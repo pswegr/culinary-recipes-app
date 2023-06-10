@@ -1,0 +1,35 @@
+.r-list-item{
+  &.r-desktop{
+    box-shadow: 0 20px 30px 0 rgba(0,0,0,0.07);
+    margin: 4rem auto;
+    padding: 4rem 2rem;
+    width: 60%;
+  }
+  &.r-handset-poitret-mode{
+    width: 95%;
+    margin: 1rem auto;
+    padding: 1rem 0.5rem;
+  }
+  
+  .r-img {
+    object-fit: cover;
+    width: 100%
+  }
+
+  .r-ul{
+    display: inline-block;
+  }
+
+  .r-igredients {
+    padding: 2em;
+  }
+
+  .r-instructions{
+    padding: 2em;
+  }
+
+  .r-display-flex{
+    display: grid;
+    grid-template-columns: 1fr 1fr
+  }
+}

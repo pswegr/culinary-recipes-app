@@ -1,0 +1,47 @@
+<div class="r-list-item" [ngClass]="{'r-handset-poitret-mode': isHandsetPortrait, 'r-desktop': !isHandsetPortrait }" *ngIf="recipe">
+  <div class="r-list-item-header">
+    <h1>{{recipe.title}}</h1>
+    <h5>servings: {{recipe.servings}}</h5>
+  </div>
+  <div>
+    <div>
+      <div
+          [style.background]="'lightblue'">
+            <img class="r-img" src="https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg" alt="Photo of a Shiba Inu">
+      </div>
+      <div  [ngClass]="{'r-display-flex': !isHandsetPortrait}">
+        <div [style.background]="'lightblue'">
+        <div class="r-igredients">
+          <h3>Igredients</h3>
+          <ul class="r-ul">
+            <li *ngFor="let igredient of recipe.ingredients">
+              <span matListItemTitle>{{igredient.name}}</span>
+              <span matListItemLine>{{igredient.quantity}}</span>
+            </li>
+          </ul>
+        </div>
+    </div>
+    <div
+    [style.background]="'lightgreen'">
+    <div class="r-instructions">
+      <h3>Instructions</h3>
+      <ol >
+        <li *ngFor="let instruction of recipe.instructions">
+          <span matListItemTitle>{{instruction}}</span>
+        </li>
+      </ol>
+    </div>
+      </div>
+    
+  </div>
+    </div>
+
+
+
+    
+  </div>
+  <div>
+    <button mat-button>LIKE</button>
+    <button mat-button>SHARE</button>
+  </div>
+</div>
