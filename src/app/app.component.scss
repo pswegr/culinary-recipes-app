@@ -1,0 +1,10 @@
+html, body, app-root, .app-frame {
+  overflow: auto;
+  margin: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+body::-webkit-scrollbar{
+  display: none;
+}

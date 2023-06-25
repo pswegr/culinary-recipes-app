@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from './modules/material.module';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 
@@ -8,10 +9,13 @@ import { MaterialModule } from './modules/material.module';
   declarations: [],
   imports: [
     CommonModule,
-    MaterialModule
+    MaterialModule,
+    DragDropModule
   ],
   exports:[
-    MaterialModule
+    CommonModule,
+    MaterialModule,
+    DragDropModule
   ]
 })
 export class SharedModule { }

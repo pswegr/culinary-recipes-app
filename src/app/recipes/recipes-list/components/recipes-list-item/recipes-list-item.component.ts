@@ -31,6 +31,7 @@ export class RecipesListItemComponent implements OnDestroy, OnInit {
         }
       });
   }
+
   ngOnInit(): void {
     this.themeModeService.isDarkMode$.subscribe(isDark => this.isDarkMode = isDark);
   }

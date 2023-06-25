@@ -13,4 +13,12 @@ export class RecipesService {
   getRecipes(){
     return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes');
   }
+
+  getCategories() {
+    return this.http.get<string[]>(environment.apiUrl + 'Recipes/Categories')
+  }
+
+  getRecipe(id: string){
+    return this.http.get<RecipeModel>(environment.apiUrl + `Recipes/${id}`)
+  }
 }

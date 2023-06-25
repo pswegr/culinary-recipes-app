@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, HostBinding, Inject, OnInit, Renderer2 } from '@angular/core';
 import { ThemeModeService } from './shared/services/theme-mode.service';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,7 @@ import { ThemeModeService } from './shared/services/theme-mode.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, private themeModeService : ThemeModeService) {}
+  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, private themeModeService : ThemeModeService, private overlay: OverlayContainer) {}
 
   ngOnInit(): void {
     this.renderer.setAttribute(this.document.body, 'class', 'theme-dark');
@@ -20,5 +21,6 @@ export class AppComponent implements OnInit {
     const hostClass = isDarkMode ? 'theme-dark' : 'theme-light';
     this.renderer.setAttribute(this.document.body, 'class', hostClass);
     this.themeModeService.setIsDarkMode(isDarkMode);
+    this.overlay.getContainerElement().classList.add(hostClass);
   }
 }

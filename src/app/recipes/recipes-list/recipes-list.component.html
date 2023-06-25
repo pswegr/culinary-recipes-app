@@ -1,1 +1,6 @@
-<app-recipes-list-item [recipe]="item" *ngFor="let item of recipes"></app-recipes-list-item> 
+<div class="r-header">
+  <button class="r-add-button" mat-fab routerLink="/upsert">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+<app-recipes-list-item [recipe]="item" *ngFor="let item of recipes"></app-recipes-list-item>

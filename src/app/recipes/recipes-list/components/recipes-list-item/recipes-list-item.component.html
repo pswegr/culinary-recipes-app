@@ -1,28 +1,41 @@
 <div class="r-list-item"
-  [ngClass]="{'r-handset-poitret-mode': isHandsetPortrait, 'r-desktop': !isHandsetPortrait, 'dark-mode-shadow': isDarkMode, 'light-mode-shadow': !isDarkMode }" *ngIf="recipe">
-    <div class="r-list-item-header">
-      <h1>{{recipe.title}}</h1>
-      <h5>servings: {{recipe.servings}}</h5>
-    </div>
-    <div>
-      <div>
-            <img class="r-img" 
-              src="https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg" 
-              alt="Photo of a Shiba Inu">
-      </div>
-      <div  [ngClass]="{'r-display-flex': !isHandsetPortrait}">
-        <div [ngStyle]="{'background': isDarkMode ? 'blue': 'lightblue'}">
-          <div class="r-igredients">
-            <h3>Igredients</h3>
-            <ul class="r-ul">
-              <li *ngFor="let igredient of recipe.ingredients">
-                <span>{{igredient.name}}</span>
-                <span>{{igredient.quantity}}</span>
-              </li>
-            </ul>
-          </div>
+  [ngClass]="{'r-handset-poitret-mode': isHandsetPortrait, 
+              'r-desktop': !isHandsetPortrait, 
+              'dark-mode-shadow': isDarkMode, 
+              'light-mode-shadow': !isDarkMode }" 
+  *ngIf="recipe">
+  
+    <div  [ngClass]="{'r-dark-mode': isDarkMode}">
+      <div  [ngClass]="{'r-display-grid-2': !isHandsetPortrait}">
+        <div class="r-list-item-header" [ngStyle]="{'background': isDarkMode ? 'linear-gradient(0deg, rgba(2,0,36,0) 0%, rgba(13,13,75,0) 20%, rgba(70,70,70,1) 100%)': 'lightgreen'}">
+          <h1 class="r-title">{{recipe.title}}</h1>
+          <h5>{{recipe.description}}</h5>
         </div>
-        <div [ngStyle]="{'background': isDarkMode ? 'green': 'lightgreen'}">
+        <div>
+            <img class="r-img" 
+              src="{{recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}" 
+              alt="{{recipe.title}}">
+        </div>
+      </div>
+      <div  [ngClass]="{'r-display-grid-3': !isHandsetPortrait}">
+        <h4>Preparation time: {{recipe.preparationTime}}</h4>
+        <h4>Cooking time: {{recipe.cookingTime}}</h4>
+        <h4>Servings: {{recipe.servings}}</h4>
+      </div>
+      <div  [ngClass]="{'r-display-grid-2': !isHandsetPortrait}">
+        <div class="r-list-item-content" 
+          [ngStyle]="{'background': isDarkMode ? 'linear-gradient(270deg, rgba(2,0,36,0) 0%, rgba(13,13,75,0) 20%, rgba(55,55,55,1) 100%)': 'lightblue'}">
+            <div class="r-igredients">
+              <h3>Igredients</h3>
+              <ul class="r-ul">
+                <li *ngFor="let igredient of recipe.ingredients">
+                  <span>{{igredient.name}}</span>
+                  <span> {{igredient.quantity}}</span>
+                </li>
+              </ul>
+            </div>
+        </div>
+        <div class="r-list-item-content" [ngStyle]="{'background': isDarkMode ? 'linear-gradient(90deg, rgba(2,0,36,0) 0%, rgba(13,13,75,0) 20%, rgba(55,55,55,1) 100%)': 'lightgreen'}">
           <div class="r-instructions">
             <h3>Instructions</h3>
             <ol>
@@ -34,8 +47,13 @@
         </div>
       </div>
     </div>
-  <div>
-    <button mat-button>LIKE</button>
-    <button mat-button>SHARE</button>
+  <div class="r-card-footer">
+    <div>
+      <button mat-button>LIKE</button>
+      <button mat-button>SHARE</button>
+    </div>
+    <button class="r-add-button" mat-mini-fab routerLink="/upsert/{{recipe.id}}">
+      <mat-icon>edit</mat-icon>
+    </button>
   </div>
 </div>

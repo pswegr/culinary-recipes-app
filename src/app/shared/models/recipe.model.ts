@@ -9,4 +9,6 @@ export interface RecipeModel {
   servings: number;
   ingredients: IngredientModel[];
   instructions: string[];
+  category: string;
+  imageUrl: string;
 }
