@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
 import { IngredientModel } from 'src/app/shared/models/igredient.model';
@@ -62,9 +62,7 @@ export class UpsertRecipeComponent implements OnInit {
     }
   }
 
-
   checkCompletion(){
-    console.log(this.myStepper.steps.toArray().filter(x => x.completed === false).length > 1);
     this.disableSafe = this.myStepper.steps.toArray().filter(x => x.completed === false).length > 1;
   }
 
