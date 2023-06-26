@@ -10,7 +10,7 @@ import { SharedModule } from '../shared/shared.module';
     ToolbarComponent
   ],
   imports: [
-    SharedModule
+    SharedModule,
   ],
   exports: [
     ToolbarComponent

@@ -1,6 +1,6 @@
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject, of, takeUntil } from 'rxjs';
+import { Component, Input, OnDestroy, effect } from '@angular/core';
+import { Subject} from 'rxjs';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
 
@@ -9,7 +9,7 @@ import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
   templateUrl: './recipes-list-item.component.html',
   styleUrls: ['./recipes-list-item.component.scss']
 })
-export class RecipesListItemComponent implements OnDestroy, OnInit {
+export class RecipesListItemComponent implements OnDestroy {
   @Input() recipe: RecipeModel | undefined;
   destroyed = new Subject<void>();
   isHandsetPortrait: boolean = false;
@@ -30,10 +30,10 @@ export class RecipesListItemComponent implements OnDestroy, OnInit {
           this.isHandsetPortrait = false;
         }
       });
-  }
 
-  ngOnInit(): void {
-    this.themeModeService.isDarkMode$.subscribe(isDark => this.isDarkMode = isDark);
+      effect(() => {
+        this.isDarkMode = this.themeModeService.isDark();
+      }) 
   }
 
   ngOnDestroy() {

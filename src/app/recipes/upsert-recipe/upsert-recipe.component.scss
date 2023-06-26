@@ -29,27 +29,37 @@
 .r-list {
   width: 100%;
   max-width: 100%;
-  border: solid 1px #484848;
   min-height: 60px;
   display: block;
-  background: #6c6c6c;
   border-radius: 4px;
   max-height: 700px;
 }
 
-.r-box {
-  padding: 10px 5px;
-  border-bottom: solid 1px #484848;
+.r-dark {
+  border: solid 1px #484848;
+  background: #6c6c6c;
   color: rgba(255, 255, 255, 0.87);
+}
+
+.r-light {
+  border: solid 1px #6c6c6c;
+  background: #efefef;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.r-box {
+  padding: 10px 20px;
+  border-bottom: solid 1px #484848;
+
   display: inline-grid;
-  grid-template-columns: 4fr 1fr;
+  grid-template-columns: 5fr 1fr;
+  width: 100%;
   gap: 8px;
   align-items: center;
-  justify-content: space-between;
   box-sizing: border-box;
   text-align: justify;
   cursor: move;
-  background: #6c6c6c;
+  
   font-size: 14px;
   flex-wrap: wrap;
 }
@@ -80,7 +90,9 @@
 
 .r-item-action-buttons {
   display: flex;
-  gap: 8px;
+  align-items: end;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
 .r-new-instruction {
@@ -100,6 +112,7 @@
   justify-content: space-between;
   gap: 32px;
   margin-bottom: 12px;
+  width: 100%;
 }
 
 .r-ingredients {

@@ -14,13 +14,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.renderer.setAttribute(this.document.body, 'class', 'theme-dark');
-    this.themeModeService.setIsDarkMode(true);
+    this.themeModeService.isDark.set(true);
   }
 
   switchMode(isDarkMode: boolean){
     const hostClass = isDarkMode ? 'theme-dark' : 'theme-light';
     this.renderer.setAttribute(this.document.body, 'class', hostClass);
-    this.themeModeService.setIsDarkMode(isDarkMode);
+    this.themeModeService.isDark.set(isDarkMode);
     this.overlay.getContainerElement().classList.add(hostClass);
   }
 }

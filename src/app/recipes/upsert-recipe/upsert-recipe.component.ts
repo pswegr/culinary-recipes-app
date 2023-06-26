@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, effect } from '@angular/core';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
-import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { IngredientModel } from 'src/app/shared/models/igredient.model';
 import { RecipesService } from '../services/recipes.service';
 import { Observable,  map, of } from 'rxjs';
@@ -8,6 +8,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper';
+import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
 
 @Component({
   selector: 'app-upsert-recipe',
@@ -20,6 +21,7 @@ export class UpsertRecipeComponent implements OnInit {
   isHandsetPortrait: boolean = false;
   stepperOrientation: Observable<StepperOrientation> = of('vertical');
   disableSafe: boolean = true;
+  isDarkMode: boolean = true;
 
   recipe: RecipeModel = {servings: 0, title: '', id: '', imageUrl: '', category: '', description: '', preparationTime: 0, cookingTime: 0, ingredients: [], instructions: [] };
   newInstruction: string = '';
@@ -29,13 +31,19 @@ export class UpsertRecipeComponent implements OnInit {
   filteredOptions: string[] = [];
 
   constructor(breakpointObserver: BreakpointObserver, 
-    private route: ActivatedRoute, 
-    private recipesService: RecipesService){
+    private route: ActivatedRoute,
+    private recipesService: RecipesService,
+    private themeModeService: ThemeModeService){
     this.stepperOrientation = breakpointObserver
       .observe([
         Breakpoints.HandsetPortrait
       ])
       .pipe(map(({matches}) => (matches ? 'vertical' : 'horizontal')));
+    
+  
+    effect(() => {
+      this.isDarkMode = this.themeModeService.isDark();
+    }) 
    }
 
    
