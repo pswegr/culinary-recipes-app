@@ -29,7 +29,7 @@
         <mat-label>Preparation time</mat-label>
         <input type="number" matInput placeholder="Preparation Time [minutes]" [(ngModel)]="recipe.preparationTime" name="preparationTime">
       </mat-form-field>
-      <div>
+      <div class="r-stepper-footer">
         <button mat-button matStepperNext>Next</button>
       </div>
     </form>
@@ -41,10 +41,10 @@
         <div class="r-box" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" [attr.data-drag-data]="instruction" *ngFor="let instruction of recipe.instructions; let i= index; trackBy:trackByFn" cdkDrag>
           {{instruction}}
           <div class="r-item-action-buttons">
-            <button mat-mini-fab color="warn" (click)="deleteInstruction(i)">
+            <button mat-mini-fab color="warn" (click)="deleteInstruction(i)" matTooltip="Delete instruction">
               <mat-icon>delete</mat-icon>
             </button>
-            <button mat-mini-fab color="primary" (click)="editInstruction(i)">
+            <button mat-mini-fab color="primary" (click)="editInstruction(i)" matTooltip="Edit instruction">
               <mat-icon>edit</mat-icon>
             </button> 
           </div>
@@ -58,7 +58,7 @@
         <mat-icon>add</mat-icon>
         Add instruction
       </button>
-      <div>
+      <div class="r-stepper-footer">
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>
       </div>
@@ -73,10 +73,10 @@
               {{item.name}} - {{item.quantity}} 
             </div>
             <div class="r-item-action-buttons">
-              <button mat-mini-fab color="warn" (click)="deleteIngredient(i)">
+              <button mat-mini-fab color="warn" (click)="deleteIngredient(i)" matTooltip="Delete Ingredient">
                 <mat-icon>delete</mat-icon>
               </button>
-              <button mat-mini-fab color="primary" (click)="editIngredient(i)">
+              <button mat-mini-fab color="primary" (click)="editIngredient(i)" matTooltip="Edit Ingredient">
                 <mat-icon>edit</mat-icon>
               </button>
             </div>
@@ -96,14 +96,14 @@
         <mat-icon>add</mat-icon>
         Add ingredient
       </button>
-      <div>
+      <div class="r-stepper-footer">
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>
       </div>
     </div>
   </mat-step>
   <mat-step>
-    <ng-template matStepLabel>Fill out category and add photo</ng-template>
+    <ng-template matStepLabel>Category and add photo</ng-template>
     <div class="r-form-recipes-data">
       <mat-form-field class="r-full-width">
         <input type="text" matInput [(ngModel)]="recipe.category" [matAutocomplete]="auto" (ngModelChange)="categoryChanged($event)">
@@ -114,9 +114,8 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-      <div>
+      <div class="r-stepper-footer">
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
       </div>
     </div>
   </mat-step>
