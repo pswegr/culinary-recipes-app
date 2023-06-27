@@ -15,5 +15,4 @@ export class RecipesListComponent implements OnInit{
   ngOnInit(): void {
     this.recipeService.getRecipes().subscribe(x => this.recipes = x);
   }
-
 }
