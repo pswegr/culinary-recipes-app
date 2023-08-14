@@ -4,11 +4,14 @@ import { MaterialModule } from './modules/material.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ResponsivenessDirective } from './directives/responsiveness.directive';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    ResponsivenessDirective
+  ],
   imports: [
     BrowserAnimationsModule,
     CommonModule,
@@ -21,7 +24,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CommonModule,
     MaterialModule,
     DragDropModule,
-    RouterModule
+    RouterModule,
+    ResponsivenessDirective
   ]
 })
 export class SharedModule { }

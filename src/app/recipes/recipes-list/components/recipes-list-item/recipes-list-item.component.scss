@@ -33,8 +33,32 @@
     border-radius: 20px;
   }
 
+  .r-list-item-content-bg-dark {
+    background: linear-gradient(270deg, rgba(2,0,36,0) 0%, rgba(13,13,75,0) 20%, rgba(55,55,55,1) 100%);
+  }
+
+  .r-list-item-content-bg-dark-reverse {
+    background: linear-gradient(90deg, rgba(2,0,36,0) 0%, rgba(13,13,75,0) 20%, rgba(55,55,55,1) 100%);
+  }
+
+  .r-list-item-content-bg-light {
+    background: linear-gradient(270deg, rgba(1, 75, 131, 0) 0%, rgba(3, 89, 164, 0) 20%, rgb(0, 84, 132,0.1) 100%);
+  }
+
+  .r-list-item-content-bg-light-reverse {
+    background: linear-gradient(90deg, rgba(1, 75, 131, 0) 0%, rgba(3, 89, 164, 0) 20%, rgb(0, 84, 132, 0.1) 100%);
+  }
+
   .r-list-item-header {
     padding: 2rem;
+  }
+
+  .r-list-item-header-bg-dark {
+    background: linear-gradient(0deg, rgba(2,0,36,0) 0%, rgba(13,13,75,0) 20%, rgba(70,70,70,1) 100%);
+  }
+
+  .r-list-item-header-bg-light {
+    background: linear-gradient(0deg, rgba(2, 255, 129, 0) 0%, rgba(13, 120, 150, 0) 20%, rgb(108, 204, 5, 0.2) 100%);
   }
 
   .r-igredients, .r-instructions{
