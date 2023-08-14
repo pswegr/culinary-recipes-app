@@ -1,8 +1,6 @@
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import { Component, Input, OnDestroy, effect } from '@angular/core';
+import { Component, Input, OnDestroy} from '@angular/core';
 import { Subject} from 'rxjs';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
-import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
 
 @Component({
   selector: 'app-recipes-list-item',
