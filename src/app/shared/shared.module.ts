@@ -5,12 +5,14 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ResponsivenessDirective } from './directives/responsiveness.directive';
+import { ImageAvgColorDirective } from './directives/image-avg-color.directive';
 
 
 
 @NgModule({
   declarations: [
-    ResponsivenessDirective
+    ResponsivenessDirective,
+    ImageAvgColorDirective
   ],
   imports: [
     BrowserAnimationsModule,
@@ -25,7 +27,8 @@ import { ResponsivenessDirective } from './directives/responsiveness.directive';
     MaterialModule,
     DragDropModule,
     RouterModule,
-    ResponsivenessDirective
+    ResponsivenessDirective,
+    ImageAvgColorDirective
   ]
 })
 export class SharedModule { }

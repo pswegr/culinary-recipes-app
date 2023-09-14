@@ -4,6 +4,7 @@
   [darkMode]="['dark-mode-shadow']"
   [lightMode]="['light-mode-shadow']"
   *ngIf="recipe">
+  <div appImageAvgColor>
     <div appResponsiveness [darkMode]="['r-dark-mode']">
       <div appResponsiveness [largeScreens]="['r-display-grid-2']">
         <div class="r-list-item-header" appResponsiveness 
@@ -13,7 +14,7 @@
             <h5>{{recipe.description}}</h5>
         </div>
         <div>
-            <img class="r-img" 
+            <img #img class="r-img" 
               src="{{recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}" 
               alt="{{recipe.title}}">
         </div>
@@ -52,6 +53,8 @@
         </div>
       </div>
     </div>
+  </div>
+   
   <div class="r-card-footer">
     <div>
       <button mat-button>LIKE</button>
