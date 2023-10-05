@@ -15,10 +15,14 @@ export class RecipesService {
   }
 
   getCategories() {
-    return this.http.get<string[]>(environment.apiUrl + 'Recipes/Categories')
+    return this.http.get<string[]>(environment.apiUrl + 'Recipes/Categories');
   }
 
   getRecipe(id: string){
-    return this.http.get<RecipeModel>(environment.apiUrl + `Recipes/${id}`)
+    return this.http.get<RecipeModel>(environment.apiUrl + `Recipes/${id}`);
+  }
+
+  getTags() {
+    return this.http.get<string[]>(environment.apiUrl + 'Recipes/Tags');
   }
 }

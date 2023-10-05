@@ -3,4 +3,4 @@
     <mat-icon>add</mat-icon>
   </button>
 </div>
-<app-recipes-list-item [recipe]="item" *ngFor="let item of recipes"></app-recipes-list-item>
+<app-recipes-list-item [recipe]="item" *ngFor="let item of recipes$ | async"></app-recipes-list-item>
