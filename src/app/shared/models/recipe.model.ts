@@ -11,4 +11,5 @@ export interface RecipeModel {
   instructions: string[];
   category: string;
   imageUrl: string;
+  tags: string[];
 }

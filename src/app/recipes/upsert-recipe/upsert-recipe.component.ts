@@ -1,21 +1,22 @@
-import { Component, OnInit, ViewChild, effect } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, effect } from '@angular/core';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { IngredientModel } from 'src/app/shared/models/igredient.model';
 import { RecipesService } from '../services/recipes.service';
-import { Observable,  map, of } from 'rxjs';
+import { Observable,  Subject,  filter,  map, of, share, switchMap } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-upsert-recipe',
   templateUrl: './upsert-recipe.component.html',
   styleUrls: ['./upsert-recipe.component.scss']
 })
-export class UpsertRecipeComponent implements OnInit {
+export class UpsertRecipeComponent implements OnInit, OnDestroy {
   @ViewChild('stepper') myStepper!: MatStepper;
   recipeId: string | null = null;
   isHandsetPortrait: boolean = false;
@@ -23,12 +24,25 @@ export class UpsertRecipeComponent implements OnInit {
   disableSafe: boolean = true;
   isDarkMode: boolean = true;
 
-  recipe: RecipeModel = {servings: 0, title: '', id: '', imageUrl: '', category: '', description: '', preparationTime: 0, cookingTime: 0, ingredients: [], instructions: [] };
+  destroy$ = new Subject<void>()
+
+  $recipe: Observable<RecipeModel> = this.route.paramMap.pipe(
+    takeUntil(this.destroy$),
+    filter(p => p.get('id') !== null),
+    map(p => p.get('id') ?? ''),
+    switchMap(id => this.recipesService.getRecipe(id))
+  ).pipe(share());
+
+  $tags = this.recipesService.getTags().pipe(takeUntil(this.destroy$))
+
+  recipe: RecipeModel = {servings: 0, title: '', id: '', imageUrl: '', category: '', description: '', preparationTime: 0, cookingTime: 0, ingredients: [], instructions: [], tags: [] };
   newInstruction: string = '';
   newIngredient: IngredientModel = {name: '', quantity: ''};
   
   categories: string[] = [];
   filteredOptions: string[] = [];
+
+  
 
   constructor(breakpointObserver: BreakpointObserver, 
     private route: ActivatedRoute,
@@ -46,16 +60,15 @@ export class UpsertRecipeComponent implements OnInit {
     }) 
    }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
    
   ngOnInit(): void {
-    this.route.paramMap.subscribe(
-    (params : ParamMap) => {
-      this.recipeId = params.get('id');
-    });
-    if(this.recipeId){
-      this.recipesService.getRecipe(this.recipeId).subscribe(x => this.recipe = x);
-    }
-    this.recipesService.getCategories().subscribe(x => {
+    this.$recipe.pipe(takeUntil(this.destroy$)).subscribe(x => this.recipe = x)
+
+    this.recipesService.getCategories().pipe(takeUntil(this.destroy$)).subscribe(x => {
       this.categories = x;
       this.filteredOptions = this.categories
     });
