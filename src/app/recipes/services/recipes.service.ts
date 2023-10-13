@@ -25,4 +25,11 @@ export class RecipesService {
   getTags() {
     return this.http.get<string[]>(environment.apiUrl + 'Recipes/Tags');
   }
+
+  upsertRecipe(formData: FormData){
+    return this.http.post(environment.apiUrl + "Recipes/UpsertWithImage", formData, {
+      reportProgress: true,
+      observe: 'events'
+    });
+  }
 }
