@@ -1,4 +1,5 @@
 import { IngredientModel } from "./igredient.model"
+import { PhotoModel } from "./photo.model";
 
 export interface RecipeModel {
   id: string;
@@ -12,4 +13,5 @@ export interface RecipeModel {
   category: string;
   imageUrl: string;
   tags: string[];
+  photo: PhotoModel;
 }

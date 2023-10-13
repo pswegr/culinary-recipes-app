@@ -14,7 +14,7 @@
         </div>
         <div>
             <img class="r-img" 
-              src="{{recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}" 
+              src="{{recipe?.photo?.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}" 
               alt="{{recipe.title}}">
         </div>
       </div>
