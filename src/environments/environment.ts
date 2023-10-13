@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: 'https://localhost:7231/api/'
+  apiUrl: 'https://culinaryrecipesapi20231012231909.azurewebsites.net/api/'
 };
