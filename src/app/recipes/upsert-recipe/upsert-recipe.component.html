@@ -114,6 +114,13 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
+      <mat-form-field class="r-full-width">
+        <mat-label>Tags</mat-label>
+        <mat-select [(ngModel)]="recipe.tags" multiple>
+          <mat-option *ngFor="let tag of $tags | async" [value]="tag">{{tag}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <app-file-input (fileUploadedEvent)="uploadedFile($event)" requiredFileType="image/png"></app-file-input>
       <div class="r-stepper-footer">
         <button mat-button matStepperPrevious>Back</button>
       </div>
