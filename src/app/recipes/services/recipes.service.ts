@@ -14,6 +14,10 @@ export class RecipesService {
     return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes');
   }
 
+  getAllRecipes(){
+    return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes/GetAll');
+  }
+
   getCategories() {
     return this.http.get<string[]>(environment.apiUrl + 'Recipes/Categories');
   }
