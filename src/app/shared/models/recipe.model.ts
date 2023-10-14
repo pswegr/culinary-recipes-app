@@ -14,4 +14,5 @@ export interface RecipeModel {
   imageUrl: string;
   tags: string[];
   photo: PhotoModel;
+  published: boolean;
 }
