@@ -6,6 +6,7 @@ import { UpsertRecipeComponent } from './upsert-recipe/upsert-recipe.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FileInputComponent } from './upsert-recipe/custom-controls/file-input/file-input.component';
+import { RecipesAllListComponent } from './recipes-list/recipes-all-list/recipes-all-list.component';
 
 
 
@@ -14,7 +15,8 @@ import { FileInputComponent } from './upsert-recipe/custom-controls/file-input/f
     RecipesListComponent,
     RecipesListItemComponent,
     UpsertRecipeComponent,
-    FileInputComponent
+    FileInputComponent,
+    RecipesAllListComponent
   ],
   imports: [
     SharedModule,

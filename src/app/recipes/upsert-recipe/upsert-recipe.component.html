@@ -106,6 +106,7 @@
     <ng-template matStepLabel>Category and add photo</ng-template>
     <div class="r-form-recipes-data">
       <mat-form-field class="r-full-width">
+        <mat-label>Category</mat-label>
         <input type="text" matInput [(ngModel)]="recipe.category" [matAutocomplete]="auto" (ngModelChange)="categoryChanged($event)">
         <mat-autocomplete #auto="matAutocomplete" autoSelectActiveOption="true">
           <mat-option *ngFor="let category of filteredOptions"
@@ -114,6 +115,7 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
+      <mat-slide-toggle [(ngModel)]="recipe.published" checked="true" class="r-slide-toggle">Published</mat-slide-toggle>
       <mat-form-field class="r-full-width">
         <mat-label>Tags</mat-label>
         <mat-select [(ngModel)]="recipe.tags" multiple>
