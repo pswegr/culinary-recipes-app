@@ -122,7 +122,7 @@
           <mat-option *ngFor="let tag of $tags | async" [value]="tag">{{tag}}</mat-option>
         </mat-select>
       </mat-form-field>
-      <app-file-input (fileUploadedEvent)="uploadedFile($event)" requiredFileType="image/png"></app-file-input>
+      <app-file-input (fileUploadedEvent)="uploadedFile($event)" requiredFileType="image/png, image/jpeg"></app-file-input>
       <div class="r-stepper-footer">
         <button mat-button matStepperPrevious>Back</button>
       </div>
