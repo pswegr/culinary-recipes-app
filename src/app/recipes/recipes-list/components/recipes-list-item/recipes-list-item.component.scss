@@ -22,7 +22,7 @@
   .r-img {
     object-fit: cover;
     width: 100%;
-    border-radius: 20px;
+    border-radius: 15px;
   }
 
   .r-ul{
@@ -30,7 +30,7 @@
   }
 
   .r-list-item-content, .r-list-item-header {
-    border-radius: 20px;
+    border-radius: 15px;
   }
 
   .r-list-item-content-bg-dark {
@@ -58,7 +58,7 @@
   }
 
   .r-list-item-header-bg-light {
-    background: linear-gradient(0deg, rgba(2, 255, 129, 0) 0%, rgba(13, 120, 150, 0) 20%, rgb(108, 204, 5, 0.2) 100%);
+    background: linear-gradient(0deg, rgba(2, 255, 129, 0) 0%, rgba(13, 120, 150, 0) 20%, rgba(220, 220, 220, 0.334) 100%);
   }
 
   .r-igredients, .r-instructions{
@@ -84,10 +84,6 @@
     margin-bottom: 1rem;
     align-items: stretch;
     text-align: center;
-  }
-
-  .r-title {
-    text-shadow: 1px 1px 1px rgb(77, 158, 77);
   }
 
   .r-card-footer {
