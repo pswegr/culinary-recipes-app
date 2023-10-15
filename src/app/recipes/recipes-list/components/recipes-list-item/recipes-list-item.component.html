@@ -1,4 +1,5 @@
 <div class="r-list-item" appResponsiveness
+  [ngStyle]="{'background-color': isDark() ? 'inherit' : recipe.photo.mainColor + '22' }"
   [smallScreens]="['r-handset-poitret-mode']"
   [largeScreens]="['r-desktop']"
   [darkMode]="['dark-mode-shadow']"
@@ -9,11 +10,13 @@
         <div class="r-list-item-header" appResponsiveness 
           [darkMode]="['r-list-item-header-bg-dark']"
           [lightMode]="['r-list-item-header-bg-light']">
-            <h1 class="r-title">{{recipe.title}}</h1>
+            <h1 [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + recipe.photo.mainColor }">{{recipe.title}}</h1>
             <h5>{{recipe.description}}</h5>
         </div>
         <div>
             <img class="r-img" 
+              [ngStyle]="{'box-shadow': '0px 0px 5px 0px ' + recipe.photo.mainColor,
+                          'opacity': isDark() ? '0.75' : '1'}"
               src="{{recipe.photo.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}" 
               alt="{{recipe.title}}">
         </div>
