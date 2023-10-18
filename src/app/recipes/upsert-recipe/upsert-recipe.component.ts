@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild, effect } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, effect, inject } from '@angular/core';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { IngredientModel } from 'src/app/shared/models/igredient.model';
 import { RecipesService } from '../services/recipes.service';
 import { Observable,  Subject,  Subscription,  filter,  map, of, share, switchMap } from 'rxjs';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper';
@@ -12,6 +13,10 @@ import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { FileInputComponent } from './custom-controls/file-input/file-input.component';
 import { HttpEventType } from '@angular/common/http';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { FormControl } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-upsert-recipe',
@@ -21,11 +26,14 @@ import { HttpEventType } from '@angular/common/http';
 export class UpsertRecipeComponent implements OnInit, OnDestroy {
   @ViewChild('stepper') myStepper!: MatStepper;
   @ViewChild(FileInputComponent) fileInput: FileInputComponent | null = null;
+  @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
+  tagCtrl = new FormControl('');
   recipeId: string | null = null;
   isHandsetPortrait: boolean = false;
   stepperOrientation: Observable<StepperOrientation> = of('vertical');
   disableSafe: boolean = true;
   isDarkMode: boolean = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
 
   destroy$ = new Subject<void>();
   uploadSub: Subscription = new Subscription();
@@ -52,7 +60,8 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private recipesService: RecipesService,
-    private themeModeService: ThemeModeService){
+    private themeModeService: ThemeModeService,
+    private announcer: LiveAnnouncer){
     this.stepperOrientation = breakpointObserver
       .observe([
         Breakpoints.HandsetPortrait
@@ -166,5 +175,35 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
 
   uploadedFile(event: File | null){
     this.photoUploaded = event;
+  }
+
+  selectedTag(event: MatAutocompleteSelectedEvent): void {
+    this.recipe.tags.push(event.option.viewValue);
+    this.tagInput.nativeElement.value = '';
+    this.tagCtrl.setValue(null);
+  }
+
+  addTag(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    // Add our fruit
+    if (value) {
+      this.recipe.tags.push(value);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+
+    this.tagCtrl.setValue(null);
+  }
+
+  removeTag(tag: string): void {
+    const index = this.recipe.tags.indexOf(tag);
+
+    if (index >= 0) {
+      this.recipe.tags.splice(index, 1);
+
+      this.announcer.announce(`Removed ${tag}`);
+    }
   }
 }

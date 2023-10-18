@@ -15,8 +15,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
-
-
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [],
@@ -36,7 +35,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatProgressBarModule,
     MatTooltipModule,
     MatSelectModule,
-    MatMenuModule
+    MatMenuModule,
+    MatChipsModule
     
   ],
   exports: [
@@ -54,7 +54,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatProgressBarModule,
     MatTooltipModule,
     MatSelectModule,
-    MatMenuModule
+    MatMenuModule,
+    MatChipsModule
   ]
 })
 export class MaterialModule { }
