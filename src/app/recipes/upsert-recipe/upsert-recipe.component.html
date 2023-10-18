@@ -118,9 +118,23 @@
       <mat-slide-toggle [(ngModel)]="recipe.published" checked="true" class="r-slide-toggle">Published</mat-slide-toggle>
       <mat-form-field class="r-full-width">
         <mat-label>Tags</mat-label>
-        <mat-select [(ngModel)]="recipe.tags" multiple>
-          <mat-option *ngFor="let tag of $tags | async" [value]="tag">{{tag}}</mat-option>
-        </mat-select>
+        <mat-chip-grid #chipGrid aria-label="Fruit selection">
+          <mat-chip-row *ngFor="let tag of recipe.tags" (removed)="removeTag(tag)">
+            {{tag}}
+            <button matChipRemove [attr.aria-label]="'remove ' + tag">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        </mat-chip-grid>
+        <input placeholder="New tag..." #tagInput [formControl]="tagCtrl"
+          [matChipInputFor]="chipGrid" [matAutocomplete]="autoTags"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="addTag($event)"/>
+        <mat-autocomplete #autoTags="matAutocomplete" (optionSelected)="selectedTag($event)">
+          <mat-option *ngFor="let tag of $tags | async" [value]="tag">
+            {{tag}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
       <app-file-input (fileUploadedEvent)="uploadedFile($event)" requiredFileType="image/png, image/jpeg"></app-file-input>
       <div class="r-stepper-footer">

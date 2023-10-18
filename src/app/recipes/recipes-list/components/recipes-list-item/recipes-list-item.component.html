@@ -11,6 +11,7 @@
           [darkMode]="['r-list-item-header-bg-dark']"
           [lightMode]="['r-list-item-header-bg-light']">
             <h1 [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + recipe.photo.mainColor }">{{recipe.title}}</h1>
+            <h2>{{recipe.category}}</h2>
             <h5>{{recipe.description}}</h5>
         </div>
         <div>
