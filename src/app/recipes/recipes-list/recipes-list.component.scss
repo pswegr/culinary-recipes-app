@@ -7,3 +7,17 @@
   }
 }
 
+.r-chips{
+  &.r-desktop{
+    margin: 1rem auto;
+    padding: 2rem 1rem;
+    width: calc(55% + 10rem);
+  }
+  
+  &.r-handset-poitret-mode{
+    width: 95%;
+    margin: 1rem auto;
+    padding: 1rem 0.5rem;
+  }
+}
+
