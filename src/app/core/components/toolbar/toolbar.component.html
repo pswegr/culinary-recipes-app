@@ -5,10 +5,11 @@
   <mat-menu #menu="matMenu">
     <button mat-menu-item routerLink="/all-recipes">All recipes</button>
   </mat-menu>
-  <a routerLink="/recipes" routerLinkActive="router-link-active" class="r-header-title">Culinary recipes</a>
+  <a routerLink="/recipes" routerLinkActive="router-link-active" class="r-header-title">
+    <span class="r-logo">R</span>ecipes with passion
+  </a>
   <span class="r-spacer"></span>
-  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-    <mat-icon>favorite</mat-icon>
-  </button>
-  <mat-slide-toggle (change)="onDarkModeSwithed($event)" checked="true">Dark Mode</mat-slide-toggle>
+  <mat-slide-toggle (change)="onDarkModeSwithed($event)" checked="true"> 
+    <mat-icon>bedtime</mat-icon>
+  </mat-slide-toggle>
 </mat-toolbar>
