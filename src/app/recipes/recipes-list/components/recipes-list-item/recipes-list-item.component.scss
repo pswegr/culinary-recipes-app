@@ -26,7 +26,9 @@
   }
 
   .r-ul{
-    display: inline-block;
+    .r-quantity {
+      opacity: .75;
+    }
   }
 
   .r-list-item-content, .r-list-item-header {

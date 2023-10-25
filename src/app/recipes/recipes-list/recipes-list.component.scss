@@ -3,21 +3,21 @@
   justify-content: center;
   
   .r-add-button {
-    margin: 1rem;
+    margin: 0.5rem;
   }
 }
 
 .r-chips{
   &.r-desktop{
-    margin: 1rem auto;
-    padding: 2rem 1rem;
+    margin: 0.5rem auto;
+    padding: 1rem 0.5rem;
     width: calc(55% + 10rem);
   }
   
   &.r-handset-poitret-mode{
     width: 95%;
-    margin: 1rem auto;
-    padding: 1rem 0.5rem;
+    margin: 0.25rem auto;
+    padding: 0.5rem 0.25rem;
   }
 }
 
