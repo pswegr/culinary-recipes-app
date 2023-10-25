@@ -3,11 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { RecipesModule } from './recipes/recipes.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
+import { TermsModule } from './terms/terms.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,8 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     HttpClientModule,
     CoreModule,
-    RecipesModule
+    RecipesModule,
+    TermsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
