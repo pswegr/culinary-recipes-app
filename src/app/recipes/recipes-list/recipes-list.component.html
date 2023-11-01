@@ -1,12 +1,19 @@
-<div class="r-header">
-  <button class="r-add-button" mat-fab routerLink="/upsert" matTooltip="Add new recipe">
-    <mat-icon>add</mat-icon>
-  </button>
-</div>
-<div class="r-chips" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
-  <h5>Search recipes by tags:</h5>
-  <mat-chip-listbox multiple aria-label="Fish selection" (change)="chipsChanged($event)">
-    <mat-chip-option title="tag" *ngFor="let tag of tags$ | async">{{tag}}</mat-chip-option>
-  </mat-chip-listbox>
-</div>
-<app-recipes-list-item [recipe]="item" *ngFor="let item of recipes$ | async"></app-recipes-list-item>
+<ng-container *ngIf="recipes$ | async as recipes; else loading">
+  <div class="r-header">
+    <button class="r-add-button" mat-fab routerLink="/recipes/upsert" matTooltip="Add new recipe">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <div class="r-chips" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
+    <h5>Search recipes by tags:</h5>
+    <mat-chip-listbox multiple aria-label="Fish selection" (change)="chipsChanged($event)">
+      <mat-chip-option [selected]="selected(tag)" title="tag" *ngFor="let tag of tags$ | async">{{tag}}</mat-chip-option>
+    </mat-chip-listbox>
+  </div>
+  <app-recipes-list-item [recipe]="item" *ngFor="let item of recipes" (tag)="clickTagOnItem($event)"></app-recipes-list-item>
+</ng-container>
+<ng-template #loading>
+  <div >
+    <mat-spinner class="r-center"></mat-spinner>
+  </div>
+</ng-template>

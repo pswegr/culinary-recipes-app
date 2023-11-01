@@ -1,25 +1,24 @@
-<div class="r-list-item" appResponsiveness
-  [ngStyle]="{'background-color': isDark() ? 'inherit' : recipe.photo.mainColor + '22' }"
-  [smallScreens]="['r-handset-poitret-mode']"
-  [largeScreens]="['r-desktop']"
-  [darkMode]="['dark-mode-shadow']"
-  [lightMode]="['light-mode-shadow']"
-  *ngIf="recipe">
+<div [appDoubleClick]="recipe.id" (doubleClick)="navigateToDetails($event)" *ngIf="recipe">
+  <div class="r-list-item" appResponsiveness
+    [ngStyle]="{'background-color': isDark() ? 'inherit' : recipe.photo.mainColor + '22' }"
+    [smallScreens]="['r-handset-poitret-mode']" [largeScreens]="['r-desktop']" [darkMode]="['dark-mode-shadow']"
+    [lightMode]="['light-mode-shadow']">
+
     <div appResponsiveness [darkMode]="['r-dark-mode']">
       <div appResponsiveness [largeScreens]="['r-display-grid-2']">
-        <div class="r-list-item-header" appResponsiveness 
-          [darkMode]="['r-list-item-header-bg-dark']"
+        <div class="r-list-item-header" appResponsiveness [darkMode]="['r-list-item-header-bg-dark']"
           [lightMode]="['r-list-item-header-bg-light']">
-            <h1 [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + recipe.photo.mainColor }">{{recipe.title}}</h1>
-            <h2>{{recipe.category}}</h2>
-            <h5>{{recipe.description}}</h5>
+          <h1 [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + recipe.photo.mainColor }">{{recipe.title}}</h1>
+          <h2>{{recipe.category}}</h2>
+          <h5>{{recipe.description}}</h5>
+          <mat-chip-set role="doc-index">
+            <mat-chip appChipClick (chipClick)="clickTagOnItem($event)" role="doc-index" *ngFor="let tag of recipe.tags">{{tag}}</mat-chip>
+          </mat-chip-set>
         </div>
         <div>
-            <img class="r-img" 
-              [ngStyle]="{'box-shadow': '0px 0px 5px 0px ' + recipe.photo.mainColor,
-                          'opacity': isDark() ? '0.75' : '1'}"
-              src="{{recipe.photo.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}" 
-              alt="{{recipe.title}}">
+          <img class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}"
+            src="{{recipe.photo.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
+            alt="{{recipe.title}}">
         </div>
       </div>
       <div appResponsiveness [largeScreens]="['r-display-grid-3']">
@@ -28,42 +27,40 @@
         <h4>Servings: {{recipe.servings}}</h4>
       </div>
       <div appResponsiveness [largeScreens]="['r-display-grid-2']">
-        <div class="r-list-item-content" 
-          appResponsiveness
-          [darkMode]="['r-list-item-content-bg-dark']"
+        <div class="r-list-item-content" appResponsiveness [darkMode]="['r-list-item-content-bg-dark']"
           [lightMode]="['r-list-item-content-bg-light']">
-            <div class="r-igredients">
-              <h3>Igredients</h3>
-              <ul class="r-ul">
-                <li *ngFor="let igredient of recipe.ingredients">
-                  <span>{{igredient.name}}</span>
-                  <span> - </span>
-                  <span class="r-quantity">{{igredient.quantity}}</span>
-                </li>
-              </ul>
-            </div>
+          <div class="r-igredients">
+            <h3>Igredients</h3>
+            <ul class="r-ul">
+              <li *ngFor="let igredient of recipe.ingredients">
+                <span>{{igredient.name}}</span>
+                <span> - </span>
+                <span class="r-quantity">{{igredient.quantity}}</span>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="r-list-item-content" appResponsiveness 
-          [darkMode]="['r-list-item-content-bg-dark-reverse']"
+        <div class="r-list-item-content" appResponsiveness [darkMode]="['r-list-item-content-bg-dark-reverse']"
           [lightMode]="['r-list-item-content-bg-light-reverse']">
-            <div class="r-instructions">
-              <h3>Instructions</h3>
-              <ol>
-                <li *ngFor="let instruction of recipe.instructions">
-                  <span>{{instruction}}</span>
-                </li>
-              </ol>
-            </div>
+          <div class="r-instructions">
+            <h3>Instructions</h3>
+            <ol>
+              <li *ngFor="let instruction of recipe.instructions">
+                <span>{{instruction}}</span>
+              </li>
+            </ol>
+          </div>
         </div>
       </div>
     </div>
-  <div class="r-card-footer">
-    <div>
-      <button mat-button>LIKE</button>
-      <button mat-button>SHARE</button>
+    <div class="r-card-footer">
+      <div>
+        <button mat-button>LIKE</button>
+        <button mat-button>SHARE</button>
+      </div>
+      <button class="r-add-button" mat-mini-fab routerLink="upsert/{{recipe.id}}" matTooltip="Edit recipe">
+        <mat-icon>edit</mat-icon>
+      </button>
     </div>
-    <button class="r-add-button" mat-mini-fab routerLink="/upsert/{{recipe.id}}" matTooltip="Edit recipe">
-      <mat-icon>edit</mat-icon>
-    </button>
   </div>
 </div>

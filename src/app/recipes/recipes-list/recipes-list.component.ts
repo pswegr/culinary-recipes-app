@@ -1,30 +1,40 @@
-import { Component, WritableSignal, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import { RecipesService } from '../services/recipes.service';
-import { Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, map, switchMap, tap } from 'rxjs';
 import { MatChipListboxChange } from '@angular/material/chips';
-import { toObservable } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-recipes-list',
   templateUrl: './recipes-list.component.html',
   styleUrls: ['./recipes-list.component.scss']
 })
-export class RecipesListComponent{
-  chosenTags: WritableSignal<string[]> = signal([]);
-  recipes$: Observable<RecipeModel[]> =  
-    toObservable(this.chosenTags)
-      .pipe(
-        switchMap((pickedTags) => 
-          this.recipeService.getRecipes(pickedTags) 
-        )
-      );
+export class RecipesListComponent {
+  chosenTags: BehaviorSubject<string[]> = new BehaviorSubject([''])
+  recipes$: Observable<RecipeModel[]> = this.route.queryParamMap.pipe(
+    tap(params => this.chosenTags.next(params.getAll('tags'))),
+    switchMap(params => this.recipeService.getRecipes(params.getAll('tags')))
+  );
 
   tags$: Observable<string[]> = this.recipeService.getTags();
 
-  constructor(private recipeService: RecipesService){}
+  constructor(private recipeService: RecipesService, private router: Router, private route: ActivatedRoute) {
+  }
 
-  chipsChanged(event: MatChipListboxChange){
-    this.chosenTags.set(event.value);
+  chipsChanged(event: MatChipListboxChange) {
+    this.chosenTags.next(event.value);
+    const tagsObj = { tags: this.chosenTags.value }
+    this.router.navigate(['/recipes'], {
+      queryParams: tagsObj
+    })
+  }
+
+  clickTagOnItem(event: string){
+    this.router.navigateByUrl(`recipes/tag/${event}`)
+  }
+
+  selected(tag: string){
+    return this.chosenTags.value.filter(x => x === tag).length > 0;
   }
 }
