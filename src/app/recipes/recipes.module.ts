@@ -7,6 +7,9 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileInputComponent } from './upsert-recipe/custom-controls/file-input/file-input.component';
 import { RecipesAllListComponent } from './recipes-list/recipes-all-list/recipes-all-list.component';
+import { RecipeComponent } from './recipe/recipe.component';
+import { RecipesRoutingModule } from './recipes-routing.module';
+import { TagDetailsComponent } from './recipes-list/tag-details/tag-details.component';
 
 
 
@@ -16,11 +19,13 @@ import { RecipesAllListComponent } from './recipes-list/recipes-all-list/recipes
     RecipesListItemComponent,
     UpsertRecipeComponent,
     FileInputComponent,
-    RecipesAllListComponent
+    RecipesAllListComponent,
+    RecipeComponent,
+    TagDetailsComponent
   ],
   imports: [
+    RecipesRoutingModule,
     SharedModule,
-    RouterModule,
     FormsModule,
     ReactiveFormsModule
   ]

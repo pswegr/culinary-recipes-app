@@ -1,0 +1,12 @@
+<div *ngIf="recipesbyTag$ | async as recipesByTag">
+  <div class="r-header-tag-details">
+    <h1>
+      Tag name - {{tagName$ | async}}
+    </h1>
+    <h4>
+      count: {{recipesByTag.length}}
+    </h4> 
+  </div>
+  <app-recipes-list-item [recipe]="item" *ngFor="let item of recipesByTag"></app-recipes-list-item>
+</div>
+

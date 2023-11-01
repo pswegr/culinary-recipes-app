@@ -40,8 +40,8 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
 
   $recipe: Observable<RecipeModel> = this.route.paramMap.pipe(
     takeUntil(this.destroy$),
-    filter(p => p.get('id') !== null),
-    map(p => p.get('id') ?? ''),
+    filter(p => p.get('recipeId') !== null),
+    map(p => p.get('recipeId') ?? ''),
     switchMap(id => this.recipesService.getRecipe(id))
   ).pipe(share());
 
@@ -115,9 +115,7 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
   }
 
   save(){
-    console.log(this.recipe);
     const formData = new FormData();
-    console.log(this.photoUploaded);
     formData.append('recipe', JSON.stringify(this.recipe));
     if (this.photoUploaded) {
       formData.append('photo', this.photoUploaded);
