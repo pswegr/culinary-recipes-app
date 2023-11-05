@@ -12,11 +12,9 @@ export class RecipesService {
 
   getRecipes(pickedTags: string[] | null = null, category: string | null = null){
     const searchParams = new URLSearchParams();
-    console.log(category);
     if(category){
       searchParams.append('category', category)
     }
-    console.log(pickedTags);
     pickedTags?.forEach((tag) =>{ 
       if(tag){
         searchParams.append('tags', tag)
