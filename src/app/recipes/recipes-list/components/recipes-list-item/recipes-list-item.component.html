@@ -11,9 +11,9 @@
           <h1 [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + recipe.photo.mainColor }">{{recipe.title}}</h1>
           <h2>{{recipe.category}}</h2>
           <h5>{{recipe.description}}</h5>
-          <mat-chip-set role="doc-index">
-            <mat-chip appChipClick (chipClick)="clickTagOnItem($event)" role="doc-index" *ngFor="let tag of recipe.tags">{{tag}}</mat-chip>
-          </mat-chip-set>
+          <mat-chip-listbox>
+            <mat-chip appChipClick (chipClick)="clickTagOnItem($event)" *ngFor="let tag of recipe.tags">{{tag}}</mat-chip>
+          </mat-chip-listbox>
         </div>
         <div>
           <img class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}" width="200" height="150" priority

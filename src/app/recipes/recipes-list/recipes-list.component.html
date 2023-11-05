@@ -6,7 +6,7 @@
   </div>
   <div class="r-chips" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
     <h5>Search recipes by tags:</h5>
-    <mat-chip-listbox multiple aria-label="Fish selection" (change)="chipsChanged($event)">
+    <mat-chip-listbox multiple aria-label="Tag selection" (change)="chipsChanged($event)">
       <mat-chip-option [selected]="selected(tag)" title="tag" *ngFor="let tag of tags$ | async">{{tag}}</mat-chip-option>
     </mat-chip-listbox>
   </div>

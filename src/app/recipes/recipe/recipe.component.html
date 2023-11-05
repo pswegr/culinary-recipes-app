@@ -37,9 +37,9 @@
           </h4>
         </div>
         <div class="r-grid-item-6">
-          <mat-chip-set role="doc-index">
-            <mat-chip-option (chipClick)="chipClicked($event)" appChipClick role="doc-index" *ngFor="let tag of recipe.tags">{{tag}}</mat-chip-option>
-          </mat-chip-set>
+          <mat-chip-listbox>
+            <mat-chip-option (chipClick)="chipClicked($event)" appChipClick *ngFor="let tag of recipe.tags">{{tag}}</mat-chip-option>
+          </mat-chip-listbox>
         </div>
         <div class="r-grid-item-7 r-content" appResponsiveness [darkMode]="['r-content-bg-dark']"
           [lightMode]="['r-content-bg-light']">
