@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, share, switchMap } from 'rxjs';
-import { RecipesService } from '../../services/recipes.service';
+import { RecipesService } from '../../../shared/services/recipes.service';
 
 @Component({
   selector: 'app-tag-details',

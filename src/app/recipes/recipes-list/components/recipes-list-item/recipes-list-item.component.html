@@ -16,8 +16,8 @@
           </mat-chip-set>
         </div>
         <div>
-          <img class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}"
-            src="{{recipe.photo.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
+          <img class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}" width="200" height="150" priority
+            ngSrc="{{recipe.photo.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
             alt="{{recipe.title}}">
         </div>
       </div>
@@ -58,7 +58,7 @@
         <button mat-button>LIKE</button>
         <button mat-button>SHARE</button>
       </div>
-      <button class="r-add-button" mat-mini-fab routerLink="upsert/{{recipe.id}}" matTooltip="Edit recipe">
+      <button class="r-add-button" mat-mini-fab routerLink="/recipes/upsert/{{recipe.id}}" matTooltip="Edit recipe">
         <mat-icon>edit</mat-icon>
       </button>
     </div>
