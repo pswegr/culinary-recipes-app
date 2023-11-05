@@ -1,4 +1,4 @@
-<div class="r-details" *ngIf="recipe$ | async as recipe">
+<div class="r-details" *ngIf="recipe$ | async as recipe; else loading">
   <div class="r-container" appResponsiveness 
     [largeScreens]="['r-desktop']" 
     [mediumScreens]="['r-tablet']"
@@ -15,8 +15,8 @@
       <div class="r-grid-container" appResponsiveness [largeScreens]="['r-desktop']" [mediumScreens]="['r-tablet']"
         [smallScreens]="['r-small']">
         <div class="r-grid-item-1">
-          <img class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}"
-            src="{{recipe.photo.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
+          <img class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}" width="200" height="150" priority
+            ngSrc="{{recipe.photo.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
             alt="{{recipe.title}}">
         </div>
         <div class="r-grid-item-2">
@@ -68,6 +68,10 @@
         <div class="r-grid-item-9"> created by: </div>
       </div>
     </div>
-   
   </div>
 </div>
+<ng-template #loading>
+  <div >
+    <mat-spinner class="r-center"></mat-spinner>
+  </div>
+</ng-template>

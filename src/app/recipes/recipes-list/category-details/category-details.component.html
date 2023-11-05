@@ -1,0 +1,16 @@
+<div *ngIf="recipesbyCategory$ | async as recipesbyCategory; else loading">
+  <div class="r-header-category-details">
+    <h1>
+      Category: {{categoryName$ | async}}
+    </h1>
+    <h4>
+      count: {{recipesbyCategory.length}}
+    </h4> 
+  </div>
+  <app-recipes-list-item [recipe]="item" *ngFor="let item of recipesbyCategory"></app-recipes-list-item>
+</div>
+<ng-template #loading>
+  <div >
+    <mat-spinner class="r-center"></mat-spinner>
+  </div>
+</ng-template>

@@ -1,7 +1,7 @@
 import { Component, Signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, share, switchMap } from 'rxjs';
-import { RecipesService } from '../services/recipes.service';
+import { RecipesService } from '../../shared/services/recipes.service';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
 
 @Component({
