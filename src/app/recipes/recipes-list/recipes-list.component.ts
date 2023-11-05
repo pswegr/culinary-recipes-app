@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
-import { RecipesService } from '../services/recipes.service';
+import { RecipesService } from '../../shared/services/recipes.service';
 import { BehaviorSubject, Observable, map, switchMap, tap } from 'rxjs';
 import { MatChipListboxChange } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';

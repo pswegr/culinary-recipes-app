@@ -10,10 +10,19 @@ export class RecipesService {
 
   constructor(private http: HttpClient) { }
 
-  getRecipes(pickedTags: string[]){
+  getRecipes(pickedTags: string[] | null = null, category: string | null = null){
     const searchParams = new URLSearchParams();
-    pickedTags.forEach((tag) => searchParams.append('tags', tag));
-    if(pickedTags.length === 0){
+    console.log(category);
+    if(category){
+      searchParams.append('category', category)
+    }
+    console.log(pickedTags);
+    pickedTags?.forEach((tag) =>{ 
+      if(tag){
+        searchParams.append('tags', tag)
+      } 
+    });
+    if(pickedTags?.length === 0 && !category){
       return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes');
     }
     return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes?' + searchParams.toString());

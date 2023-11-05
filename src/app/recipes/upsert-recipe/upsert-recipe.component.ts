@@ -3,7 +3,7 @@ import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { IngredientModel } from 'src/app/shared/models/igredient.model';
-import { RecipesService } from '../services/recipes.service';
+import { RecipesService } from '../../shared/services/recipes.service';
 import { Observable,  Subject,  Subscription,  filter,  map, of, share, switchMap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';

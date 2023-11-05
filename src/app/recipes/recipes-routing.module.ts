@@ -5,6 +5,7 @@ import { UpsertRecipeComponent } from "./upsert-recipe/upsert-recipe.component";
 import { NgModule } from "@angular/core";
 import { RecipesAllListComponent } from "./recipes-list/recipes-all-list/recipes-all-list.component";
 import { TagDetailsComponent } from "./recipes-list/tag-details/tag-details.component";
+import { CategoryDetailsComponent } from "./recipes-list/category-details/category-details.component";
 
 const routes: Routes = [
   {
@@ -36,7 +37,12 @@ const routes: Routes = [
   {
     path: 'tag/:tag',
     component: TagDetailsComponent, 
-    title: "All Recipes"
+    title: "Tag details"
+  },
+  {
+    path: 'category/:category',
+    component: CategoryDetailsComponent, 
+    title: "Category details"
   }
 ]
 

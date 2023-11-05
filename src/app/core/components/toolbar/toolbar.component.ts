@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { RecipesService } from 'src/app/shared/services/recipes.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -8,6 +9,9 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 })
 export class ToolbarComponent {
   @Output() readonly darkModeSwitched = new EventEmitter<boolean>();
+  categories$ = this.recipesService.getCategories();
+
+  constructor(private recipesService: RecipesService){}
 
   onDarkModeSwithed({checked} : MatSlideToggleChange){
     this.darkModeSwitched.emit(checked);

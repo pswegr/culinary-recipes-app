@@ -1,4 +1,4 @@
-<div *ngIf="recipesbyTag$ | async as recipesByTag">
+<div *ngIf="recipesbyTag$ | async as recipesByTag; else loading">
   <div class="r-header-tag-details">
     <h1>
       Tag name - {{tagName$ | async}}
@@ -9,4 +9,9 @@
   </div>
   <app-recipes-list-item [recipe]="item" *ngFor="let item of recipesByTag"></app-recipes-list-item>
 </div>
+<ng-template #loading>
+  <div >
+    <mat-spinner class="r-center"></mat-spinner>
+  </div>
+</ng-template>
 
