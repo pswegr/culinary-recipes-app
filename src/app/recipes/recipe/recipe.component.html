@@ -1,4 +1,4 @@
-<div class="r-details" *ngIf="recipe$ | async as recipe; else loading">
+<div class="r-details" *ngIf="loadRecipe$ | async as recipe">
   <div class="r-container" appResponsiveness 
     [largeScreens]="['r-desktop']" 
     [mediumScreens]="['r-tablet']"
@@ -70,8 +70,3 @@
     </div>
   </div>
 </div>
-<ng-template #loading>
-  <div >
-    <mat-spinner class="r-center"></mat-spinner>
-  </div>
-</ng-template>

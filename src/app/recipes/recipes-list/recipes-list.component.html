@@ -1,4 +1,4 @@
-<ng-container *ngIf="recipes$ | async as recipes; else loading">
+<ng-container *ngIf="loadRecipes$ | async as recipes">
   <div class="r-header">
     <button class="r-add-button" mat-fab routerLink="/recipes/upsert" matTooltip="Add new recipe">
       <mat-icon>add</mat-icon>
@@ -12,8 +12,4 @@
   </div>
   <app-recipes-list-item [recipe]="item" *ngFor="let item of recipes" (tag)="clickTagOnItem($event)"></app-recipes-list-item>
 </ng-container>
-<ng-template #loading>
-  <div >
-    <mat-spinner class="r-center"></mat-spinner>
-  </div>
-</ng-template>
+
