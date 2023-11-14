@@ -7,6 +7,7 @@ import { ResponsivenessDirective } from './directives/responsiveness.directive';
 import { DoubleClickDirective } from './directives/double-click.directive';
 import { ChipClickDirective } from './directives/chip-click.directive';
 import { LoadingComponent } from './components/loading/loading.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { LoadingComponent } from './components/loading/loading.component';
     DoubleClickDirective,
     ChipClickDirective,
     LoadingComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     CommonModule,

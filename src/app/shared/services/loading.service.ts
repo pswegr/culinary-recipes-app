@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, concatMap, finalize, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, concatMap, finalize, of, tap, throwError } from 'rxjs';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class LoadingService {
 
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
 
-  constructor() {
+  constructor(private alertService: AlertService) {
       console.log("Loading service created ...");
   }
 
@@ -19,7 +20,13 @@ export class LoadingService {
           .pipe(
               tap(() => this.loadingOn()),
               concatMap(() => obs$),
-              finalize(() => this.loadingOff())
+              finalize(() => this.loadingOff()),
+              catchError(err => {
+                const message = 'Could not load resources';
+                this.alertService.openSnackBar(message, 'close')
+                console.log(message, err);
+                return throwError(() => new Error(err));
+              })
           );
   }
 

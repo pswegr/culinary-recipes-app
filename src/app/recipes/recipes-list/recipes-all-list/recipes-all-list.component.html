@@ -1,9 +1,4 @@
-<div *ngIf="recipesAll$ | async as recipesAll; else loading">
+<div *ngIf="loadRecipesAll$ | async as recipesAll">
   <app-recipes-list-item [recipe]="item" *ngFor="let item of recipesAll"></app-recipes-list-item>
 </div>
-<ng-template #loading>
-  <div >
-    <mat-spinner class="r-center"></mat-spinner>
-  </div>
-</ng-template>
 
