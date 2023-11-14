@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, share, switchMap } from 'rxjs';
 import { RecipesService } from '../../shared/services/recipes.service';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
   selector: 'app-recipe',
@@ -17,7 +18,9 @@ export class RecipeComponent {
     switchMap(recipeId => this.recipesService.getRecipe(recipeId)),
   ).pipe(share());
 
-  constructor(private route: ActivatedRoute, private recipesService: RecipesService, private themeModeService: ThemeModeService, private router: Router) { }
+  loadRecipe$ = this.loadingService.showLoaderUntilCompleted(this.recipe$);
+
+  constructor(private route: ActivatedRoute, private recipesService: RecipesService, private themeModeService: ThemeModeService, private router: Router, private loadingService: LoadingService) { }
 
   chipClicked(event: string){
     this.router.navigateByUrl(`recipes/tag/${event}`)

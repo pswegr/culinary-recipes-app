@@ -5,10 +5,10 @@
   <mat-menu #menu="matMenu">
     <button mat-menu-item routerLink="/recipes/all">All recipes</button>
     <button mat-menu-item routerLink="/policy-and-terms">Policy & terms</button>
-    <button mat-menu-item [matMenuTriggerFor]="categoriesMenu">Categories</button>
+    <button mat-menu-item *ngIf="loadCategories$ | async" [matMenuTriggerFor]="categoriesMenu">Categories</button>
   </mat-menu>
   <mat-menu #categoriesMenu="matMenu">
-    <button mat-menu-item *ngFor="let item of categories$ | async" [routerLink]="'recipes/category/'+ item">{{item}}</button>
+    <button mat-menu-item *ngFor="let item of loadCategories$| async" [routerLink]="'recipes/category/'+ item">{{item}}</button>
   </mat-menu>
   <a routerLink="/recipes" routerLinkActive="router-link-active" class="r-header-title">
     <div class="r-logo-h3">Recipes</div>
