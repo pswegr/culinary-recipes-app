@@ -6,12 +6,14 @@ import { RouterModule } from '@angular/router';
 import { ResponsivenessDirective } from './directives/responsiveness.directive';
 import { DoubleClickDirective } from './directives/double-click.directive';
 import { ChipClickDirective } from './directives/chip-click.directive';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   declarations: [
     ResponsivenessDirective,
     DoubleClickDirective,
     ChipClickDirective,
+    LoadingComponent,
   ],
   imports: [
     CommonModule,
@@ -27,6 +29,7 @@ import { ChipClickDirective } from './directives/chip-click.directive';
     ResponsivenessDirective,
     DoubleClickDirective,
     ChipClickDirective,
+    LoadingComponent,
   ]
 })
 export class SharedModule { }

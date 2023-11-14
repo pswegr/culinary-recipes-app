@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { TermsModule } from './terms/terms.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoadingService } from './shared/services/loading.service';
 
 @NgModule({
   declarations: [
