@@ -11,7 +11,6 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 })
 export class RecipesAllListComponent {
   recipesAll$: Observable<RecipeModel[]> = this.recipeService.getAllRecipes();
-  loadRecipesAll$ = this.loadingService.showLoaderUntilCompleted(this.recipesAll$);
 
-  constructor(private recipeService: RecipesService, private loadingService: LoadingService){}
+  constructor(private recipeService: RecipesService){}
 }

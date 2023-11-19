@@ -1,13 +1,13 @@
-<div class="r-details" *ngIf="loadRecipe$ | async as recipe">
+<div class="r-details" *ngIf="recipe$ | async as recipe">
   <div class="r-container" appResponsiveness 
     [largeScreens]="['r-desktop']" 
     [mediumScreens]="['r-tablet']"
     [smallScreens]="['r-handset-poitret-mode']" 
     [darkMode]="['r-dark-mode']">
-    <div class="r-item"  [ngStyle]="{'background-color': isDark() ? 'inherit' : recipe.photo.mainColor + '22' }">
+    <div class="r-item"  [ngStyle]="{'background-color': isDark() ? 'inherit' : recipe?.photo?.mainColor ?? 'green' + '22' }">
       <div class="r-header" appResponsiveness [darkMode]="['r-header-bg-dark']" [lightMode]="['r-header-bg-light']">
         <h2 class="r-category">{{recipe.category}}</h2>
-        <h1 class="r-title" [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + recipe.photo.mainColor }">
+        <h1 class="r-title" [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + recipe?.photo?.mainColor ?? 'green' }">
           {{recipe.title}}
         </h1>
         <h5 class="r-description">{{recipe.description}}</h5>
@@ -16,7 +16,7 @@
         [smallScreens]="['r-small']">
         <div class="r-grid-item-1">
           <img class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}" width="200" height="150" priority
-            ngSrc="{{recipe.photo.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
+            ngSrc="{{recipe?.photo?.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
             alt="{{recipe.title}}">
         </div>
         <div class="r-grid-item-2">

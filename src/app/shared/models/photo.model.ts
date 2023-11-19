@@ -1,5 +1,5 @@
 export interface PhotoModel {
-  publicId: string;
-  url: string;
-  mainColor: string;
+  publicId?: string;
+  url?: string;
+  mainColor?: string;
 }

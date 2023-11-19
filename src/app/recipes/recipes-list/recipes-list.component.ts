@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import { RecipesService } from '../../shared/services/recipes.service';
-import { BehaviorSubject, Observable, map, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, first, map, shareReplay, switchMap, tap } from 'rxjs';
 import { MatChipListboxChange } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -17,11 +17,8 @@ export class RecipesListComponent {
     tap(params => this.chosenTags.next(params.getAll('tags'))),
     switchMap(params => this.recipeService.getRecipes(params.getAll('tags')))
   );
-  loadRecipes$: Observable<RecipeModel[]> = this.loadingService.showLoaderUntilCompleted(this.recipes$);
 
   tags$: Observable<string[]> = this.recipeService.getTags();
-
-  loadTags$: Observable<string[]> = this.loadingService.showLoaderUntilCompleted(this.tags$);
 
   constructor(private recipeService: RecipesService, private router: Router, private route: ActivatedRoute, private loadingService: LoadingService) {
   }

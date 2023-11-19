@@ -1,6 +1,6 @@
 <div [appDoubleClick]="recipe.id" (doubleClick)="navigateToDetails($event)" *ngIf="recipe">
   <div class="r-list-item" appResponsiveness
-    [ngStyle]="{'background-color': isDark() ? 'inherit' : recipe.photo.mainColor + '22' }"
+    [ngStyle]="{'background-color': isDark() ? 'inherit' : recipe?.photo?.mainColor ?? 'green' + '22' }"
     [smallScreens]="['r-handset-poitret-mode']" [largeScreens]="['r-desktop']" [darkMode]="['dark-mode-shadow']"
     [lightMode]="['light-mode-shadow']">
 
@@ -8,7 +8,7 @@
       <div appResponsiveness [largeScreens]="['r-display-grid-2']">
         <div class="r-list-item-header" appResponsiveness [darkMode]="['r-list-item-header-bg-dark']"
           [lightMode]="['r-list-item-header-bg-light']">
-          <h1 [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + recipe.photo.mainColor }">{{recipe.title}}</h1>
+          <h1 [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + recipe?.photo?.mainColor ?? 'green' }">{{recipe.title}}</h1>
           <h2>{{recipe.category}}</h2>
           <h5>{{recipe.description}}</h5>
           <mat-chip-listbox>
@@ -17,7 +17,7 @@
         </div>
         <div>
           <img class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}" width="200" height="150" priority
-            ngSrc="{{recipe.photo.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
+            ngSrc="{{recipe.photo?.url || recipe?.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
             alt="{{recipe.title}}">
         </div>
       </div>
