@@ -11,8 +11,8 @@ export interface RecipeModel {
   ingredients: IngredientModel[];
   instructions: string[];
   category: string;
-  imageUrl: string;
+  imageUrl?: string;
   tags: string[];
-  photo: PhotoModel;
+  photo?: PhotoModel;
   published: boolean;
 }

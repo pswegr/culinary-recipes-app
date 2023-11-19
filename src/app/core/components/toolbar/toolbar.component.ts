@@ -12,7 +12,6 @@ import { RecipesService } from 'src/app/shared/services/recipes.service';
 export class ToolbarComponent {
   @Output() readonly darkModeSwitched = new EventEmitter<boolean>();
   categories$ = this.recipesService.getCategories().pipe(shareReplay());
-  loadCategories$ = this.loadingService.showLoaderUntilCompleted(this.categories$);
   constructor(private recipesService: RecipesService, private loadingService: LoadingService){}
 
   onDarkModeSwithed({checked} : MatSlideToggleChange){
