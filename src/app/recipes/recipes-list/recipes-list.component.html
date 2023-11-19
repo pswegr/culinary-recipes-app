@@ -1,4 +1,4 @@
-<ng-container *ngIf="loadRecipes$ | async as recipes">
+<ng-container *ngIf="recipes$ | async as recipes">
   <div class="r-header">
     <button class="r-add-button" mat-fab routerLink="/recipes/upsert" matTooltip="Add new recipe">
       <mat-icon>add</mat-icon>

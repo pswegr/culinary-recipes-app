@@ -1,4 +1,4 @@
-<div *ngIf="loadRecipesAll$ | async as recipesAll">
+<div *ngIf="recipesAll$ | async as recipesAll">
   <app-recipes-list-item [recipe]="item" *ngFor="let item of recipesAll"></app-recipes-list-item>
 </div>
 

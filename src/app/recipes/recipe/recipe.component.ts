@@ -18,8 +18,6 @@ export class RecipeComponent {
     switchMap(recipeId => this.recipesService.getRecipe(recipeId)),
   ).pipe(share());
 
-  loadRecipe$ = this.loadingService.showLoaderUntilCompleted(this.recipe$);
-
   constructor(private route: ActivatedRoute, private recipesService: RecipesService, private themeModeService: ThemeModeService, private router: Router, private loadingService: LoadingService) { }
 
   chipClicked(event: string){

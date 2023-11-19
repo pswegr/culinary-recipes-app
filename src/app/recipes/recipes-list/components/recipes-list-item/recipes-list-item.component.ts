@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Input, OnDestroy, Output, Signal, WritableSignal} from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, Signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject} from 'rxjs';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
-import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'app-recipes-list-item',

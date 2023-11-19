@@ -1,7 +1,7 @@
-<div *ngIf="loadRecipesByCategory$ | async as recipesbyCategory">
+<div *ngIf="recipesByCategory$ | async as recipesbyCategory">
   <div class="r-header-category-details">
     <h1>
-      Category: {{loadCategoryName$ | async}}
+      Category: {{categoryName$ | async}}
     </h1>
     <h4>
       count: {{recipesbyCategory.length}}
