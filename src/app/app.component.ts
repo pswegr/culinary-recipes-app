@@ -1,14 +1,12 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, HostBinding, Inject, OnInit, Renderer2 } from '@angular/core';
+import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { ThemeModeService } from './shared/services/theme-mode.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { LoadingService } from './shared/services/loading.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  providers: [LoadingService]
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 
