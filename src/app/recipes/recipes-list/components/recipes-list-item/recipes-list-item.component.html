@@ -1,6 +1,6 @@
 <div [appDoubleClick]="recipe.id" (doubleClick)="navigateToDetails($event)" *ngIf="recipe">
   <div class="r-list-item" appResponsiveness
-    [ngStyle]="{'background-color': isDark() ? 'inherit' : recipe?.photo?.mainColor ?? 'green' + '22' }"
+    [ngStyle]="{'background-color': isDark() ? 'inherit' : (recipe?.photo?.mainColor ?? '#008000') + '22' }"
     [smallScreens]="['r-handset-poitret-mode']" [largeScreens]="['r-desktop']" [darkMode]="['dark-mode-shadow']"
     [lightMode]="['light-mode-shadow']">
 
@@ -8,7 +8,7 @@
       <div appResponsiveness [largeScreens]="['r-display-grid-2']">
         <div class="r-list-item-header" appResponsiveness [darkMode]="['r-list-item-header-bg-dark']"
           [lightMode]="['r-list-item-header-bg-light']">
-          <h1 [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + recipe?.photo?.mainColor ?? 'green' }">{{recipe.title}}</h1>
+          <h1 [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + (recipe?.photo?.mainColor ?? '#008000') }">{{recipe.title}}</h1>
           <h2>{{recipe.category}}</h2>
           <h5>{{recipe.description}}</h5>
           <mat-chip-listbox>

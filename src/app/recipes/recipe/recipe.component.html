@@ -4,10 +4,10 @@
     [mediumScreens]="['r-tablet']"
     [smallScreens]="['r-handset-poitret-mode']" 
     [darkMode]="['r-dark-mode']">
-    <div class="r-item"  [ngStyle]="{'background-color': isDark() ? 'inherit' : recipe?.photo?.mainColor ?? 'green' + '22' }">
+    <div class="r-item"  [ngStyle]="{'background-color': isDark() ? 'inherit' : (recipe?.photo?.mainColor ?? '#008000') + '22' }">
       <div class="r-header" appResponsiveness [darkMode]="['r-header-bg-dark']" [lightMode]="['r-header-bg-light']">
         <h2 class="r-category">{{recipe.category}}</h2>
-        <h1 class="r-title" [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + recipe?.photo?.mainColor ?? 'green' }">
+        <h1 class="r-title" [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + (recipe?.photo?.mainColor ?? '#008000') }">
           {{recipe.title}}
         </h1>
         <h5 class="r-description">{{recipe.description}}</h5>
