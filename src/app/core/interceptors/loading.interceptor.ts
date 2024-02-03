@@ -34,6 +34,10 @@ export class LoadingInterceptor implements HttpInterceptor {
       catchError(err => {
         const message = 'Could not load resources';
         this.alertService.openSnackBar(message, 'close')
+        this.totalRequests--;
+        if (this.totalRequests <= 0) {
+          this.loadingService.loadingOff();
+        }
         console.log(message, err);
         return throwError(() => new Error(err));
       })
