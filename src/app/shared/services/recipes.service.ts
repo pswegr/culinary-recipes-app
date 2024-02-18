@@ -26,8 +26,22 @@ export class RecipesService {
     return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes?' + searchParams.toString());
   }
 
-  getAllRecipes(){
-    return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes/GetAll');
+  getAllRecipes(pickedTags: string[] | null = null, category: string | null = null){
+    const searchParams = new URLSearchParams();
+    if(category){
+      searchParams.append('category', category)
+    }
+    pickedTags?.forEach((tag) =>{ 
+      if(tag){
+        searchParams.append('tags', tag)
+      } 
+    });
+
+    if(pickedTags?.length === 0 && !category){
+      return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes/GetAll');
+    }
+
+    return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes/GetAll?' + searchParams.toString());
   }
 
   getCategories() {
@@ -40,6 +54,10 @@ export class RecipesService {
 
   getTags() {
     return this.http.get<string[]>(environment.apiUrl + 'Recipes/Tags');
+  }
+
+  getAllTags() {
+    return this.http.get<string[]>(environment.apiUrl + 'Recipes/AllTags');
   }
 
   upsertRecipe(formData: FormData){
