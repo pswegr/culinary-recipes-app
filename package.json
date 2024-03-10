@@ -9,7 +9,7 @@
     "test": "ng test"
   },
   "private": true,
-  "engines": { 
+  "engines": {
     "node": "^18.13.0 || ^20.9.0"
   },
   "dependencies": {
@@ -28,8 +28,8 @@
     "zone.js": "~0.14.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^17.0.0",
-    "@angular/cli": "~17.0.0",
+    "@angular-devkit/build-angular": "^17.2.3",
+    "@angular/cli": "~17.2.3",
     "@angular/compiler-cli": "^17.0.0",
     "@types/jasmine": "~4.3.0",
     "jasmine-core": "~4.6.0",
