@@ -41,10 +41,10 @@
         <div class="r-box" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" [attr.data-drag-data]="instruction" *ngFor="let instruction of recipe.instructions; let i= index; trackBy:trackByFn" cdkDrag>
           {{instruction}}
           <div class="r-item-action-buttons">
-            <button mat-mini-fab color="warn" (click)="deleteInstruction(i)" matTooltip="Delete instruction">
+            <button mat-mini-fab class="recipe-mat-fab-secondary" (click)="deleteInstruction(i)" matTooltip="Delete instruction">
               <mat-icon>delete</mat-icon>
             </button>
-            <button mat-mini-fab color="primary" (click)="editInstruction(i)" matTooltip="Edit instruction">
+            <button mat-mini-fab (click)="editInstruction(i)" matTooltip="Edit instruction">
               <mat-icon>edit</mat-icon>
             </button> 
           </div>
@@ -54,7 +54,7 @@
         <mat-label>Next instruction</mat-label>
         <textarea matInput placeholder="instruction step" (keyup.enter)="addNewInstruction()" [(ngModel)]="newInstruction" name="newInstructions"></textarea>
       </mat-form-field>
-      <button mat-fab extended color="accent" (click)="addNewInstruction()" [disabled]="recipe.instructions.length > 10">
+      <button mat-fab extended (click)="addNewInstruction()" [disabled]="recipe.instructions.length > 10">
         <mat-icon>add</mat-icon>
         Add instruction
       </button>

@@ -1,6 +1,7 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
+@use '@angular/material-experimental' as matx;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -36,7 +37,38 @@ $culinary-recipes-app-theme-dark: mat.define-dark-theme((
   )
 ));
 
+//mat 3
+$dark-theme: matx.define-theme((
+  color: (
+    theme-type: dark,
+    primary: matx.$m3-cyan-palette,
+    tertiary: matx.$m3-green-palette,
+  ),
+  typography: (
+    brand-family: 'Comic Sans',
+    bold-weight: 900
+  ),
+  density: (
+    scale: -1
+  )
+));
 
+$light-theme: matx.define-theme((
+  color: (
+    theme-type: light,
+    primary: matx.$m3-azure-palette,
+    tertiary: matx.$m3-green-palette
+  ),
+  typography: (
+    brand-family: 'Comic Sans',
+    bold-weight: 900
+  ),
+  density: (
+    scale: -1
+  )
+));
+
+//
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -47,12 +79,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   // Include theme styles for core and each component used in your app.
   // Alternatively, you can import and @include the theme mixins for each component
   // that you are using.
-  @include mat.all-component-themes($culinary-recipes-app-theme);
+  @include mat.all-component-themes($light-theme);
+
+  .recipe-mat-fab-secondary {
+    @include mat.fab-color($light-theme, $color-variant: secondary);
+  }
 }
 
 .theme-dark {
   // Include theme styles for core and each component used in your app.
   // Alternatively, you can import and @include the theme mixins for each component
   // that you are using.
-  @include mat.all-component-themes($culinary-recipes-app-theme-dark);
+  @include mat.all-component-themes($dark-theme);
+
+  .recipe-mat-fab-secondary {
+    @include mat.fab-color($dark-theme, $color-variant: secondary);
+  }
 }
