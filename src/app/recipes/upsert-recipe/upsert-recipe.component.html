@@ -35,6 +35,44 @@
     </form>
   </mat-step>
   <mat-step>
+    <ng-template matStepLabel>Igredients</ng-template>
+    <div class="r-ingredients">
+      <div class="r-ingredients-list">
+        <div class="r-ingredient-list-item" *ngFor="let item of recipe.ingredients; let i= index;">
+            <div>
+              {{item.name}} - {{item.quantity}} 
+            </div>
+            <div class="r-item-action-buttons">
+              <button mat-mini-fab class="recipe-mat-fab-secondary" (click)="deleteIngredient(i)" matTooltip="Delete Ingredient">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button mat-mini-fab color="primary" (click)="editIngredient(i)" matTooltip="Edit Ingredient">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+        </div>
+      </div>
+      <div class="r-grid-2-columns">
+        <mat-form-field class="r-full-width r-new-instruction">
+          <mat-label>Ingredient</mat-label>
+          <textarea matInput placeholder="Igredient name" [(ngModel)]="newIngredient.name" (keyup.enter)="addNewIngrdient()" name="newInstructions.name"></textarea>
+        </mat-form-field>
+        <mat-form-field class="r-full-width r-new-instruction">
+          <mat-label>Quantity</mat-label>
+          <textarea matInput placeholder="quantity" [(ngModel)]="newIngredient.quantity" (keyup.enter)="addNewIngrdient()" name="newInstructions.quantity"></textarea>
+        </mat-form-field>
+      </div>
+      <button mat-fab extended class="recipe-mat-btn-tertiary" (click)="addNewIngrdient()" (keyup.enter)="addNewIngrdient()">
+        <mat-icon>add</mat-icon>
+        Add ingredient
+      </button>
+      <div class="r-stepper-footer">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </div>
+  </mat-step>
+  <mat-step>
     <form class="r-form-recipes-data-instructions  r-overflow-auto">
       <ng-template matStepLabel>Fill out instructions</ng-template>
       <div cdkDropList class="r-list" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" (cdkDropListDropped)="drop($event)">
@@ -54,7 +92,7 @@
         <mat-label>Next instruction</mat-label>
         <textarea matInput placeholder="instruction step" (keyup.enter)="addNewInstruction()" [(ngModel)]="newInstruction" name="newInstructions"></textarea>
       </mat-form-field>
-      <button mat-fab extended (click)="addNewInstruction()" [disabled]="recipe.instructions.length > 10">
+      <button mat-fab extended class="recipe-mat-btn-tertiary" (click)="addNewInstruction()" [disabled]="recipe.instructions.length > 10">
         <mat-icon>add</mat-icon>
         Add instruction
       </button>
@@ -63,44 +101,6 @@
         <button mat-button matStepperNext>Next</button>
       </div>
     </form>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Igredients</ng-template>
-    <div class="r-ingredients">
-      <div class="r-ingredients-list">
-        <div class="r-ingredient-list-item" *ngFor="let item of recipe.ingredients; let i= index;">
-            <div>
-              {{item.name}} - {{item.quantity}} 
-            </div>
-            <div class="r-item-action-buttons">
-              <button mat-mini-fab color="warn" (click)="deleteIngredient(i)" matTooltip="Delete Ingredient">
-                <mat-icon>delete</mat-icon>
-              </button>
-              <button mat-mini-fab color="primary" (click)="editIngredient(i)" matTooltip="Edit Ingredient">
-                <mat-icon>edit</mat-icon>
-              </button>
-            </div>
-        </div>
-      </div>
-      <div class="r-grid-2-columns">
-        <mat-form-field class="r-full-width r-new-instruction">
-          <mat-label>Ingredient</mat-label>
-          <textarea matInput placeholder="Igredient name" [(ngModel)]="newIngredient.name" (keyup.enter)="addNewIngrdient()" name="newInstructions.name"></textarea>
-        </mat-form-field>
-        <mat-form-field class="r-full-width r-new-instruction">
-          <mat-label>Quantity</mat-label>
-          <textarea matInput placeholder="quantity" [(ngModel)]="newIngredient.quantity" (keyup.enter)="addNewIngrdient()" name="newInstructions.quantity"></textarea>
-        </mat-form-field>
-      </div>
-      <button mat-fab extended color="accent" (click)="addNewIngrdient()" (keyup.enter)="addNewIngrdient()">
-        <mat-icon>add</mat-icon>
-        Add ingredient
-      </button>
-      <div class="r-stepper-footer">
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </div>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Category and add photo</ng-template>
