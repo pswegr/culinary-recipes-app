@@ -19,15 +19,9 @@ export class RecipeComponent {
     switchMap(recipeId => this.recipesService.getRecipe(recipeId)),
     tap(recipe => {
       this.titleService.setTitle(`${recipe.title} - Recipes with Passion / przepisy kulinarne`);
-      this.metaService.updateTag({name: 'decription', content: `${recipe.title} - ${recipe.description} - Recipes with Passion`})
+      this.metaService.updateTag({ name: 'decription', content: `${recipe.title} - ${recipe.description} - Recipes with Passion` })
     })
   ).pipe(share());
 
-  constructor(private route: ActivatedRoute, private recipesService: RecipesService, private themeModeService: ThemeModeService, private router: Router, private loadingService: LoadingService, private titleService: Title, private metaService: Meta) { }
-
-  chipClicked(event: string){
-    this.router.navigateByUrl(`recipes/tag/${event}`)
-  }
-
-
+  constructor(private route: ActivatedRoute, private recipesService: RecipesService, private themeModeService: ThemeModeService, private titleService: Title, private metaService: Meta) { }
 }
