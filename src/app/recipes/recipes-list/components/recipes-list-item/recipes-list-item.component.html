@@ -6,8 +6,7 @@
 
     <div appResponsiveness [darkMode]="['r-dark-mode']">
       <div appResponsiveness [largeScreens]="['r-display-grid-2']">
-        <div class="r-list-item-header" appResponsiveness [darkMode]="['r-list-item-header-bg-dark']"
-          [lightMode]="['r-list-item-header-bg-light']">
+        <div class="r-list-item-header" [appGradientBg]="'0deg'" [gradientColor]="recipe?.photo?.mainColor">
           <h1 [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + (recipe?.photo?.mainColor ?? '#008000') }">{{recipe.title}}</h1>
           <h2>{{recipe.category}}</h2>
           <h5>{{recipe.description}}</h5>
@@ -27,8 +26,7 @@
         <h4>Servings: {{recipe.servings}}</h4>
       </div>
       <div appResponsiveness [largeScreens]="['r-display-grid-2']">
-        <div class="r-list-item-content" appResponsiveness [darkMode]="['r-list-item-content-bg-dark']"
-          [lightMode]="['r-list-item-content-bg-light']">
+        <div class="r-list-item-content" appGradientBg="270deg" [gradientColor]="recipe?.photo?.mainColor">
           <div class="r-igredients">
             <h3>Igredients</h3>
             <ul class="r-ul">
@@ -40,11 +38,10 @@
             </ul>
           </div>
         </div>
-        <div class="r-list-item-content" appResponsiveness [darkMode]="['r-list-item-content-bg-dark-reverse']"
-          [lightMode]="['r-list-item-content-bg-light-reverse']">
+        <div class="r-list-item-content" appGradientBg="90deg" [gradientColor]="recipe?.photo?.mainColor">
           <div class="r-instructions">
             <h3>Instructions</h3>
-            <ol>
+            <ol class="r-ol">
               <li *ngFor="let instruction of recipe.instructions">
                 <span>{{instruction}}</span>
               </li>

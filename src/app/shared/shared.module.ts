@@ -8,12 +8,14 @@ import { DoubleClickDirective } from './directives/double-click.directive';
 import { ChipClickDirective } from './directives/chip-click.directive';
 import { LoadingComponent } from './components/loading/loading.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { GradientBgDirective } from './directives/gradient-bg.directive';
 
 @NgModule({
   declarations: [
     ResponsivenessDirective,
     DoubleClickDirective,
     ChipClickDirective,
+    GradientBgDirective,
     LoadingComponent,
     PageNotFoundComponent,
   ],
@@ -31,6 +33,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     ResponsivenessDirective,
     DoubleClickDirective,
     ChipClickDirective,
+    GradientBgDirective,
     LoadingComponent,
   ]
 })

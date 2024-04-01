@@ -10,7 +10,8 @@ import { RecipeComponent } from './recipe/recipe.component';
 import { RecipesRoutingModule } from './recipes-routing.module';
 import { TagDetailsComponent } from './recipes-list/tag-details/tag-details.component';
 import { NgOptimizedImage } from '@angular/common';
-import { CategoryDetailsComponent } from './recipes-list/category-details/category-details.component'
+import { CategoryDetailsComponent } from './recipes-list/category-details/category-details.component';
+import { RecipeCartComponent } from './components/recipe-cart/recipe-cart.component'
 
 
 
@@ -23,7 +24,8 @@ import { CategoryDetailsComponent } from './recipes-list/category-details/catego
     RecipesAllListComponent,
     RecipeComponent,
     TagDetailsComponent,
-    CategoryDetailsComponent
+    CategoryDetailsComponent,
+    RecipeCartComponent
   ],
   imports: [
     RecipesRoutingModule,
