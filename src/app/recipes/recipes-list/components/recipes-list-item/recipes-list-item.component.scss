@@ -1,3 +1,5 @@
+@import "abstract/variables";
+
 .r-list-item{
   &.r-desktop{
     margin: 4rem auto;
@@ -28,14 +30,41 @@
 
   .r-ul{
     padding-inline-start: 20px;
-    
-    .r-quantity {
-      opacity: .75;
+    list-style: none;
+    width: 80%;
+    margin: 0 auto;
+
+    .r-li{
+      padding: 1rem;
+      font-size: 1rem;
+      text-align: center;
+
+      .r-quantity {
+        opacity: .75;
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba($r-color-grey-light, .22);
+      }
     }
+  
   }
 
   .r-ol {
     padding-inline-start: 20px;
+
+    .r-li{
+      padding: 1rem;
+      font-size: 1rem;
+
+      .r-quantity {
+        opacity: .75;
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba($r-color-grey-light, .22);
+      }
+    }
   }
 
   .r-list-item-content, .r-list-item-header {

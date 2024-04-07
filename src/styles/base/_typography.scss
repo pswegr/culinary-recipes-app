@@ -1,0 +1,18 @@
+@import '../abstract/variables';
+
+.r-heading-secondary {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-block;
+  background-image: linear-gradient(to right, $r-color-primary, $r-color-primary-dark);
+  -webkit-background-clip: text;
+  color: transparent;
+  letter-spacing: .2rem;
+  transition: all .2s;
+
+  &:hover {
+      transform: skewY(1deg) skewX(7deg) scale(1.05);
+      text-shadow: .5rem 1rem 2rem rgba($r-color-black, .2);
+  }
+}
