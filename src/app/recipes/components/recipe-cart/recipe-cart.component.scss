@@ -1,3 +1,4 @@
+@import "abstract/variables";
 .r-container {
   border-radius: 15px;
   
@@ -162,8 +163,43 @@
     height: auto;
   }
 
-  .r-ul,.r-ol {
+  .r-ul{
     padding-inline-start: 20px;
+    list-style: none;
+    width: 80%;
+    margin: 0 auto;
+
+    .r-li{
+      padding: 1rem;
+      font-size: 1rem;
+      text-align: center;
+
+      .r-quantity {
+        opacity: .75;
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba($r-color-grey-light, .22);
+      }
+    }
+  
+  }
+
+  .r-ol {
+    padding-inline-start: 20px;
+
+    .r-li{
+      padding: 1rem;
+      font-size: 1rem;
+
+      .r-quantity {
+        opacity: .75;
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba($r-color-grey-light, .22);
+      }
+    }
   }
 
   .r-item {

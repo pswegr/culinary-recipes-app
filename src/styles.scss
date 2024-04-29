@@ -50,6 +50,7 @@ $light-theme: matx.define-theme((color: (theme-type: light,
 //
 
 /* You can add global styles to this file, and also import other style files */
+@import 'base/typography';
 
 html,
 body {
@@ -58,7 +59,7 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Inter, "Helvetica Neue", sans-serif;
 }
 
 .theme-light {
@@ -98,3 +99,6 @@ body {
     @include mat.button-color($dark-theme, $color-variant: tertiary);
   }
 }
+
+
+
