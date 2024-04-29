@@ -28,9 +28,9 @@
       <div appResponsiveness [largeScreens]="['r-display-grid-2']">
         <div class="r-list-item-content" appGradientBg="270deg" [gradientColor]="recipe?.photo?.mainColor">
           <div class="r-igredients">
-            <h3>Igredients</h3>
+            <h3 class="r-sub-header">Igredients</h3>
             <ul class="r-ul">
-              <li *ngFor="let igredient of recipe.ingredients">
+              <li class="r-li" *ngFor="let igredient of recipe.ingredients">
                 <span>{{igredient.name}}</span>
                 <span> - </span>
                 <span class="r-quantity">{{igredient.quantity}}</span>
@@ -42,7 +42,7 @@
           <div class="r-instructions">
             <h3>Instructions</h3>
             <ol class="r-ol">
-              <li *ngFor="let instruction of recipe.instructions">
+              <li class="r-li" *ngFor="let instruction of recipe.instructions">
                 <span>{{instruction}}</span>
               </li>
             </ol>
