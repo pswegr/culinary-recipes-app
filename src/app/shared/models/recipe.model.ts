@@ -15,4 +15,8 @@ export interface RecipeModel {
   tags: string[];
   photo?: PhotoModel;
   published: boolean;
+  createdBy: string;
+  updatedBy: string;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -69,7 +69,7 @@
           <button mat-button>LIKE</button>
           <button mat-button>SHARE</button>
         </div>
-        <button class="r-add-button" mat-mini-fab routerLink="/recipes/upsert/{{recipe.id}}" matTooltip="Edit recipe">
+        <button class="r-add-button" mat-mini-fab routerLink="/recipes/upsert/{{recipe.id}}" matTooltip="Edit recipe" *appIfAdminOrOwner="recipe.createdBy">
           <mat-icon>edit</mat-icon>
         </button>
       </div>

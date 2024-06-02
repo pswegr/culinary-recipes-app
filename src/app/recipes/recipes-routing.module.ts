@@ -6,6 +6,7 @@ import { NgModule } from "@angular/core";
 import { RecipesAllListComponent } from "./recipes-list/recipes-all-list/recipes-all-list.component";
 import { TagDetailsComponent } from "./recipes-list/tag-details/tag-details.component";
 import { CategoryDetailsComponent } from "./recipes-list/category-details/category-details.component";
+import { authGuard } from "../core/guards/auth.guard";
 
 const routes: Routes = [
   {
@@ -27,7 +28,8 @@ const routes: Routes = [
   { 
     path: 'upsert', 
     component: UpsertRecipeComponent, 
-    title: "Add recipe" 
+    title: "Add recipe",
+    canActivate: [authGuard]
   },
   {
     path: 'all',
