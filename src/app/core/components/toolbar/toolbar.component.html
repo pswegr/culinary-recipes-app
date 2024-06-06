@@ -3,9 +3,11 @@
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item routerLink="/recipes/all">All recipes</button>
+    <button mat-menu-item routerLink="/recipes/yours">Your recipes</button>
+    <button mat-menu-item routerLink="/recipes/all" *appIfAdminOrOwner>All recipes</button>
     <button mat-menu-item routerLink="/policy-and-terms">Policy & terms</button>
     <button mat-menu-item *ngIf="categories$ | async" [matMenuTriggerFor]="categoriesMenu">Categories</button>
+    <button mat-menu-item *appIfAuth routerLink="/account/info">Account info</button>
   </mat-menu>
   <mat-menu #categoriesMenu="matMenu">
     <button mat-menu-item *ngFor="let item of categories$| async" [routerLink]="'recipes/category/'+ item">{{item}}</button>

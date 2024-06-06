@@ -7,6 +7,8 @@ import { RecipesAllListComponent } from "./recipes-list/recipes-all-list/recipes
 import { TagDetailsComponent } from "./recipes-list/tag-details/tag-details.component";
 import { CategoryDetailsComponent } from "./recipes-list/category-details/category-details.component";
 import { authGuard } from "../core/guards/auth.guard";
+import { YourRecipesListComponent } from "./recipes-list/your-recipes-list/your-recipes-list.component";
+import { adminGuard } from "../core/guards/admin.guard";
 
 const routes: Routes = [
   {
@@ -34,7 +36,14 @@ const routes: Routes = [
   {
     path: 'all',
     component: RecipesAllListComponent, 
-    title: "All Recipes"
+    title: "All Recipes",
+    canActivate: [adminGuard]
+  },
+  {
+    path: 'yours',
+    component: YourRecipesListComponent, 
+    title: "Your recipes",
+    canActivate: [authGuard]
   },
   {
     path: 'tag/:tag',

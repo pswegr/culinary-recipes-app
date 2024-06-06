@@ -1,10 +1,9 @@
 .login-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 1em;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1em;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   
   mat-form-field {
     width: 100%;
@@ -19,3 +18,26 @@
     margin-top: 8px;
     font-size: 0.8em;
   }
+
+  .r-login__button {
+    margin-block: 1rem;
+  }
+
+  .r-register {
+    margin-block: 1rem;
+    
+
+    &__button {
+        margin-block: 1rem;
+    }
+  }
+
+  .r-forgot-password {
+    margin-block: 1rem;
+    
+
+    &__button {
+        margin-block: 1rem;
+    }
+  }
+}

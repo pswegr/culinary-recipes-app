@@ -10,6 +10,7 @@ import { LoadingComponent } from './components/loading/loading.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { GradientBgDirective } from './directives/gradient-bg.directive';
 import { IfAdminOrOwnerDirective } from './directives/if-admin-or-owner.directive';
+import { IfAuthDirective } from './directives/if-auth.directive';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { IfAdminOrOwnerDirective } from './directives/if-admin-or-owner.directiv
     LoadingComponent,
     PageNotFoundComponent,
     IfAdminOrOwnerDirective,
+    IfAuthDirective
   ],
   imports: [
     CommonModule,
@@ -38,6 +40,7 @@ import { IfAdminOrOwnerDirective } from './directives/if-admin-or-owner.directiv
     GradientBgDirective,
     LoadingComponent,
     IfAdminOrOwnerDirective,
+    IfAuthDirective
   ]
 })
 export class SharedModule { }

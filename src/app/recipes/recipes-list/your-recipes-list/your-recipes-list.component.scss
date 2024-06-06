@@ -1,0 +1,13 @@
+.r-chips{
+  &.r-desktop{
+    margin: 0.5rem auto;
+    padding: 1rem 0.5rem;
+    width: calc(55% + 10rem);
+  }
+  
+  &.r-handset-poitret-mode{
+    width: 95%;
+    margin: 0.25rem auto;
+    padding: 0.5rem 0.25rem;
+  }
+}

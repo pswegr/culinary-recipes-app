@@ -1,43 +1,45 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable, Subscription, catchError, debounceTime, map, of, switchMap } from 'rxjs';
+import { AccountService } from 'src/app/shared/services/account.service';
+import { AlertService } from 'src/app/shared/services/alert.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
-export class RegisterComponent implements OnInit, OnDestroy {
-  registerForm!: FormGroup;
-  passwordSub? = Subscription.EMPTY;
+export class RegisterComponent implements OnDestroy {
+  registerForm: FormGroup = this.fb.group({
+    email: ['', [Validators.required, Validators.email], [this.emailValidator()]],
+    nickname: ['', [Validators.required], [this.nicknameValidator()]],
+    password: ['', [
+      Validators.required,
+      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)
+    ]],
+    confirmPassword: ['', [Validators.required]]
+  }, { validators: this.passwordMatchValidator } as AbstractControlOptions);
 
-  constructor(private fb: FormBuilder) { }
+  registerSub = Subscription.EMPTY;
+
+  constructor(private fb: FormBuilder, private accountService: AccountService, private alertService: AlertService, private router: Router) { }
 
   ngOnDestroy(): void {
-    this.passwordSub?.unsubscribe();
+    this.registerSub.unsubscribe();
   }
 
-  ngOnInit(): void {
-    this.registerForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email], [this.emailValidator()]],
-      nickname: ['', [Validators.required], [this.nicknameValidator()]],
-      password: ['', [
-        Validators.required,
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)
-      ]],
-      confirmPassword: ['', [Validators.required]]
-    }, { validators: this.passwordMatchValidator });
-
-    this.passwordSub = this.registerForm.get('password')?.valueChanges.subscribe(() => {
-      this.registerForm.get('confirmPassword')?.updateValueAndValidity({ onlySelf: true });
-    });
-  }
 
   onSubmit(): void {
     if (this.registerForm.valid) {
       const { email, nickname, password } = this.registerForm.value;
-      console.log('Registration successful', { email, nickname, password });
-      // Handle registration logic here
+
+      this.registerSub = this.accountService.register({ email, nick: nickname, password }).subscribe(
+        x => {
+          this.alertService.openSnackBar(x.message)
+          this.router.navigate(['/'])
+        }
+      )
     }
   }
 
@@ -49,8 +51,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
       return of(control.value).pipe(
         debounceTime(500),
-        switchMap(email => this.checkEmail(email)),
-        map(isTaken => (isTaken ? { emailTaken: true } : null)),
+        switchMap(email => this.accountService.isEmailUnique(email)),
+        map(isUnique => (isUnique ? null : { emailTaken: true })),
         catchError(() => of(null))
       );
     };
@@ -64,26 +66,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
       return of(control.value).pipe(
         debounceTime(500),
-        switchMap(nickname => this.checkNickname(nickname)),
-        map(isTaken => (isTaken ? { nicknameTaken: true } : null)),
+        switchMap(nickname => this.accountService.isNickValid(nickname)),
+        map(isValid => (isValid ? null : { nicknameInvalid: true })),
         catchError(() => of(null))
       );
     };
   }
 
-  checkEmail(email: string): Observable<boolean> {
-    // Simulate an email check
-    const takenEmails = ['test@example.com', 'user@example.com'];
-    return of(takenEmails.includes(email)).pipe(debounceTime(1000));
-  }
-
-  checkNickname(nickname: string): Observable<boolean> {
-    // Simulate a nickname check
-    const takenNicknames = ['admin', 'user', 'test'];
-    return of(takenNicknames.includes(nickname)).pipe(debounceTime(1000));
-  }
-
-  passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
+  passwordMatchValidator(form: FormGroup): ValidationErrors | null {
     const password = form.get('password')?.value;
     const confirmPassword = form.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { passwordMismatch: true };
