@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, retry } from 'rxjs';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import { environment } from 'src/environments/environment';
 
@@ -87,5 +88,9 @@ export class RecipesService {
       reportProgress: true,
       observe: 'events'
     });
+  }
+
+  likeToggle(recipeId: string): Observable<boolean>{
+    return this.http.post<boolean>(environment.apiUrl + `Recipes/${recipeId}/likeToggle`, recipeId);
   }
 }

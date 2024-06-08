@@ -19,4 +19,5 @@ export interface RecipeModel {
   updatedBy: string;
   createdAt: string;
   updatedAt: string;
+  likedByUsers: string[]
 }

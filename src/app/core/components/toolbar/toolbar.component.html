@@ -7,14 +7,14 @@
     <button mat-menu-item routerLink="/recipes/all" *appIfAdminOrOwner>All recipes</button>
     <button mat-menu-item routerLink="/policy-and-terms">Policy & terms</button>
     <button mat-menu-item *ngIf="categories$ | async" [matMenuTriggerFor]="categoriesMenu">Categories</button>
-    <button mat-menu-item *appIfAuth routerLink="/account/info">Account info</button>
+    <button mat-menu-item *appIfAuth="true" routerLink="/account/info">Account info</button>
   </mat-menu>
   <mat-menu #categoriesMenu="matMenu">
     <button mat-menu-item *ngFor="let item of categories$| async" [routerLink]="'recipes/category/'+ item">{{item}}</button>
   </mat-menu>
   <a routerLink="/recipes" routerLinkActive="router-link-active" class="r-header-title">
-    <div class="r-logo-h3">Recipes</div>
-    <div class="r-logo-p">with passion</div>
+    <span class="r-logo-h3">Netreci</span>
+    <span class="r-logo-p">pes</span>
   </a>
   <span class="r-spacer"></span>
   <mat-slide-toggle (change)="onDarkModeSwithed($event)" checked="true"> 

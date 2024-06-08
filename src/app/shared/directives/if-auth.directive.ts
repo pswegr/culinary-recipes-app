@@ -5,13 +5,20 @@ import { AccountService } from "../services/account.service";
   selector: '[appIfAuth]'
 })
 export class IfAuthDirective {
+  appIfAuth = input<boolean>();
+  appIfAuthElse = input<TemplateRef<any>>();
 
   constructor(private templateRef: TemplateRef<any>, private viewContainerRef: ViewContainerRef, private accountService: AccountService) {
     effect(() => {
+      this.viewContainerRef.clear();
       if(this.accountService.currentUser()){
         this.viewContainerRef.createEmbeddedView(this.templateRef);
       }else {
-        this.viewContainerRef.clear();
+        if(this.appIfAuthElse()){
+          this.viewContainerRef.createEmbeddedView(this.appIfAuthElse() as TemplateRef<any>);
+        }else {
+          this.viewContainerRef.clear();
+        }
       }
     });
   }

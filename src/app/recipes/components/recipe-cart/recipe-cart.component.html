@@ -62,12 +62,19 @@
             </ol>
           </div>
         </div>
-        <div class="r-grid-item-9"> created by: </div>
+        <div class="r-grid-item-9"> created by: {{recipe.createdBy}}</div>
       </div>
       <div class="r-card-footer">
         <div>
-          <button mat-button>LIKE</button>
-          <button mat-button>SHARE</button>
+          <button mat-button *appIfAuth="true; else notAuthorized"> 
+            <mat-icon [@likeToggle]="isLiked(recipe.likedByUsers) ? 'liked' : 'unliked'" class="r-favorite"  aria-hidden="false" aria-label="like icon" fontIcon="favorite"></mat-icon>
+            {{isLiked(recipe.likedByUsers)? 'UNLIKE' : 'LIKE'}} | {{recipe.likedByUsers.length}}
+          </button>
+          <ng-template #notAuthorized>
+            <button mat-button routerLink="/account/login">
+              <mat-icon class="r-favorite" aria-hidden="false" aria-label="like icon" fontIcon="favorite"></mat-icon>
+              LIKE</button>
+          </ng-template>
         </div>
         <button class="r-add-button" mat-mini-fab routerLink="/recipes/upsert/{{recipe.id}}" matTooltip="Edit recipe" *appIfAdminOrOwner="recipe.createdBy">
           <mat-icon>edit</mat-icon>
