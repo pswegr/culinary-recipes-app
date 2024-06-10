@@ -33,7 +33,7 @@ $culinary-recipes-app-theme-dark: mat.define-dark-theme((color: (primary: $culin
 
 //mat 3
 $dark-theme: matx.define-theme((color: (theme-type: dark,
-        primary: matx.$m3-cyan-palette,
+        primary: matx.$m3-yellow-palette,
         tertiary: matx.$m3-green-palette,
       ),
       typography: (brand-family: 'Comic Sans',
@@ -41,7 +41,7 @@ $dark-theme: matx.define-theme((color: (theme-type: dark,
       density: (scale: -1)));
 
 $light-theme: matx.define-theme((color: (theme-type: light,
-        primary: matx.$m3-cyan-palette,
+        primary: matx.$m3-yellow-palette,
         tertiary: matx.$m3-green-palette ),
       typography: (brand-family: 'Comic Sans',
         bold-weight: 900),

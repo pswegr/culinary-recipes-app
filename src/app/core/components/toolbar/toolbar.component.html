@@ -13,8 +13,9 @@
     <button mat-menu-item *ngFor="let item of categories$| async" [routerLink]="'recipes/category/'+ item">{{item}}</button>
   </mat-menu>
   <a routerLink="/recipes" routerLinkActive="router-link-active" class="r-header-title">
-    <span class="r-logo-h3">Netreci</span>
-    <span class="r-logo-p">pes</span>
+    <!-- <span class="r-logo-h3">Netreci</span>
+    <span class="r-logo-p">pes</span> -->
+    <img src="/assets/logo/logo_new.png" class="r-logo">
   </a>
   <span class="r-spacer"></span>
   <mat-slide-toggle (change)="onDarkModeSwithed($event)" checked="true"> 
