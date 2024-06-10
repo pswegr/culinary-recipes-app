@@ -9,6 +9,8 @@ import { ChipClickDirective } from './directives/chip-click.directive';
 import { LoadingComponent } from './components/loading/loading.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { GradientBgDirective } from './directives/gradient-bg.directive';
+import { IfAdminOrOwnerDirective } from './directives/if-admin-or-owner.directive';
+import { IfAuthDirective } from './directives/if-auth.directive';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,8 @@ import { GradientBgDirective } from './directives/gradient-bg.directive';
     GradientBgDirective,
     LoadingComponent,
     PageNotFoundComponent,
+    IfAdminOrOwnerDirective,
+    IfAuthDirective
   ],
   imports: [
     CommonModule,
@@ -35,6 +39,8 @@ import { GradientBgDirective } from './directives/gradient-bg.directive';
     ChipClickDirective,
     GradientBgDirective,
     LoadingComponent,
+    IfAdminOrOwnerDirective,
+    IfAuthDirective
   ]
 })
 export class SharedModule { }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, retry } from 'rxjs';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import { environment } from 'src/environments/environment';
 
@@ -44,6 +45,24 @@ export class RecipesService {
     return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes/GetAll?' + searchParams.toString());
   }
 
+  getAllRecipesCreatedByUser(pickedTags: string[] | null = null, category: string | null = null){
+    const searchParams = new URLSearchParams();
+    if(category){
+      searchParams.append('category', category)
+    }
+    pickedTags?.forEach((tag) =>{ 
+      if(tag){
+        searchParams.append('tags', tag)
+      } 
+    });
+
+    if(pickedTags?.length === 0 && !category){
+      return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes/GetAllCreatedByUser');
+    }
+
+    return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes/GetAllCreatedByUser?' + searchParams.toString());
+  }
+
   getCategories() {
     return this.http.get<string[]>(environment.apiUrl + 'Recipes/Categories');
   }
@@ -60,10 +79,18 @@ export class RecipesService {
     return this.http.get<string[]>(environment.apiUrl + 'Recipes/AllTags');
   }
 
+  getAllTagsCreatedByUser() {
+    return this.http.get<string[]>(environment.apiUrl + 'Recipes/AllTagsCreatedByUser');
+  }
+
   upsertRecipe(formData: FormData){
     return this.http.post(environment.apiUrl + "Recipes/UpsertWithImage", formData, {
       reportProgress: true,
       observe: 'events'
     });
+  }
+
+  likeToggle(recipeId: string): Observable<boolean>{
+    return this.http.post<boolean>(environment.apiUrl + `Recipes/${recipeId}/likeToggle`, recipeId);
   }
 }

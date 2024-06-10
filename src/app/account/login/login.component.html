@@ -1,0 +1,46 @@
+<div class="login-container">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" />
+        <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="loginForm.controls['email'].hasError('email')">
+          Please enter a valid email
+        </mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" type="password" />
+        <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+            Password is required
+        </mat-error>
+        <mat-error *ngIf="loginForm.controls['password'].hasError('minlength')">
+            Password must be at least 8 characters long
+        </mat-error>
+      </mat-form-field>
+
+      <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
+  
+      <button class="r-login__button" mat-flat-button color="primary" type="submit" [disabled]="loginForm.invalid">
+        Login
+      </button>
+
+      <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+    </form>
+    <div class="r-register">
+      <div class="r-register__info">
+        You don't have an account?
+      </div>
+      <button class="r-register__button" mat-raised-button color="primary" routerLink="/account/register">
+        Register
+      </button>
+    </div>
+    <div class="r-reset-password">
+      <button class="r-reset-password__button" mat-button color="primary" routerLink="/account/forgotPassword">
+        Forgot password
+      </button>
+    </div>
+</div>

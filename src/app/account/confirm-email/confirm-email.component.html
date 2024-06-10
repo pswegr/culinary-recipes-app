@@ -1,0 +1,10 @@
+<div class="r-center">
+  <ng-container *ngIf="confirmEmail$ | async as confirmEmail; else pendingConfirmPassword">
+    <h1>{{confirmEmail.message}}</h1>
+  </ng-container>
+  <ng-template #pendingConfirmPassword>
+    <h1>Confirming password...</h1>
+  </ng-template>
+</div>
+
+
