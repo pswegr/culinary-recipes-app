@@ -32,7 +32,7 @@ export class LoadingInterceptor implements HttpInterceptor {
         }
       }),
       catchError(err => {
-        const message = 'Could not load resources';
+        const message = err.status === 401? 'Unathorized': 'Could not load resources';
         this.alertService.openSnackBar(message, 'close')
         this.totalRequests--;
         if (this.totalRequests <= 0) {

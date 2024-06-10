@@ -47,7 +47,7 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
 
   $tags = this.recipesService.getTags().pipe(takeUntil(this.destroy$))
 
-  recipe: RecipeModel = {servings: 0, title: '', id: '', imageUrl: '', category: '', description: '', preparationTime: 0, cookingTime: 0, ingredients: [], instructions: [], tags: [], photo: {publicId: '', url: '', mainColor: ''}, published: false };
+  recipe: RecipeModel = {servings: 0, title: '', id: '', imageUrl: '', category: '', description: '', preparationTime: 0, cookingTime: 0, ingredients: [], instructions: [], tags: [], photo: {publicId: '', url: '', mainColor: ''}, published: false, createdAt: '', createdBy: '', updatedAt: '', updatedBy: '', likedByUsers: [] };
   newInstruction: string = '';
   newIngredient: IngredientModel = {name: '', quantity: ''};
   

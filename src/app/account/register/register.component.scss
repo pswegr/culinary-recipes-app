@@ -1,0 +1,23 @@
+.register-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1em;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+ 
+  
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  button {
+    width: 100%;
+  }
+  
+  mat-error {
+    margin-top: 8px;
+    margin-bottom: 24px;
+    font-size: 0.8em;
+  }
+}

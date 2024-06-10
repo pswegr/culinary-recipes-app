@@ -9,8 +9,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { TermsModule } from './terms/terms.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LoadingService } from './shared/services/loading.service';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
+import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,10 @@ import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
   ],
   providers: [
     {
-      provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+      provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true,
     }
   ],
   bootstrap: [AppComponent]

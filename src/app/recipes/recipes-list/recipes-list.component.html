@@ -10,6 +10,6 @@
       <mat-chip-option [selected]="selected(tag)" title="tag" *ngFor="let tag of tags$ | async">{{tag}}</mat-chip-option>
     </mat-chip-listbox>
   </div>
-  <app-recipes-list-item [recipe]="item" *ngFor="let item of recipes" (tag)="clickTagOnItem($event)"></app-recipes-list-item>
+  <app-recipes-list-item [recipe]="item" *ngFor="let item of recipes" (tag)="clickTagOnItem($event)" (likeToggleClicked)="clickLikeToggle($event)"></app-recipes-list-item>
 </ng-container>
 
