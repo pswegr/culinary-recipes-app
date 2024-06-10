@@ -11,6 +11,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { GradientBgDirective } from './directives/gradient-bg.directive';
 import { IfAdminOrOwnerDirective } from './directives/if-admin-or-owner.directive';
 import { IfAuthDirective } from './directives/if-auth.directive';
+import { NgOptimizedImage } from '@angular/common'
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { IfAuthDirective } from './directives/if-auth.directive';
     CommonModule,
     MaterialModule,
     DragDropModule,
-    RouterModule
+    RouterModule,
+    NgOptimizedImage
   ],
   exports:[
     CommonModule,
@@ -40,7 +42,8 @@ import { IfAuthDirective } from './directives/if-auth.directive';
     GradientBgDirective,
     LoadingComponent,
     IfAdminOrOwnerDirective,
-    IfAuthDirective
+    IfAuthDirective,
+    NgOptimizedImage
   ]
 })
 export class SharedModule { }
