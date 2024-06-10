@@ -13,7 +13,7 @@ export class TagDetailsComponent {
   tagName$ = this.route.params.pipe(filter(p => p['tag'] !== null), map(p => p['tag']));
   recipesByTag$ = this.tagName$.pipe(
     tap(tag => {
-      this.titleService.setTitle(`${tag} - Recipes with Passion / ${tag} przepisy`);
+      this.titleService.setTitle(`${tag} - netreci - Recipes with Passion / ${tag} przepisy`);
       this.metaService.updateTag({name: 'decription', content: `Culinary recipes with tag: ${tag} / Przepisy kulinarne otagowane: ${tag}`})
     }),
     switchMap(tag => this.recipesService.getRecipes([tag])),

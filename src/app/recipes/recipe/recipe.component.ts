@@ -1,9 +1,8 @@
 import { Component, Signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { filter, map, share, switchMap, tap } from 'rxjs';
 import { RecipesService } from '../../shared/services/recipes.service';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
 import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
@@ -18,8 +17,8 @@ export class RecipeComponent {
     map(p => p['recipeId']),
     switchMap(recipeId => this.recipesService.getRecipe(recipeId)),
     tap(recipe => {
-      this.titleService.setTitle(`${recipe.title} - Recipes with Passion / przepisy kulinarne`);
-      this.metaService.updateTag({ name: 'decription', content: `${recipe.title} - ${recipe.description} - Recipes with Passion` })
+      this.titleService.setTitle(`${recipe.title} - netreci - Recipes with Passion / przepisy kulinarne`);
+      this.metaService.updateTag({ name: 'decription', content: `${recipe.title} - ${recipe.description} - netreci - Recipes with Passion` })
     })
   ).pipe(share());
 
