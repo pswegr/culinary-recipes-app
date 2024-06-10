@@ -58,9 +58,10 @@
           {{isLiked(recipe.likedByUsers)? 'UNLIKE' : 'LIKE'}} | {{recipe.likedByUsers.length}}
         </button>
         <ng-template #notAuthorized>
-          <button mat-button routerLink="/account/login" [matBadgeSize]="'large'" [matBadge]="recipe.likedByUsers.length" matBadgeColor="primary">
+          <button mat-button routerLink="/account/login">
             <mat-icon class="r-favorite" aria-hidden="false" aria-label="like icon" fontIcon="favorite"></mat-icon>
-            LIKE</button>
+            LIKE | {{recipe.likedByUsers.length}}
+          </button>
         </ng-template>
       </div>
       <button class="r-add-button" mat-mini-fab routerLink="/recipes/upsert/{{recipe.id}}" matTooltip="Edit recipe" *appIfAdminOrOwner="recipe.createdBy">

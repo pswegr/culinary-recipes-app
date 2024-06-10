@@ -14,7 +14,7 @@ const routes: Routes = [
   {
     path: '',
     component: RecipesListComponent,
-    title: 'Recipes with passion',
+    title: 'netreci - Recipes with passion',
     pathMatch: 'full'
   },
   {
