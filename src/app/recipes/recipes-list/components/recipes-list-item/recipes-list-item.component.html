@@ -5,7 +5,7 @@
     [lightMode]="['light-mode-shadow']">
 
     <div appResponsiveness [darkMode]="['r-dark-mode']">
-      <div appResponsiveness [largeScreens]="['r-display-grid-2']">
+      <div appResponsiveness [largeScreens]="['r-display-grid-2-header']">
         <div class="r-list-item-header" [appGradientBg]="'0deg'" [gradientColor]="recipe?.photo?.mainColor">
           <h1 [ngStyle]="{ 'text-shadow': '1px 1px 1px ' + (recipe?.photo?.mainColor ?? '#008000') }">{{recipe.title}}</h1>
           <h2>{{recipe.category}}</h2>

@@ -13,12 +13,10 @@
     <button mat-menu-item *ngFor="let item of categories$| async" [routerLink]="'recipes/category/'+ item">{{item}}</button>
   </mat-menu>
   <a routerLink="/recipes" routerLinkActive="router-link-active" class="r-header-title">
-    <!-- <span class="r-logo-h3">Netreci</span>
-    <span class="r-logo-p">pes</span> -->
-    <img src="/assets/logo/logo_new.png" class="r-logo">
+    <img src="/assets/logo/logo.png" class="r-logo" alt="netreci - Recipes with passion">
   </a>
   <span class="r-spacer"></span>
-  <mat-slide-toggle (change)="onDarkModeSwithed($event)" checked="true"> 
+  <mat-slide-toggle class="r-slide-toggle" (change)="onDarkModeSwithed($event)" checked="true"> 
     <mat-icon>bedtime</mat-icon>
   </mat-slide-toggle>
   <button mat-button class="r-login-btn" routerLink="/account/login" *ngIf="!(hasRoute('login') || accountService.currentUser())">
