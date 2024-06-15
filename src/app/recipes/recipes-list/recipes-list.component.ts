@@ -46,6 +46,9 @@ export class RecipesListComponent {
      this.recipeService.likeToggle(recipeId).subscribe(
       x => this.refreshToken.next(null)
     );
-    
+  }
+
+  disableCombination(recipes: RecipeModel[], tag: string){
+    return recipes.filter(x => x.tags.includes(tag)).length === 0;
   }
 }
