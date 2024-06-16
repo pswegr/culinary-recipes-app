@@ -18,7 +18,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/culinary-recipes-app"
+              "base": "dist/culinary-recipes-app",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
