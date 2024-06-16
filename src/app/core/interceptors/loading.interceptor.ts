@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor
-} from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable, catchError, finalize, throwError } from 'rxjs';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { AlertService } from 'src/app/shared/services/alert.service';
