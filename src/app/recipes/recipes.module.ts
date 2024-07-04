@@ -12,7 +12,9 @@ import { TagDetailsComponent } from './recipes-list/tag-details/tag-details.comp
 import { NgOptimizedImage } from '@angular/common';
 import { CategoryDetailsComponent } from './recipes-list/category-details/category-details.component';
 import { RecipeCartComponent } from './components/recipe-cart/recipe-cart.component';
-import { YourRecipesListComponent } from './recipes-list/your-recipes-list/your-recipes-list.component'
+import { YourRecipesListComponent } from './recipes-list/your-recipes-list/your-recipes-list.component';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { SearchOverlayComponent } from './recipes-list/components/search-overlay/search-overlay.component';
 
 
 
@@ -27,14 +29,16 @@ import { YourRecipesListComponent } from './recipes-list/your-recipes-list/your-
     TagDetailsComponent,
     CategoryDetailsComponent,
     RecipeCartComponent,
-    YourRecipesListComponent
+    YourRecipesListComponent,
+    SearchOverlayComponent
   ],
   imports: [
     RecipesRoutingModule,
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    OverlayModule,
   ]
 })
 export class RecipesModule { }

@@ -1,0 +1,13 @@
+.overlay-container {
+  border-radius: 0 0 2rem 2rem;
+  background-color: rgba($color: #cabd04, $alpha: .1);
+  backdrop-filter: blur(10px);
+  max-height: 60vh;
+  overflow: auto;
+  padding-bottom: 1rem;
+  width: 60vw;
+
+  @media screen and (max-width: 600px) {
+    width: 75vw;
+  }
+}

@@ -11,17 +11,20 @@ export class RecipesService {
 
   constructor(private http: HttpClient) { }
 
-  getRecipes(pickedTags: string[] | null = null, category: string | null = null){
+  getRecipes(pickedTags: string[] | null = null, category: string | null = null, content: string | null = null){
     const searchParams = new URLSearchParams();
     if(category){
       searchParams.append('category', category)
+    }
+    if(content){
+      searchParams.append('content', content);
     }
     pickedTags?.forEach((tag) =>{ 
       if(tag){
         searchParams.append('tags', tag)
       } 
     });
-    if(pickedTags?.length === 0 && !category){
+    if(pickedTags?.length === 0 && !category && !content){
       return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes');
     }
     return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes?' + searchParams.toString());

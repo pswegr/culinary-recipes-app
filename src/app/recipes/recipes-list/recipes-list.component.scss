@@ -1,14 +1,7 @@
 .r-header {
   display: flex;
-  justify-content: center;
-  
-  .r-add-button {
-    margin: 0.5rem;
-    transform: scale(0.9);
-  }
-}
+  flex-direction: column;
 
-.r-chips{
   &.r-desktop{
     margin: 0.25rem auto;
     padding: 0.5rem 0.25rem;
@@ -20,5 +13,56 @@
     margin: 0.25rem auto;
     padding: 0.5rem 0.25rem;
   }
+  
+  &__top {
+    display: flex;
+    justify-content: space-between;
+
+    .r-add-button {
+      margin: 0.5rem;
+      transform: scale(0.9);
+    }
+  
+    .r-search-bar-container {
+      border-radius: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba($color: #cabd04, $alpha: .05);
+      width: 60vw;
+
+      @media screen and (max-width: 600px) {
+        width: 75vw;
+      }
+
+      &__left {
+        display: flex;
+        padding-left: 1rem;
+
+        .r-input {
+          font-size: 1.1rem;
+          outline: none;
+          border: none;
+          background: transparent;
+          margin-left: 0.5rem;
+          flex-grow: 1;
+  
+          &.r-dark-mode {
+            color: rgb(187, 187, 187);
+          }
+        }
+      }
+
+      .r-clear-filter {
+        margin-right: 1rem;
+      }
+    
+      &.opened{
+        background-color: rgba($color: #cabd04, $alpha: .2);
+        border-radius: 2rem 2rem 0 0;
+      }
+    }
+  }
+  
 }
 
