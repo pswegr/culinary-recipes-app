@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription, catchError, debounceTime, map, of, switchMap } from 'rxjs';
 import { AccountService } from 'src/app/shared/services/account.service';
-import { AlertService } from 'src/app/shared/services/alert.service';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +22,7 @@ export class RegisterComponent implements OnDestroy {
 
   registerSub = Subscription.EMPTY;
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private alertService: AlertService, private router: Router) { }
+  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) { }
 
   ngOnDestroy(): void {
     this.registerSub.unsubscribe();
@@ -36,8 +35,7 @@ export class RegisterComponent implements OnDestroy {
 
       this.registerSub = this.accountService.register({ email, nick: nickname, password }).subscribe(
         x => {
-          this.alertService.openSnackBar(x.message)
-          this.router.navigate(['/'])
+          this.router.navigate(['/account/register-succeded']);
         }
       )
     }

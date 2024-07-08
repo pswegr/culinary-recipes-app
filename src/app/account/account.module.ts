@@ -10,6 +10,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { EmailLinkSentComponent } from './email-link-sent/email-link-sent.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
+import { RegisterSuccededComponent } from './register-succeded/register-succeded.component';
 
 
 
@@ -21,7 +22,8 @@ import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
     ResetPasswordComponent,
     EmailLinkSentComponent,
     ForgotPasswordComponent,
-    ConfirmEmailComponent
+    ConfirmEmailComponent,
+    RegisterSuccededComponent
   ],
   imports: [
     CommonModule,

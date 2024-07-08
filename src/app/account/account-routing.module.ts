@@ -8,10 +8,12 @@ import { ResetPasswordComponent } from "./reset-password/reset-password.componen
 import { EmailLinkSentComponent } from "./email-link-sent/email-link-sent.component";
 import { ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
 import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
+import { RegisterSuccededComponent } from "./register-succeded/register-succeded.component";
 
 const routes: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
+    {path: 'register-succeded', component: RegisterSuccededComponent},
     {path: 'info', component: ManageAccountComponent, canActivate: [authGuard]},
     {path: 'resetPassword', component: ResetPasswordComponent},
     {path: 'forgotPassword', component: ForgotPasswordComponent},
