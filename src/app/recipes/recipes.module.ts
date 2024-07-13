@@ -15,6 +15,7 @@ import { RecipeCartComponent } from './components/recipe-cart/recipe-cart.compon
 import { YourRecipesListComponent } from './recipes-list/your-recipes-list/your-recipes-list.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { SearchOverlayComponent } from './recipes-list/components/search-overlay/search-overlay.component';
+import { FavoritesListComponent } from './recipes-list/favorites-list/favorites-list.component';
 
 
 
@@ -30,7 +31,8 @@ import { SearchOverlayComponent } from './recipes-list/components/search-overlay
     CategoryDetailsComponent,
     RecipeCartComponent,
     YourRecipesListComponent,
-    SearchOverlayComponent
+    SearchOverlayComponent,
+    FavoritesListComponent
   ],
   imports: [
     RecipesRoutingModule,
