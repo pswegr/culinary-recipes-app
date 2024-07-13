@@ -4,6 +4,7 @@
   </button>
   <mat-menu #menu="matMenu">
     <button mat-menu-item routerLink="/recipes/yours">Your recipes</button>
+    <button mat-menu-item routerLink="/recipes/favorites" appResponsiveness [largeScreens]="['r-display-none']" [mediumScreens]="['r-display-none']">Favorites</button>
     <button mat-menu-item routerLink="/recipes/all" *appIfAdminOrOwner>All recipes</button>
     <button mat-menu-item routerLink="/policy-and-terms">Policy & terms</button>
     <button mat-menu-item *ngIf="categories$ | async" [matMenuTriggerFor]="categoriesMenu">Categories</button>
@@ -13,8 +14,9 @@
     <button mat-menu-item *ngFor="let item of categories$| async" [routerLink]="'recipes/category/'+ item">{{item}}</button>
   </mat-menu>
   <a routerLink="/recipes" routerLinkActive="router-link-active" class="r-header-title">
-    <img src="/assets/logo/logo.png" class="r-logo" alt="netreci - Recipes with passion">
+    <img src="/assets/logo/logo.png" class="r-logo" alt="Netreci - Recipes with Passion">
   </a>
+  <button class="r-favorites-btn" appResponsiveness [smallScreens]="['r-display-none']" mat-button routerLink="/recipes/favorites">Favorites</button>
   <span class="r-spacer"></span>
   <mat-slide-toggle class="r-slide-toggle" (change)="onDarkModeSwithed($event)" checked="true"> 
     <mat-icon>bedtime</mat-icon>

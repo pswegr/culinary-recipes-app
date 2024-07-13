@@ -9,13 +9,20 @@ import { CategoryDetailsComponent } from "./recipes-list/category-details/catego
 import { authGuard } from "../core/guards/auth.guard";
 import { YourRecipesListComponent } from "./recipes-list/your-recipes-list/your-recipes-list.component";
 import { adminGuard } from "../core/guards/admin.guard";
+import { FavoritesListComponent } from "./recipes-list/favorites-list/favorites-list.component";
 
 const routes: Routes = [
   {
     path: '',
     component: RecipesListComponent,
-    title: 'netreci - Recipes with passion',
+    title: 'Netreci - Recipes with Passion',
     pathMatch: 'full'
+  },
+  {
+    path: 'favorites',
+    component: FavoritesListComponent,
+    title: 'favorites - Netreci - Recipes with Passion',
+    canActivate: [authGuard]
   },
   {
     path: 'details/:recipeId',
