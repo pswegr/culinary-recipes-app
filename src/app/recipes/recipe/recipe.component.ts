@@ -17,7 +17,7 @@ export class RecipeComponent {
     map(p => p['recipeId']),
     switchMap(recipeId => this.recipesService.getRecipe(recipeId)),
     tap(recipe => {
-      this.titleService.setTitle(`${recipe.title} - netreci - Recipes with Passion / przepisy kulinarne`);
+      this.titleService.setTitle(`${recipe.title} - Netreci - Recipes with Passion / przepisy kulinarne`);
       this.metaService.updateTag({ name: 'decription', content: `${recipe.title} - ${recipe.description} - Netreci - Recipes with Passion` })
     })
   ).pipe(share());
