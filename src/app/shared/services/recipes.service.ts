@@ -97,6 +97,10 @@ export class RecipesService {
     return this.http.get<string[]>(environment.apiUrl + 'Recipes/Tags');
   }
 
+  getTagsUpsertRecipe() {
+    return this.http.get<string[]>(environment.apiUrl + 'Recipes/TagsForNewRecipe');
+  }
+
   getFavoritesTags() {
     return this.http.get<string[]>(environment.apiUrl + 'Recipes/FavoritesTags');
   }

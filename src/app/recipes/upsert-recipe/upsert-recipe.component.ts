@@ -45,7 +45,7 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
     switchMap(id => this.recipesService.getRecipe(id))
   ).pipe(share());
 
-  $tags = this.recipesService.getTags().pipe(takeUntil(this.destroy$))
+  $tags = this.recipesService.getTagsUpsertRecipe().pipe(takeUntil(this.destroy$))
 
   recipe: RecipeModel = {servings: 0, title: '', id: '', imageUrl: '', category: '', description: '', preparationTime: 0, cookingTime: 0, ingredients: [], instructions: [], tags: [], photo: {publicId: '', url: '', mainColor: ''}, published: false, likedByUsers: [] };
   newInstruction: string = '';
