@@ -40,7 +40,7 @@
       <div class="r-ingredients-list">
         <div class="r-ingredient-list-item" *ngFor="let item of recipe.ingredients; let i= index;">
             <div>
-              {{item.name}} - {{item.quantity}} 
+              {{item.name}} - {{item.quantity}} {{item.unit}}
             </div>
             <div class="r-item-action-buttons">
               <button mat-mini-fab class="recipe-mat-fab-secondary" (click)="deleteIngredient(i)" matTooltip="Delete Ingredient">
@@ -52,7 +52,7 @@
             </div>
         </div>
       </div>
-      <div class="r-grid-2-columns">
+      <div class="r-grid-3-columns">
         <mat-form-field class="r-full-width r-new-instruction">
           <mat-label>Ingredient</mat-label>
           <textarea matInput placeholder="Igredient name" [(ngModel)]="newIngredient.name" (keyup.enter)="addNewIngrdient()" name="newInstructions.name"></textarea>
@@ -60,6 +60,10 @@
         <mat-form-field class="r-full-width r-new-instruction">
           <mat-label>Quantity</mat-label>
           <textarea matInput placeholder="quantity" [(ngModel)]="newIngredient.quantity" (keyup.enter)="addNewIngrdient()" name="newInstructions.quantity"></textarea>
+        </mat-form-field>
+        <mat-form-field class="r-full-width r-new-instruction">
+          <mat-label>Unit</mat-label>
+          <textarea matInput placeholder="unit" [(ngModel)]="newIngredient.unit" (keyup.enter)="addNewIngrdient()" name="newInstructions.unit"></textarea>
         </mat-form-field>
       </div>
       <button mat-fab extended class="recipe-mat-btn-tertiary" (click)="addNewIngrdient()" (keyup.enter)="addNewIngrdient()">
