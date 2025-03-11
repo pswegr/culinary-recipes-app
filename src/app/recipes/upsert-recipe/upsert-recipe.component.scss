@@ -99,9 +99,9 @@
   margin-top: 10px;
 }
 
-.r-grid-2-columns {
+.r-grid-3-columns {
   display: inline-grid;
-  grid-template-columns: 2.4fr 1fr;
+  grid-template-columns: 2fr 1.25fr 1fr;
   gap: 4px;
 }
 
