@@ -49,7 +49,7 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
 
   recipe: RecipeModel = {servings: 0, title: '', id: '', imageUrl: '', category: '', description: '', preparationTime: 0, cookingTime: 0, ingredients: [], instructions: [], tags: [], photo: {publicId: '', url: '', mainColor: ''}, published: false, likedByUsers: [] };
   newInstruction: string = '';
-  newIngredient: IngredientModel = {name: '', quantity: ''};
+  newIngredient: IngredientModel = {name: '', quantity: '', unit: ''};
   
   categories: string[] = [];
   filteredOptions: string[] = [];
@@ -154,7 +154,7 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
 
   addNewIngrdient() {
     this.recipe.ingredients.push(this.newIngredient);
-    this.newIngredient = {name: '', quantity: ''};
+    this.newIngredient = {name: '', quantity: '', unit: ''};
   }
 
   editIngredient(index: number) {

@@ -1,6 +1,15 @@
 <div class="overlay-container mat-elevation-z2">
   <mat-divider />
   <mat-action-list>
+    @for(search of recentSearches(); track search){
+      <mat-list-item (click)="onHistoryItemChoosen.emit(search)">
+        <mat-icon matListItemIcon>history</mat-icon>
+        <h3 matListItemTitle>{{search}}</h3>
+        <button matListItemMeta mat-icon-button (click)="deleteHistoryItem($event, search)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-list-item>
+    }
     @for(recipe of filteredRecipesList$ | async; track recipe){
       <mat-list-item (click)="navigateToDetails(recipe.id)">
         <img matListItemIcon class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}" width="20" height="15" priority
@@ -12,14 +21,5 @@
         </button>
       </mat-list-item>
     }
-    @for(search of recentSearches(); track search){
-      <mat-list-item (click)="onHistoryItemChoosen.emit(search)">
-        <mat-icon matListItemIcon>history</mat-icon>
-        <h3 matListItemTitle>{{search}}</h3>
-        <button matListItemMeta mat-icon-button (click)="deleteHistoryItem($event, search)">
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-list-item>
-    } 
   </mat-action-list>
 </div>

@@ -34,7 +34,7 @@
               <li class="r-li" *ngFor="let igredient of recipe.ingredients">
                 <span>{{igredient.name}}</span>
                 <span> - </span>
-                <span class="r-quantity">{{igredient.quantity}}</span>
+                <span class="r-quantity">{{igredient.quantity}} {{igredient.unit}}</span>
               </li>
             </ul>
           </div>
