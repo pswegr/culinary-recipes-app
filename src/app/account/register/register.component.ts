@@ -5,9 +5,10 @@ import { Observable, Subscription, catchError, debounceTime, map, of, switchMap 
 import { AccountService } from 'src/app/shared/services/account.service';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrl: './register.component.scss',
+    standalone: false
 })
 export class RegisterComponent implements OnDestroy {
   registerForm: FormGroup = this.fb.group({

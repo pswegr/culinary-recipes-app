@@ -7,9 +7,10 @@ import { SearchBarService } from 'src/app/shared/services/search-bar.service';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
 
 @Component({
-  selector: 'app-search-overlay',
-  templateUrl: './search-overlay.component.html',
-  styleUrl: './search-overlay.component.scss'
+    selector: 'app-search-overlay',
+    templateUrl: './search-overlay.component.html',
+    styleUrl: './search-overlay.component.scss',
+    standalone: false
 })
 export class SearchOverlayComponent {
   searchText = input.required<string>();

@@ -10,9 +10,10 @@ import { CdkConnectedOverlay } from '@angular/cdk/overlay';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-recipes-list',
-  templateUrl: './recipes-list.component.html',
-  styleUrls: ['./recipes-list.component.scss']
+    selector: 'app-recipes-list',
+    templateUrl: './recipes-list.component.html',
+    styleUrls: ['./recipes-list.component.scss'],
+    standalone: false
 })
 export class RecipesListComponent {
   searchText = new FormControl('');

@@ -6,9 +6,10 @@ import { SendEmailLinkModel } from 'src/app/shared/models/send-email-link.model'
 import { AccountService } from 'src/app/shared/services/account.service';
 
 @Component({
-  selector: 'app-forgot-password',
-  templateUrl: './forgot-password.component.html',
-  styleUrl: './forgot-password.component.scss'
+    selector: 'app-forgot-password',
+    templateUrl: './forgot-password.component.html',
+    styleUrl: './forgot-password.component.scss',
+    standalone: false
 })
 export class ForgotPasswordComponent {
   loginForm: FormGroup = this.fb.group({

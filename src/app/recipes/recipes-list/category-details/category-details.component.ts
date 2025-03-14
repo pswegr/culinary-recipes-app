@@ -4,9 +4,10 @@ import { filter, map, share, switchMap } from 'rxjs';
 import { RecipesService } from 'src/app/shared/services/recipes.service';
 
 @Component({
-  selector: 'app-category-details',
-  templateUrl: './category-details.component.html',
-  styleUrls: ['./category-details.component.scss']
+    selector: 'app-category-details',
+    templateUrl: './category-details.component.html',
+    styleUrls: ['./category-details.component.scss'],
+    standalone: false
 })
 export class CategoryDetailsComponent {
   categoryName$ = this.route.params.pipe(filter(p => p['category'] !== null), map(p => p['category']));
