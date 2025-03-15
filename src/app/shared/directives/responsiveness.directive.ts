@@ -4,7 +4,8 @@ import { ThemeModeService } from '../services/theme-mode.service';
 import { Subscription } from 'rxjs';
 
 @Directive({
-  selector: '[appResponsiveness]'
+    selector: '[appResponsiveness]',
+    standalone: false
 })
 export class ResponsivenessDirective implements OnInit, OnDestroy {
   @Input() smallScreens: string[] = [];

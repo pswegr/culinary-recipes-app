@@ -2,7 +2,8 @@ import { Directive, TemplateRef, ViewContainerRef, effect, input } from "@angula
 import { AccountService } from "../services/account.service";
 
 @Directive({
-  selector: '[appIfAuth]'
+    selector: '[appIfAuth]',
+    standalone: false
 })
 export class IfAuthDirective {
   appIfAuth = input<boolean>();

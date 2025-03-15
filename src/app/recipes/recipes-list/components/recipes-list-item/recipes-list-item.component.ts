@@ -7,29 +7,24 @@ import { AccountService } from 'src/app/shared/services/account.service';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
 
 @Component({
-  selector: 'app-recipes-list-item',
-  templateUrl: './recipes-list-item.component.html',
-  styleUrls: ['./recipes-list-item.component.scss'],
-  animations: [
-    trigger('likeToggle', [
-      state(
-        'liked',
-        style({
-          opacity: 1,
-          color: 'red',
-        }),
-      ),
-      state(
-        'unliked',
-        style({
-          opacity: 0.8,
-          color: 'inherit',
-        }),
-      ),
-      transition('liked => unliked', [animate('3s')]),
-      transition('unliked => liked', [animate('2s')])
-    ]),
-  ],
+    selector: 'app-recipes-list-item',
+    templateUrl: './recipes-list-item.component.html',
+    styleUrls: ['./recipes-list-item.component.scss'],
+    animations: [
+        trigger('likeToggle', [
+            state('liked', style({
+                opacity: 1,
+                color: 'red',
+            })),
+            state('unliked', style({
+                opacity: 0.8,
+                color: 'inherit',
+            })),
+            transition('liked => unliked', [animate('3s')]),
+            transition('unliked => liked', [animate('2s')])
+        ]),
+    ],
+    standalone: false
 })
 export class RecipesListItemComponent implements OnDestroy {
   @Input() recipe: RecipeModel | undefined;

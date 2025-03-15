@@ -7,9 +7,10 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 import { RecipesService } from 'src/app/shared/services/recipes.service';
 
 @Component({
-  selector: 'app-your-recipes-list',
-  templateUrl: './your-recipes-list.component.html',
-  styleUrl: './your-recipes-list.component.scss'
+    selector: 'app-your-recipes-list',
+    templateUrl: './your-recipes-list.component.html',
+    styleUrl: './your-recipes-list.component.scss',
+    standalone: false
 })
 export class YourRecipesListComponent {
   chosenTags: BehaviorSubject<string[]> = new BehaviorSubject([''])

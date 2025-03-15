@@ -8,9 +8,10 @@ import { RecipesService } from 'src/app/shared/services/recipes.service';
 import { SearchBarService } from 'src/app/shared/services/search-bar.service';
 
 @Component({
-  selector: 'app-toolbar',
-  templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss']
+    selector: 'app-toolbar',
+    templateUrl: './toolbar.component.html',
+    styleUrls: ['./toolbar.component.scss'],
+    standalone: false
 })
 export class ToolbarComponent {
   @Output() readonly darkModeSwitched = new EventEmitter<boolean>();

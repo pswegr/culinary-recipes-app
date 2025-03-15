@@ -6,9 +6,10 @@ import { LoginRequestModel } from 'src/app/shared/models/login-request.model';
 import { AccountService } from 'src/app/shared/services/account.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss',
+    standalone: false
 })
 export class LoginComponent implements OnDestroy{
   returnUrl: string;

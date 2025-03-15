@@ -5,9 +5,10 @@ import { RecipesService } from '../../../shared/services/recipes.service';
 import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-tag-details',
-  templateUrl: './tag-details.component.html',
-  styleUrls: ['./tag-details.component.scss']
+    selector: 'app-tag-details',
+    templateUrl: './tag-details.component.html',
+    styleUrls: ['./tag-details.component.scss'],
+    standalone: false
 })
 export class TagDetailsComponent {
   tagName$ = this.route.params.pipe(filter(p => p['tag'] !== null), map(p => p['tag']));

@@ -19,9 +19,10 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
-  selector: 'app-upsert-recipe',
-  templateUrl: './upsert-recipe.component.html',
-  styleUrls: ['./upsert-recipe.component.scss']
+    selector: 'app-upsert-recipe',
+    templateUrl: './upsert-recipe.component.html',
+    styleUrls: ['./upsert-recipe.component.scss'],
+    standalone: false
 })
 export class UpsertRecipeComponent implements OnInit, OnDestroy {
   @ViewChild('stepper') myStepper!: MatStepper;

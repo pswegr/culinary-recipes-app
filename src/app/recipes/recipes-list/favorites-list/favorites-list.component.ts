@@ -10,9 +10,10 @@ import { RecipesService } from 'src/app/shared/services/recipes.service';
 import { SearchBarService } from 'src/app/shared/services/search-bar.service';
 
 @Component({
-  selector: 'app-favorites-list',
-  templateUrl: './favorites-list.component.html',
-  styleUrl: './favorites-list.component.scss'
+    selector: 'app-favorites-list',
+    templateUrl: './favorites-list.component.html',
+    styleUrl: './favorites-list.component.scss',
+    standalone: false
 })
 export class FavoritesListComponent {
   searchText = new FormControl('');
