@@ -21,5 +21,13 @@
         </button>
       </mat-list-item>
     }
+    @if(isLoading$ | async){
+      <mat-list-item disabled="true">
+        <div class="loading-item"></div>
+      </mat-list-item>
+      <mat-list-item disabled="true">
+        <div class="loading-item"></div>
+      </mat-list-item>
+    }
   </mat-action-list>
 </div>
