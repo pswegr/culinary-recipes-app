@@ -1,7 +1,8 @@
 import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 @Directive({
-  selector: '[appDoubleClick]'
+    selector: '[appDoubleClick]',
+    standalone: false
 })
 export class DoubleClickDirective {
   @Output() doubleClick = new EventEmitter<any>();

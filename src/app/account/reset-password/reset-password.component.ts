@@ -6,9 +6,10 @@ import { AccountService } from 'src/app/shared/services/account.service';
 import { AlertService } from 'src/app/shared/services/alert.service';
 
 @Component({
-  selector: 'app-reset-password',
-  templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.scss'
+    selector: 'app-reset-password',
+    templateUrl: './reset-password.component.html',
+    styleUrl: './reset-password.component.scss',
+    standalone: false
 })
 export class ResetPasswordComponent implements OnDestroy {
   resetPasswordForm: FormGroup = this.fb.group({

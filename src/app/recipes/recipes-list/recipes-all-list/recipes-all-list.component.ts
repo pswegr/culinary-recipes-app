@@ -7,9 +7,10 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MatChipListboxChange } from '@angular/material/chips';
 
 @Component({
-  selector: 'app-recipes-all-list',
-  templateUrl: './recipes-all-list.component.html',
-  styleUrls: ['./recipes-all-list.component.scss']
+    selector: 'app-recipes-all-list',
+    templateUrl: './recipes-all-list.component.html',
+    styleUrls: ['./recipes-all-list.component.scss'],
+    standalone: false
 })
 export class RecipesAllListComponent {
   chosenTags: BehaviorSubject<string[]> = new BehaviorSubject([''])

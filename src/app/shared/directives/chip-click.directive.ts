@@ -1,7 +1,8 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Output } from '@angular/core';
 
 @Directive({
-  selector: '[appChipClick]'
+    selector: '[appChipClick]',
+    standalone: false
 })
 export class ChipClickDirective {
   @Output() chipClick = new EventEmitter<any>();

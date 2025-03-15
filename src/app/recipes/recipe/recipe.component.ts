@@ -6,9 +6,10 @@ import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
 import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-recipe',
-  templateUrl: './recipe.component.html',
-  styleUrls: ['./recipe.component.scss']
+    selector: 'app-recipe',
+    templateUrl: './recipe.component.html',
+    styleUrls: ['./recipe.component.scss'],
+    standalone: false
 })
 export class RecipeComponent {
   isDark: Signal<boolean> = this.themeModeService.isDark;

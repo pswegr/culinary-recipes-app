@@ -2,7 +2,8 @@ import { Directive, Input, OnChanges, SimpleChanges, TemplateRef, ViewContainerR
 import { AccountService } from '../services/account.service';
 
 @Directive({
-  selector: '[appIfAdminOrOwner]'
+    selector: '[appIfAdminOrOwner]',
+    standalone: false
 })
 export class IfAdminOrOwnerDirective {
   appIfAdminOrOwner = input<string>();

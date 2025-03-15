@@ -1,7 +1,8 @@
 import { Directive, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Directive({
-  selector: '[appGradientBg]'
+    selector: '[appGradientBg]',
+    standalone: false
 })
 export class GradientBgDirective implements OnChanges {
   @Input() appGradientBg?: string;
