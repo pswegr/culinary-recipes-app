@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
+
+import { Component, Inject, OnInit, Renderer2, DOCUMENT } from '@angular/core';
 import { ThemeModeService } from './shared/services/theme-mode.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
