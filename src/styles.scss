@@ -107,6 +107,11 @@ body {
   // that you are using.
   @include mat.all-component-themes($dark-theme);
 
+  @include mat.chips-overrides((
+    outline-color: dimgray,
+    label-text-color: dimgray
+  ));
+
   .recipe-mat-fab-tertiary {
     @include mat.fab-color($dark-theme, $color-variant: tertiary);
   }
