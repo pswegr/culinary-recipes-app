@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnDestroy, Output, Signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, signal, Signal, WritableSignal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject} from 'rxjs';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
@@ -32,6 +32,8 @@ export class RecipesListItemComponent implements OnDestroy {
   @Output() likeToggleClicked: EventEmitter<string> = new EventEmitter<string>();
   destroyed = new Subject<void>();
   isDark: Signal<boolean> = this.themeModeService.isDark;
+  
+  showDetails: WritableSignal<boolean> = signal(false);
 
   constructor(private themeModeService: ThemeModeService, private router: Router, private accountService: AccountService){ }
 
@@ -41,6 +43,10 @@ export class RecipesListItemComponent implements OnDestroy {
   }
 
   navigateToDetails(event: MouseEvent){
+    this.router.navigateByUrl(`recipes/details/${event}`)
+  }
+
+  navigateToDetailsBtnClicked(event: string){
     this.router.navigateByUrl(`recipes/details/${event}`)
   }
 
@@ -59,5 +65,9 @@ export class RecipesListItemComponent implements OnDestroy {
     }
 
     return false;
+  }
+
+  protected updateDisplayDetails() {
+    this.showDetails.update(s => !s);
   }
 }
