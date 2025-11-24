@@ -1,35 +1,37 @@
 <div [appDoubleClick]="recipe.id" (doubleClick)="navigateToDetails($event)" *ngIf="recipe">
   <div class="r-list-item" appResponsiveness
-    [ngStyle]="{'background-color': isDark() ? 'inherit' : (recipe?.photo?.mainColor ?? '#008000') + '08', 'border': isDark() ? '1px solid #444' : '1px solid ' + (recipe?.photo?.mainColor ?? '#008000') + '33' }"
+    [ngStyle]="{'background-color': isDark() ? 'inherit' : (recipe?.photo?.mainColor ?? '#008000') + '08', 'border': isDark() ? '1px solid #444': 'none'}"
     [smallScreens]="['r-handset-poitret-mode']" [largeScreens]="['r-desktop']" [darkMode]="['dark-mode-shadow']"
     [lightMode]="['light-mode-shadow']"
     (click)="updateDisplayDetails()">
 
     <div appResponsiveness [darkMode]="['r-dark-mode']">
-      <div appResponsiveness class="r-top-section" [largeScreens]="['r-display-grid-2-header']" [appGradientBg]="'0deg'" [gradientColor]="recipe?.photo?.mainColor">
-        <div class="r-list-item-header">
-          <div class="r-list-item-header__title" [ngStyle]="{ 'text-shadow': '0px 0px 1px ' + (recipe?.photo?.mainColor ?? '#008000') + '22' }">{{recipe.title}}</div>
-          <div class="r-list-item-header__category">{{recipe.category}}</div>
-          <div class="r-list-item-header__created-by">by: {{recipe.createdBy}}</div>
+      <div class="main-cart">
+        <div appResponsiveness class="r-top-section" [largeScreens]="['r-display-grid-2-header']" [appGradientBg]="'0deg'" [gradientColor]="recipe?.photo?.mainColor">
+          <div class="r-list-item-header">
+            <div class="r-list-item-header__title" [ngStyle]="{ 'text-shadow': '0px 0px 1px ' + (recipe?.photo?.mainColor ?? '#008000') + '22' }">{{recipe.title}}</div>
+            <div class="r-list-item-header__category">{{recipe.category}}</div>
+            <div class="r-list-item-header__created-by">by: {{recipe.createdBy}}</div>
+          </div>
+          <div class="r-img-container">
+            <img class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}" width="400" height="300"
+              ngSrc="{{recipe.photo?.url || recipe?.imageUrl || '/assets/default/meal.jpg'}}"
+              alt="{{recipe.title}}">
+          </div>
+          <div class="r-chips-container">
+            <mat-chip-listbox>
+              <mat-chip appChipClick (chipClick)="clickTagOnItem($event)" *ngFor="let tag of recipe.tags">{{tag}}</mat-chip>
+            </mat-chip-listbox>
+          </div>
+          <div class="r-description">
+            <span>{{recipe.description}}</span>
+          </div>
         </div>
-        <div class="r-img-container">
-          <img class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}" width="400" height="300"
-            ngSrc="{{recipe.photo?.url || recipe?.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
-            alt="{{recipe.title}}">
+        <div appResponsiveness [largeScreens]="['r-display-grid-3']" class="r-top-section__bottom">
+          <h6>Preparation time: {{recipe.preparationTime}}</h6>
+          <h6>Cooking time: {{recipe.cookingTime}}</h6>
+          <h6>Servings: {{recipe.servings}}</h6>
         </div>
-        <div class="r-chips-container">
-          <mat-chip-listbox>
-            <mat-chip appChipClick (chipClick)="clickTagOnItem($event)" *ngFor="let tag of recipe.tags">{{tag}}</mat-chip>
-          </mat-chip-listbox>
-        </div>
-        <div class="r-description">
-           <span>{{recipe.description}}</span>
-        </div>
-      </div>
-      <div appResponsiveness [largeScreens]="['r-display-grid-3']" class="r-top-section__bottom">
-        <h6>Preparation time: {{recipe.preparationTime}}</h6>
-        <h6>Cooking time: {{recipe.cookingTime}}</h6>
-        <h6>Servings: {{recipe.servings}}</h6>
       </div>
       @if(showDetails()){
       <div appResponsiveness [largeScreens]="['r-display-grid-2']">

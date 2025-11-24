@@ -60,6 +60,7 @@ body {
 body {
   margin: 0;
   font-family: Inter, "Helvetica Neue", sans-serif;
+          /* Make text color dimmer */
 }
 
 .theme-light {
@@ -67,6 +68,11 @@ body {
   // Alternatively, you can import and @include the theme mixins for each component
   // that you are using.
   @include mat.all-component-themes($light-theme);
+
+  @include mat.chips-overrides((
+    outline-color: inherit,
+    label-text-color: #1c1c17bb
+  ));
 
   .recipe-mat-fab-tertiary {
     @include mat.fab-color($light-theme, $color-variant: tertiary);
@@ -99,6 +105,9 @@ body {
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+
+  --mat-app-text-color: #1c1c17bb;
+  --mat-chip-label-text-color: #1c1c17bb;
 }
 
 .theme-dark {
@@ -143,6 +152,9 @@ body {
   ::-webkit-scrollbar-thumb:hover {
     background: #383838;
   }
+
+    --mat-sys-color-on-surface: rgba(255, 255, 255, 0.7);
+    --mat-sys-color-on-background: rgba(255, 255, 255, 0.7);
 }
 
 
