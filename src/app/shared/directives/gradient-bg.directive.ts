@@ -11,6 +11,6 @@ export class GradientBgDirective implements OnChanges {
   constructor(private el: ElementRef) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.el.nativeElement.style.background = `linear-gradient(${this.appGradientBg}, #0d0d4b00 0%, ${this.gradientColor ?? '#888888'} 2000%)`
+    this.el.nativeElement.style.background = `linear-gradient(${this.appGradientBg}, #0d0d4b00 0%, ${this.gradientColor ?? '#888888'} 3000%)`
   }
 }

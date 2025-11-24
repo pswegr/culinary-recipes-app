@@ -13,7 +13,7 @@
     @for(recipe of filteredRecipesList$ | async; track recipe){
       <mat-list-item (click)="navigateToDetails(recipe.id)">
         <img matListItemIcon class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}" width="20" height="15" priority
-        ngSrc="{{recipe.photo?.url || recipe?.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
+        ngSrc="{{recipe.photo?.url || recipe?.imageUrl || '/assets/default/meal.jpg'}}"
         alt="{{recipe.title}}">
         <h3 matListItemTitle>{{recipe.title}}</h3>
         <button matListItemMeta mat-icon-button >
