@@ -15,7 +15,7 @@
         [smallScreens]="['r-small']">
         <div class="r-grid-item-1">
           <img class="r-img" [ngStyle]="{'opacity': isDark() ? '0.5' : '1'}" width="200" height="150" priority
-            ngSrc="{{recipe?.photo?.url || recipe.imageUrl || 'https://www.foodiesfeed.com/wp-content/uploads/2023/04/healthy-salad-on-a-pastel-orange-background.jpg'}}"
+            ngSrc="{{recipe?.photo?.url || recipe.imageUrl || '/assets/default/meal.jpg'}}"
             alt="{{recipe.title}}">
         </div>
         <div class="r-grid-item-2">
