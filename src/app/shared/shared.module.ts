@@ -12,6 +12,7 @@ import { GradientBgDirective } from './directives/gradient-bg.directive';
 import { IfAdminOrOwnerDirective } from './directives/if-admin-or-owner.directive';
 import { IfAuthDirective } from './directives/if-auth.directive';
 import { NgOptimizedImage } from '@angular/common'
+import { BgColorHoverDirective } from './directives/bg-color-hover.directive';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { NgOptimizedImage } from '@angular/common'
     DoubleClickDirective,
     ChipClickDirective,
     GradientBgDirective,
+    BgColorHoverDirective,
     LoadingComponent,
     PageNotFoundComponent,
     IfAdminOrOwnerDirective,
@@ -40,6 +42,7 @@ import { NgOptimizedImage } from '@angular/common'
     DoubleClickDirective,
     ChipClickDirective,
     GradientBgDirective,
+    BgColorHoverDirective,
     LoadingComponent,
     IfAdminOrOwnerDirective,
     IfAuthDirective,

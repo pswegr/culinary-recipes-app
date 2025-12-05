@@ -1,7 +1,10 @@
 @import "abstract/variables";
-
-.r-list-item{
+.r-list-item-container {
   border-radius: 2rem;
+
+  .r-list-item{
+  border-radius: 2rem;
+  cursor: pointer;
 
   .main-cart{
     display: flex;
@@ -165,4 +168,5 @@
     display: flex;
     justify-content: space-between;
   }
+}
 }
