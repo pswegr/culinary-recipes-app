@@ -1,39 +1,42 @@
 <ng-container *ngIf="recipes$ | async as recipes">
-  <div class="r-header" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
-    <div class="r-header__top">
-      <div class="r-search-bar-container" cdkOverlayOrigin #overlayPosition="cdkOverlayOrigin"
-        [ngClass]="{'opened mat-elevation-z2': overlayOpen()}">
-        <div class="r-search-bar-container__left">
-          <button mat-icon-button (click)="handleSearch()">
-            <mat-icon>search</mat-icon>
+  <div class="r-container" [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']" appResponsiveness>
+    <div class="r-header" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
+      <div class="r-header__top">
+        <div class="r-search-bar-container" cdkOverlayOrigin #overlayPosition="cdkOverlayOrigin"
+          [ngClass]="{'opened mat-elevation-z2': overlayOpen()}">
+          <div class="r-search-bar-container__left">
+            <button mat-icon-button (click)="handleSearch()">
+              <mat-icon>search</mat-icon>
+            </button>
+            <input class="r-input" placeholder="Search recipes" (click)="overlayOpen.set(true)" appResponsiveness
+              [darkMode]="['r-dark-mode']" [formControl]="searchText" />
+          </div>
+          <button mat-icon-button (click)="resetSearchText()" class="r-clear-filter">
+            <mat-icon>close</mat-icon>
           </button>
-          <input class="r-input" placeholder="Search recipes" (click)="overlayOpen.set(true)" appResponsiveness
-            [darkMode]="['r-dark-mode']" [formControl]="searchText" />
         </div>
-        <button mat-icon-button (click)="resetSearchText()" class="r-clear-filter">
-          <mat-icon>close</mat-icon>
+        <ng-template #connectedOverlay="cdkConnectedOverlay" cdkConnectedOverlay
+          [cdkConnectedOverlayOpen]="overlayOpen()" [cdkConnectedOverlayOrigin]="overlayPosition"
+          [cdkConnectedOverlayHasBackdrop]="overlayOptions.hasBackdrop" (overlayOutsideClick)="overlayOpen.set(false)"
+          [cdkConnectedOverlayFlexibleDimensions]="overlayOptions.flexibleDimensions">
+          <app-search-overlay [searchText]="searchText.value!"
+            (onHistoryItemChoosen)="searchText.setValue($event)"></app-search-overlay> <!-- Your overlay component -->
+        </ng-template>
+        <button class="r-add-button recipe-mat-primary-button" mat-fab routerLink="/recipes/upsert"
+          matTooltip="Add new recipe">
+          <mat-icon>add</mat-icon>
         </button>
       </div>
-      <ng-template #connectedOverlay="cdkConnectedOverlay" cdkConnectedOverlay [cdkConnectedOverlayOpen]="overlayOpen()"
-        [cdkConnectedOverlayOrigin]="overlayPosition" [cdkConnectedOverlayHasBackdrop]="overlayOptions.hasBackdrop"
-        (overlayOutsideClick)="overlayOpen.set(false)"
-        [cdkConnectedOverlayFlexibleDimensions]="overlayOptions.flexibleDimensions">
-        <app-search-overlay [searchText]="searchText.value!"
-          (onHistoryItemChoosen)="searchText.setValue($event)"></app-search-overlay> <!-- Your overlay component -->
-      </ng-template>
-      <button class="r-add-button recipe-mat-primary-button" mat-fab routerLink="/recipes/upsert"
-        matTooltip="Add new recipe">
-        <mat-icon>add</mat-icon>
-      </button>
+      <div class="r-chips">
+        <mat-chip-listbox multiple aria-label="Tag selection" (change)="chipsChanged($event)">
+          <mat-chip-option [selected]="selected(tag)" [disabled]="disableCombination(recipes, tag)" title="tag"
+            *ngFor="let tag of tags$ | async">{{tag}}</mat-chip-option>
+        </mat-chip-listbox>
+      </div>
     </div>
-    <div class="r-chips">
-      <h5 class="r-heading-secondary">Favorites recipes by tags:</h5>
-      <mat-chip-listbox multiple aria-label="Tag selection" (change)="chipsChanged($event)">
-        <mat-chip-option [selected]="selected(tag)" [disabled]="disableCombination(recipes, tag)" title="tag"
-          *ngFor="let tag of tags$ | async">{{tag}}</mat-chip-option>
-      </mat-chip-listbox>
+    <div class="r-content" appResponsiveness [largeScreens]="['r-desktop']">
+      <app-recipes-list-item [recipe]="item" *ngFor="let item of recipes" (tag)="clickTagOnItem($event)"
+        (likeToggleClicked)="clickLikeToggle($event)"></app-recipes-list-item>
     </div>
   </div>
-  <app-recipes-list-item [recipe]="item" *ngFor="let item of recipes" (tag)="clickTagOnItem($event)"
-    (likeToggleClicked)="clickLikeToggle($event)"></app-recipes-list-item>
 </ng-container>
