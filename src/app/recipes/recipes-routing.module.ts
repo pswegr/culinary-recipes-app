@@ -1,20 +1,20 @@
 import { RouterModule, Routes } from "@angular/router";
-import { RecipesListComponent } from "./recipes-list/recipes-list.component";
 import { RecipeComponent } from "./recipe/recipe.component";
 import { UpsertRecipeComponent } from "./upsert-recipe/upsert-recipe.component";
 import { NgModule } from "@angular/core";
 import { RecipesAllListComponent } from "./recipes-list/recipes-all-list/recipes-all-list.component";
-import { TagDetailsComponent } from "./recipes-list/tag-details/tag-details.component";
 import { CategoryDetailsComponent } from "./recipes-list/category-details/category-details.component";
 import { authGuard } from "../core/guards/auth.guard";
 import { YourRecipesListComponent } from "./recipes-list/your-recipes-list/your-recipes-list.component";
 import { adminGuard } from "../core/guards/admin.guard";
 import { FavoritesListComponent } from "./recipes-list/favorites-list/favorites-list.component";
+import { MainRecipesListComponent } from "./recipes-list/main-recipes-list/main-recipes-list.component";
+import { TagDetailsComponent } from "./recipes-list/tag-details/tag-details.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: RecipesListComponent,
+    component: MainRecipesListComponent,
     title: 'Netreci - Recipes with Passion',
     pathMatch: 'full'
   },

@@ -1,25 +1,14 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { filter, map, share, switchMap, tap } from 'rxjs';
-import { RecipesService } from '../../../shared/services/recipes.service';
-import { Meta, Title } from '@angular/platform-browser';
+import { RecipesListComponent } from '../recipes-list.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs';
 
 @Component({
     selector: 'app-tag-details',
-    templateUrl: './tag-details.component.html',
-    styleUrls: ['./tag-details.component.scss'],
+    templateUrl: '../recipes-list.component.html',
+    styleUrls: ['../recipes-list.component.scss'],
     standalone: false
 })
-export class TagDetailsComponent {
-  tagName$ = this.route.params.pipe(filter(p => p['tag'] !== null), map(p => p['tag']));
-  recipesByTag$ = this.tagName$.pipe(
-    tap(tag => {
-      this.titleService.setTitle(`${tag} - Netreci - Recipes with Passion / ${tag} przepisy`);
-      this.metaService.updateTag({name: 'decription', content: `Culinary recipes with tag: ${tag} / Przepisy kulinarne otagowane: ${tag}`})
-    }),
-    switchMap(tag => this.recipesService.getRecipes([tag])),
-  ).pipe(share());
-
-  constructor(private route: ActivatedRoute, private recipesService: RecipesService, private titleService: Title, private metaService: Meta ) { }
-
+export class TagDetailsComponent extends RecipesListComponent {
+   override title = `tag: ${toSignal(this.route.params.pipe(filter(p => p['tag'] !== null), map(p => p['tag'])))()}`;
 }
