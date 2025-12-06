@@ -1,10 +1,8 @@
-import { Component, Signal, input, output } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
+import { Component, Signal, input, model, output } from '@angular/core';
 import { Router } from '@angular/router';
-import { concat, debounceTime, delay, distinctUntilChanged, map, mapTo, of, startWith, switchMap, timer } from 'rxjs';
+import { concat, distinctUntilChanged, of, startWith, switchMap, timer } from 'rxjs';
+import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import { LoadingService } from 'src/app/shared/services/loading.service';
-import { RecipesService } from 'src/app/shared/services/recipes.service';
-import { SearchBarService } from 'src/app/shared/services/search-bar.service';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
 
 @Component({
@@ -14,7 +12,8 @@ import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
     standalone: false
 })
 export class SearchOverlayComponent {
-  searchText = input.required<string>();
+  filteredRecipesList = input.required<RecipeModel[]>();
+  recentSearches = model.required<string[]>();
   onHistoryItemChoosen = output<string>();
   isLoading$ = concat(
     of(true),
@@ -29,27 +28,8 @@ export class SearchOverlayComponent {
   );
 
   isDark: Signal<boolean> = this.themeModeService.isDark;
-
-  recentSearches = this.searchBarService.recentSearches;
-
-  filteredRecipesList$ = toObservable(this.searchText).pipe(
-    debounceTime(2000),
-    switchMap(x => {
-      let recentSearches = JSON.parse(localStorage.getItem('recentSearches')  || '[]');
-      if(x && !recentSearches.includes(x)){
-        recentSearches.push(x);
-      }
-    
-      if(recentSearches.length > 5){
-        recentSearches.shift();
-      }
-
-      localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
-      this.recentSearches.set(recentSearches);
-      return this.recipesService.getRecipes(null,null,x)})
-  );
   
-  constructor(private searchBarService: SearchBarService, private recipesService: RecipesService, private themeModeService: ThemeModeService, private router: Router, private loadingService: LoadingService){
+  constructor(private themeModeService: ThemeModeService, private router: Router, private loadingService: LoadingService){
    }
 
    navigateToDetails(recipeId: string) {

@@ -1,42 +1,22 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
-import { RecipesService } from '../../../shared/services/recipes.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MatChipListboxChange } from '@angular/material/chips';
+import { RecipesListComponent } from '../recipes-list.component';
 
 @Component({
     selector: 'app-recipes-all-list',
-    templateUrl: './recipes-all-list.component.html',
-    styleUrls: ['./recipes-all-list.component.scss'],
+    templateUrl: '../recipes-list.component.html',
+    styleUrls: ['../recipes-list.component.scss'],
     standalone: false
 })
-export class RecipesAllListComponent {
-  chosenTags: BehaviorSubject<string[]> = new BehaviorSubject([''])
-  recipesAll$: Observable<RecipeModel[]> = this.route.queryParamMap.pipe(
-    tap(params => this.chosenTags.next(params.getAll('tags'))),
-    switchMap(params => this.recipeService.getAllRecipes(params.getAll('tags')))
-  );
-
-  allTags$: Observable<string[]> = this.recipeService.getAllTags();
-
-  constructor(private recipeService: RecipesService, private router: Router, private route: ActivatedRoute, private loadingService: LoadingService) {
+export class RecipesAllListComponent extends RecipesListComponent {
+  override title: string = 'All Recipes';
+  
+  override getRecipes(tags: string[] | null = null, category: string | null = null , content: string | null = null): Observable<RecipeModel[]> {
+    return this.recipeService.getAllRecipes(tags, category, content);
   }
 
-  chipsChanged(event: MatChipListboxChange) {
-    this.chosenTags.next(event.value);
-    const tagsObj = { tags: this.chosenTags.value }
-    this.router.navigate(['/recipes/all'], {
-      queryParams: tagsObj
-    })
-  }
-
-  clickTagOnItem(event: string){
-    this.router.navigateByUrl(`recipes/tag/${event}`)
-  }
-
-  selected(tag: string){
-    return this.chosenTags.value.filter(x => x === tag).length > 0;
+  override getTags(): Observable<string[]> {
+    return this.recipeService.getAllTags();
   }
 }

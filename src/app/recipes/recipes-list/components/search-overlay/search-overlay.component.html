@@ -10,7 +10,7 @@
         </button>
       </mat-list-item>
     }
-    @for(recipe of filteredRecipesList$ | async; track recipe){
+    @for(recipe of filteredRecipesList(); track recipe){
       <mat-list-item (click)="navigateToDetails(recipe.id)">
         <img matListItemIcon class="r-img" [ngStyle]="{'opacity': isDark() ? '0.75' : '1'}" width="20" height="15" priority
         ngSrc="{{recipe.photo?.url || recipe?.imageUrl || '/assets/default/meal.jpg'}}"

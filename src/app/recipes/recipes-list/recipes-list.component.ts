@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import { RecipesService } from '../../shared/services/recipes.service';
-import { BehaviorSubject, Observable, Subscription, combineLatest, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, combineLatest, debounceTime, switchMap, tap } from 'rxjs';
 import { MatChipListboxChange } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { SearchBarService } from 'src/app/shared/services/search-bar.service';
 import { CdkConnectedOverlay } from '@angular/cdk/overlay';
 import { FormControl } from '@angular/forms';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-recipes-list',
@@ -16,30 +17,59 @@ import { FormControl } from '@angular/forms';
     standalone: false
 })
 export class RecipesListComponent {
+  title = 'Recipes';
   searchText = new FormControl('');
+  category: string | null = null;
   overlayOpen = this.searchBarService.overlayoppen;
+  recentSearches = this.searchBarService.recentSearches;
 
   refreshToken: BehaviorSubject<null> = new BehaviorSubject(null);
   chosenTags: BehaviorSubject<string[]> = new BehaviorSubject([''])
   recipes$: Observable<RecipeModel[]> = combineLatest([this.route.queryParamMap, this.refreshToken.asObservable() ]).pipe(
     tap(([params]) => {
-      this.chosenTags.next(params.getAll('tags'));
+      this.chosenTags.next(params.getAll('tag'));
       this.searchText.setValue(params.get('content'));
+      this.category = params.get('category');
     }),
-    switchMap(([params]) => this.recipeService.getRecipes(params.getAll('tags'), null, params.get('content')))
+    switchMap(([params]) => this.getRecipes(params.getAll('tag'), params.get('category'), params.get('content')))
   );
+  
+  filteredRecipesList = toSignal(combineLatest([this.route.queryParamMap,this.searchText.valueChanges]).pipe(
+    debounceTime(2000),
+    switchMap(([params, searchText]) => {
+      let recentSearches = JSON.parse(localStorage.getItem('recentSearches')  || '[]');
+      if(searchText && !recentSearches.includes(searchText)){
+        recentSearches.push(searchText);
+      }
+    
+      if(recentSearches.length > 5){
+        recentSearches.shift();
+      }
 
-  tags$: Observable<string[]> = this.recipeService.getTags();
+      localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+      this.recentSearches.set(recentSearches);
+      return this.getRecipes(params.getAll('tag'), params.get('category'), searchText)})
+  ));
+
+  getRecipes(tags: string[] | null = null, category: string | null = null , content: string | null = null): Observable<RecipeModel[]> {
+    return this.recipeService.getRecipes(tags, category, content);
+  }
+
+  getTags(): Observable<string[]> {
+    return this.recipeService.getTags();
+  }
+
+  tags$: Observable<string[]> = this.getTags();
 
   likeToggleSub = Subscription.EMPTY;
 
-  constructor(private recipeService: RecipesService, private router: Router, private route: ActivatedRoute, private loadingService: LoadingService, private searchBarService: SearchBarService) {
+  constructor(protected recipeService: RecipesService, private router: Router, protected route: ActivatedRoute, private loadingService: LoadingService, private searchBarService: SearchBarService) {
   }
 
   chipsChanged(event: MatChipListboxChange) {
     this.chosenTags.next(event.value);
-    const tagsObj = { tags: this.chosenTags.value, content: this.searchText.value }
-    this.router.navigate(['/recipes'], {
+    const tagsObj = { tag: this.chosenTags.value, content: this.searchText.value }
+    this.router.navigate([this.router.url], {
       queryParams: tagsObj
     })
   }
@@ -70,7 +100,7 @@ export class RecipesListComponent {
   };
   
   handleSearch(){
-    const tagsObj = { tags: this.chosenTags.value, content: this.searchText.value }
+    const tagsObj = { tag: this.chosenTags.value, content: this.searchText.value }
     this.router.navigate(['/recipes'], {
       queryParams: tagsObj
     })
@@ -78,7 +108,7 @@ export class RecipesListComponent {
 
   resetSearchText() {
     this.searchText.reset();
-    const tagsObj = { tags: this.chosenTags.value }
+    const tagsObj = { tag: this.chosenTags.value }
     this.router.navigate(['/recipes'], {
       queryParams: tagsObj
     })
