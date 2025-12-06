@@ -1,6 +1,7 @@
 <ng-container *ngIf="recipes$ | async as recipes">
   <div class="r-container" [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']" appResponsiveness>
     <div class="r-header" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
+      <h2 class="r-title">{{title}}</h2>
       <div class="r-header__top">
         <div class="r-search-bar-container" cdkOverlayOrigin #overlayPosition="cdkOverlayOrigin"
           [ngClass]="{'opened mat-elevation-z2': overlayOpen()}">
@@ -19,8 +20,8 @@
           [cdkConnectedOverlayOpen]="overlayOpen()" [cdkConnectedOverlayOrigin]="overlayPosition"
           [cdkConnectedOverlayHasBackdrop]="overlayOptions.hasBackdrop" (overlayOutsideClick)="overlayOpen.set(false)"
           [cdkConnectedOverlayFlexibleDimensions]="overlayOptions.flexibleDimensions">
-          <app-search-overlay [searchText]="searchText.value!"
-            (onHistoryItemChoosen)="searchText.setValue($event)"></app-search-overlay> <!-- Your overlay component -->
+          <app-search-overlay [recentSearches]="recentSearches()" [filteredRecipesList]="filteredRecipesList()!"
+            (onHistoryItemChoosen)="searchText.setValue($event)"></app-search-overlay>
         </ng-template>
         <button class="r-add-button recipe-mat-primary-button" mat-fab routerLink="/recipes/upsert"
           matTooltip="Add new recipe">

@@ -49,10 +49,13 @@ export class RecipesService {
     return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes/GetFavorites?' + searchParams.toString());
   }
 
-  getAllRecipes(pickedTags: string[] | null = null, category: string | null = null){
+  getAllRecipes(pickedTags: string[] | null = null, category: string | null = null, content: string | null = null){
     const searchParams = new URLSearchParams();
     if(category){
       searchParams.append('category', category)
+    }
+    if(content){
+      searchParams.append('content', content);
     }
     pickedTags?.forEach((tag) =>{ 
       if(tag){
@@ -60,17 +63,20 @@ export class RecipesService {
       } 
     });
 
-    if(pickedTags?.length === 0 && !category){
+    if(pickedTags?.length === 0 && !category && !content){
       return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes/GetAll');
     }
 
     return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes/GetAll?' + searchParams.toString());
   }
 
-  getAllRecipesCreatedByUser(pickedTags: string[] | null = null, category: string | null = null){
+  getAllRecipesCreatedByUser(pickedTags: string[] | null = null, category: string | null = null, content: string | null = null){
     const searchParams = new URLSearchParams();
     if(category){
       searchParams.append('category', category)
+    }
+    if(content){
+      searchParams.append('content', content);
     }
     pickedTags?.forEach((tag) =>{ 
       if(tag){

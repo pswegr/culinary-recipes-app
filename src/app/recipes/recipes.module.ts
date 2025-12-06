@@ -16,6 +16,7 @@ import { YourRecipesListComponent } from './recipes-list/your-recipes-list/your-
 import { OverlayModule } from '@angular/cdk/overlay';
 import { SearchOverlayComponent } from './recipes-list/components/search-overlay/search-overlay.component';
 import { FavoritesListComponent } from './recipes-list/favorites-list/favorites-list.component';
+import { MainRecipesListComponent } from './recipes-list/main-recipes-list/main-recipes-list.component';
 
 
 
@@ -23,6 +24,7 @@ import { FavoritesListComponent } from './recipes-list/favorites-list/favorites-
   declarations: [
     RecipesListComponent,
     RecipesListItemComponent,
+    MainRecipesListComponent,
     UpsertRecipeComponent,
     FileInputComponent,
     RecipesAllListComponent,
