@@ -84,7 +84,7 @@ export class RecipesService {
       } 
     });
 
-    if(pickedTags?.length === 0 && !category){
+    if(pickedTags?.length === 0 && !category && !content){
       return this.http.get<RecipeModel[]>(environment.apiUrl + 'Recipes/GetAllCreatedByUser');
     }
 

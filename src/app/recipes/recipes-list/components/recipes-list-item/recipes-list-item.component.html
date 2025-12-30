@@ -1,24 +1,24 @@
 <div [appDoubleClick]="recipe.id" (doubleClick)="navigateToDetails($event)" *ngIf="recipe">
-  <div class="r-list-item-container" [appBgColorHover]="recipe?.photo?.mainColor ?? '#008000'">
+  <div class="r-list-item-container" [appBgColorHover]="recipe.photo?.mainColor ?? '#008000'">
     <div class="r-list-item" appResponsiveness
-      [ngStyle]="{'background-color': isDark() ? 'inherit' : (recipe?.photo?.mainColor ?? '#008000') + '08', 'border': isDark() ? '1px solid #444': 'none'}"
+      [ngStyle]="{'background-color': isDark() ? 'inherit' : (recipe.photo?.mainColor ?? '#008000') + '08', 'border': isDark() ? '1px solid #444': 'none'}"
       [smallScreens]="['r-handset-poitret-mode']" [largeScreens]="['r-desktop']" [darkMode]="['dark-mode-shadow']"
       [lightMode]="['light-mode-shadow']" (click)="updateDisplayDetails()">
 
       <div appResponsiveness [darkMode]="['r-dark-mode']">
         <div class="main-cart">
           <div appResponsiveness class="r-top-section" [largeScreens]="['r-display-grid-2-header']"
-            [appGradientBg]="'0deg'" [gradientColor]="recipe?.photo?.mainColor">
+            [appGradientBg]="'0deg'" [gradientColor]="recipe.photo?.mainColor">
             <div class="r-list-item-header">
               <div class="r-list-item-header__title"
-                [ngStyle]="{ 'text-shadow': '0px 0px 1px ' + (recipe?.photo?.mainColor ?? '#008000') + '22' }">
+                [ngStyle]="{ 'text-shadow': '0px 0px 1px ' + (recipe.photo?.mainColor ?? '#008000') + '22' }">
                 {{recipe.title}}</div>
               <div class="r-list-item-header__category">{{recipe.category}}</div>
               <div class="r-list-item-header__created-by">by: {{recipe.createdBy}}</div>
             </div>
             <div class="r-img-container">
               <img class="r-img" width="400" height="300"
-                ngSrc="{{recipe.photo?.url || recipe?.imageUrl || '/assets/default/meal.jpg'}}" alt="{{recipe.title}}">
+                ngSrc="{{recipe.photo?.url || recipe.imageUrl || '/assets/default/meal.jpg'}}" alt="{{recipe.title}}">
             </div>
             <div class="r-chips-container">
               <mat-chip-listbox>
@@ -38,7 +38,7 @@
         </div>
         @if(showDetails()){
         <div appResponsiveness [largeScreens]="['r-display-grid-2']">
-          <div class="r-list-item-content" appGradientBg="270deg" [gradientColor]="recipe?.photo?.mainColor">
+          <div class="r-list-item-content" appGradientBg="270deg" [gradientColor]="recipe.photo?.mainColor">
             <div class="r-igredients">
               <h3 class="r-sub-header">Igredients</h3>
               <ul class="r-ul">
@@ -50,7 +50,7 @@
               </ul>
             </div>
           </div>
-          <div class="r-list-item-content" appGradientBg="90deg" [gradientColor]="recipe?.photo?.mainColor">
+          <div class="r-list-item-content" appGradientBg="90deg" [gradientColor]="recipe.photo?.mainColor">
             <div class="r-instructions">
               <h3>Instructions</h3>
               <ol class="r-ol">

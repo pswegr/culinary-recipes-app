@@ -1,4 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { provideCloudinaryLoader } from '@angular/common';
 import { Component, EventEmitter, Input, OnDestroy, Output, signal, Signal, WritableSignal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject} from 'rxjs';
@@ -51,7 +52,7 @@ export class RecipesListItemComponent implements OnDestroy {
   }
 
   clickTagOnItem(event: string){
-    this.router.navigateByUrl(`recipes/tag/${event}`)
+    this.tag.emit(event);
   }
 
   onLike(recipeId: string){

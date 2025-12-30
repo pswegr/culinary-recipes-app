@@ -34,7 +34,7 @@ export class RecipeCartComponent {
   constructor(private router: Router, private themeModeService: ThemeModeService, private accountService: AccountService){}
 
   chipClicked(event: string){
-    this.router.navigateByUrl(`recipes/tag/${event}`)
+    this.router.navigateByUrl(`recipes?tag=${event}`)
   }
 
   onLike(recipeId: string){
