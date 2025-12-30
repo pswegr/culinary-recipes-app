@@ -22,6 +22,10 @@ export class ToolbarComponent {
     this.darkModeSwitched.emit(checked);
   }
 
+  navigateToCategory(category: string) {
+    this.router.navigateByUrl(`recipes?category=${category}`);
+  }
+
   /**
    * Check if the router url contains the specified route
    *

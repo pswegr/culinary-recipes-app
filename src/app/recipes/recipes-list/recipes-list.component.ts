@@ -11,10 +11,10 @@ import { FormControl } from '@angular/forms';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
-    selector: 'app-recipes-list',
-    templateUrl: './recipes-list.component.html',
-    styleUrls: ['./recipes-list.component.scss'],
-    standalone: false
+  selector: 'app-recipes-list',
+  templateUrl: './recipes-list.component.html',
+  styleUrls: ['./recipes-list.component.scss'],
+  standalone: false
 })
 export class RecipesListComponent {
   title = 'Recipes';
@@ -25,7 +25,7 @@ export class RecipesListComponent {
 
   refreshToken: BehaviorSubject<null> = new BehaviorSubject(null);
   chosenTags: BehaviorSubject<string[]> = new BehaviorSubject([''])
-  recipes$: Observable<RecipeModel[]> = combineLatest([this.route.queryParamMap, this.refreshToken.asObservable() ]).pipe(
+  recipes$: Observable<RecipeModel[]> = combineLatest([this.route.queryParamMap, this.refreshToken.asObservable()]).pipe(
     tap(([params]) => {
       this.chosenTags.next(params.getAll('tag'));
       this.searchText.setValue(params.get('content'));
@@ -33,25 +33,26 @@ export class RecipesListComponent {
     }),
     switchMap(([params]) => this.getRecipes(params.getAll('tag'), params.get('category'), params.get('content')))
   );
-  
-  filteredRecipesList = toSignal(combineLatest([this.route.queryParamMap,this.searchText.valueChanges]).pipe(
+
+  filteredRecipesList = toSignal(combineLatest([this.route.queryParamMap, this.searchText.valueChanges]).pipe(
     debounceTime(2000),
     switchMap(([params, searchText]) => {
-      let recentSearches = JSON.parse(localStorage.getItem('recentSearches')  || '[]');
-      if(searchText && !recentSearches.includes(searchText)){
+      let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+      if (searchText && !recentSearches.includes(searchText)) {
         recentSearches.push(searchText);
       }
-    
-      if(recentSearches.length > 5){
+
+      if (recentSearches.length > 5) {
         recentSearches.shift();
       }
 
       localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
       this.recentSearches.set(recentSearches);
-      return this.getRecipes(params.getAll('tag'), params.get('category'), searchText)})
+      return this.getRecipes(params.getAll('tag'), params.get('category'), searchText)
+    })
   ));
 
-  getRecipes(tags: string[] | null = null, category: string | null = null , content: string | null = null): Observable<RecipeModel[]> {
+  getRecipes(tags: string[] | null = null, category: string | null = null, content: string | null = null): Observable<RecipeModel[]> {
     return this.recipeService.getRecipes(tags, category, content);
   }
 
@@ -68,49 +69,70 @@ export class RecipesListComponent {
 
   chipsChanged(event: MatChipListboxChange) {
     this.chosenTags.next(event.value);
-    const tagsObj = { tag: this.chosenTags.value, content: this.searchText.value }
-    this.router.navigate([this.router.url], {
-      queryParams: tagsObj
-    })
+    this.updateQueryParams({ tag: event.value.length ? event.value : null});
   }
 
-  clickTagOnItem(event: string){
-    this.router.navigateByUrl(`recipes/tag/${event}`)
+  clickTagOnItem(event: string) {
+    this.chosenTags.next([event]);;
+    this.updateQueryParams({ tag: event});
   }
 
-  selected(tag: string){
+  selected(tag: string) {
     return this.chosenTags.value.filter(x => x === tag).length > 0;
   }
 
-  clickLikeToggle(recipeId: string){
-     this.recipeService.likeToggle(recipeId).subscribe(
+  clickLikeToggle(recipeId: string) {
+    this.recipeService.likeToggle(recipeId).subscribe(
       x => this.refreshToken.next(null)
     );
   }
 
-  disableCombination(recipes: RecipeModel[], tag: string){
+  disableCombination(recipes: RecipeModel[], tag: string) {
     return recipes.filter(x => x.tags.includes(tag)).length === 0;
   }
 
   public readonly overlayOptions: Partial<CdkConnectedOverlay> = {
     hasBackdrop: true,
     positions: [
-      { originX: 'end', originY: 'bottom', overlayX: 'start',  overlayY: 'top'}
+      { originX: 'end', originY: 'bottom', overlayX: 'start', overlayY: 'top' }
     ]
   };
-  
-  handleSearch(){
+
+  handleSearch() {
     const tagsObj = { tag: this.chosenTags.value, content: this.searchText.value }
-    this.router.navigate(['/recipes'], {
+    this.router.navigate([this.router.url], {
       queryParams: tagsObj
     })
   }
 
   resetSearchText() {
     this.searchText.reset();
-    const tagsObj = { tag: this.chosenTags.value }
-    this.router.navigate(['/recipes'], {
-      queryParams: tagsObj
-    })
+    this.updateQueryParams({tag: this.chosenTags.value, content: null});
+  }
+
+  updateQueryParams(
+    changes: Record<string, string | number | boolean | string[] | null | undefined>
+  ) {
+    const queryParams: Record<string, any> = {};
+
+    Object.entries(changes).forEach(([key, value]) => {
+      if (value === null || value === undefined) {
+        queryParams[key] = null; // remove param
+        return;
+      }
+
+      if (Array.isArray(value)) {
+        queryParams[key] = value.length ? value : null;
+        return;
+      }
+
+      queryParams[key] = value;
+    });
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
+      queryParamsHandling: 'merge'
+    });
   }
 }

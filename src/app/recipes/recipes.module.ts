@@ -8,9 +8,7 @@ import { FileInputComponent } from './upsert-recipe/custom-controls/file-input/f
 import { RecipesAllListComponent } from './recipes-list/recipes-all-list/recipes-all-list.component';
 import { RecipeComponent } from './recipe/recipe.component';
 import { RecipesRoutingModule } from './recipes-routing.module';
-import { TagDetailsComponent } from './recipes-list/tag-details/tag-details.component';
 import { NgOptimizedImage } from '@angular/common';
-import { CategoryDetailsComponent } from './recipes-list/category-details/category-details.component';
 import { RecipeCartComponent } from './components/recipe-cart/recipe-cart.component';
 import { YourRecipesListComponent } from './recipes-list/your-recipes-list/your-recipes-list.component';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -29,8 +27,6 @@ import { MainRecipesListComponent } from './recipes-list/main-recipes-list/main-
     FileInputComponent,
     RecipesAllListComponent,
     RecipeComponent,
-    TagDetailsComponent,
-    CategoryDetailsComponent,
     RecipeCartComponent,
     YourRecipesListComponent,
     SearchOverlayComponent,

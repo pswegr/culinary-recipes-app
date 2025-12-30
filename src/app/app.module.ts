@@ -12,16 +12,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 
-@NgModule({ declarations: [
+@NgModule({
+    declarations: [
         AppComponent
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+    bootstrap: [AppComponent], imports: [
+        BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
         SharedModule,
         CoreModule,
         RecipesModule,
-        TermsModule], providers: [
+        TermsModule
+    ]
+    , providers: [
         {
             provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true,
         },
@@ -29,5 +33,6 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
             provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true,
         },
         provideHttpClient(withInterceptorsFromDi())
-    ] })
+    ]
+})
 export class AppModule { }
