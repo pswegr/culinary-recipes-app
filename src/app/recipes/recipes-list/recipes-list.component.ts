@@ -125,7 +125,12 @@ export class RecipesListComponent {
         queryParams[key] = value.length ? value : null;
         return;
       }
-
+      
+      if(typeof value === 'string'){
+        queryParams[key] = value.replace(/[\r\n]+/g, '');
+        return;
+      }
+        
       queryParams[key] = value;
     });
 
