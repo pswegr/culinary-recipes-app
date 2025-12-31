@@ -60,7 +60,6 @@ body {
 body {
   margin: 0;
   font-family: Inter, "Helvetica Neue", sans-serif;
-  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .theme-light {
@@ -99,6 +98,8 @@ body {
   /* Handle */
   ::-webkit-scrollbar-thumb {
     background: #888;
+    -webkit-appearance: none;
+    border-radius: 5px;
   }
 
   /* Handle on hover */
@@ -146,6 +147,8 @@ body {
   /* Handle */
   ::-webkit-scrollbar-thumb {
     background: #2e2e2e;
+    -webkit-appearance: none;
+    border-radius: 5px;
   }
 
   /* Handle on hover */
