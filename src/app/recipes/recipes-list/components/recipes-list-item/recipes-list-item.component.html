@@ -1,8 +1,8 @@
-<div [appDoubleClick]="recipe.id" (doubleClick)="navigateToDetails($event)" *ngIf="recipe">
+<div class="r-container" [appDoubleClick]="recipe.id" (doubleClick)="navigateToDetails($event)" *ngIf="recipe">
   <div class="r-list-item-container" [appBgColorHover]="recipe.photo?.mainColor ?? '#008000'">
     <div class="r-list-item" appResponsiveness
       [ngStyle]="{'background-color': isDark() ? 'inherit' : (recipe.photo?.mainColor ?? '#008000') + '08', 'border': isDark() ? '1px solid #444': 'none'}"
-      [smallScreens]="['r-handset-poitret-mode']" [largeScreens]="['r-desktop']" [darkMode]="['dark-mode-shadow']"
+      [darkMode]="['dark-mode-shadow']"
       [lightMode]="['light-mode-shadow']" (click)="updateDisplayDetails()">
 
       <div appResponsiveness [darkMode]="['r-dark-mode']">
