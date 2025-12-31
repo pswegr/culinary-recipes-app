@@ -3,8 +3,24 @@ html, body, app-root, .app-frame {
   margin: 0;
   height: 100%;
   box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
-body::-webkit-scrollbar{
-  display: none;
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
