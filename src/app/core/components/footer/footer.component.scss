@@ -1,0 +1,34 @@
+    .footer {
+        padding: 2rem 0;
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .footer-content {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .footer-content p {
+        margin: 0;
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+
+    .social-links a {
+        color: #666;
+        transition: color 0.3s ease;
+    }
+
+    .social-links a:hover {
+        color: #bec111;
+    }
+
+    .instagram-link svg {
+        vertical-align: middle;
+    }
