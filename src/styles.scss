@@ -60,7 +60,7 @@ body {
 body {
   margin: 0;
   font-family: Inter, "Helvetica Neue", sans-serif;
-          /* Make text color dimmer */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .theme-light {

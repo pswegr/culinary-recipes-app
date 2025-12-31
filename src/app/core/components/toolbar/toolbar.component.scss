@@ -1,5 +1,8 @@
 .mat-toolbar {
   padding-top: env(safe-area-inset-top);
+  position: sticky;
+  top: env(safe-area-inset-top);
+  z-index: 1000;
 }
 
 .r-spacer {

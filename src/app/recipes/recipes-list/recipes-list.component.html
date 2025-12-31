@@ -39,7 +39,7 @@
         </mat-chip-listbox>
       </div>
     </div>
-    <div class="r-content" appResponsiveness [largeScreens]="['r-desktop']">
+    <div class="r-content" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
       <app-recipes-list-item [recipe]="item" *ngFor="let item of recipes" (tag)="clickTagOnItem($event)"
         (likeToggleClicked)="clickLikeToggle($event)"></app-recipes-list-item>
     </div>
