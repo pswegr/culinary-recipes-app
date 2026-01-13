@@ -4,7 +4,6 @@ html, body, app-root, .app-frame {
   height: 100%;
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: env(safe-area-inset-bottom);
 }
 
 body::-webkit-scrollbar {

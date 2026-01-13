@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
   selector: 'app-footer',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   standalone: false
 })
 export class FooterComponent {
-
+  loadingService = inject(LoadingService);
 }
