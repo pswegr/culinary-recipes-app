@@ -1,4 +1,5 @@
-<footer class="footer">
+
+<footer class="footer" [class.loading]="loadingService.isLoading$ | async">
     <div class="footer-content">
         <p>&copy; 2025 Netreci - Culinary Recipes. All rights reserved.</p>
         <div class="social-links">
