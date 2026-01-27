@@ -138,6 +138,12 @@
   align-items: center;
 }
 
+.r-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .r-stepper-footer {
   margin-top: 2rem;
 }

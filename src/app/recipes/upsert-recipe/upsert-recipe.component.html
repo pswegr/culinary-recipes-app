@@ -1,9 +1,15 @@
 <div class="r-header">
   <h2 class="r-heading-secondary">Add new recipe</h2>
-  <button mat-fab extended color="primary" [disabled]="!(!disableSafe || recipeId)" (click)="save()">
-    <mat-icon>save</mat-icon>
-      Save
-  </button>
+  <div class="r-header-actions">
+    <button mat-stroked-button color="warn" (click)="revertChanges()">
+      <mat-icon>undo</mat-icon>
+        {{ recipeId ? 'Revert' : 'Clear' }}
+    </button>
+    <button mat-button color="primary" [disabled]="!(!disableSafe || recipeId)" (click)="save()">
+      <mat-icon>save</mat-icon>
+        Save
+    </button>
+  </div>
 </div>
 <mat-stepper  linear="false"  [orientation]="(stepperOrientation | async) ?? 'horizontal'" #stepper (selectionChange)="checkCompletion()" >
   <mat-step>
@@ -11,23 +17,23 @@
       <ng-template matStepLabel>Fill out recipe data</ng-template>
       <mat-form-field class="r-full-width">
         <mat-label>Title</mat-label>
-        <input matInput placeholder="title" [(ngModel)]="recipe.title" name="title">
+        <input matInput placeholder="title" [ngModel]="recipe().title" (ngModelChange)="updateRecipeField('title', $event)" name="title">
       </mat-form-field>
       <mat-form-field class="r-full-width">
         <mat-label>Description</mat-label>
-        <textarea matInput placeholder="Write description of the dish" [(ngModel)]="recipe.description" name="description"></textarea>
+        <textarea matInput placeholder="Write description of the dish" [ngModel]="recipe().description" (ngModelChange)="updateRecipeField('description', $event)" name="description"></textarea>
       </mat-form-field>
       <mat-form-field class="r-full-width">
         <mat-label>Servings</mat-label>
-        <input type="number" matInput placeholder="number of servings" [(ngModel)]="recipe.servings" name="servings">
+        <input type="number" matInput placeholder="number of servings" [ngModel]="recipe().servings" (ngModelChange)="updateRecipeField('servings', $event)" name="servings">
       </mat-form-field>
       <mat-form-field class="r-full-width">
         <mat-label>Cooking time</mat-label>
-        <input type="number" matInput placeholder="cooking Time [minutes]" [(ngModel)]="recipe.cookingTime" name="cookingTime">
+        <input type="number" matInput placeholder="cooking Time [minutes]" [ngModel]="recipe().cookingTime" (ngModelChange)="updateRecipeField('cookingTime', $event)" name="cookingTime">
       </mat-form-field>
       <mat-form-field class="r-full-width">
         <mat-label>Preparation time</mat-label>
-        <input type="number" matInput placeholder="Preparation Time [minutes]" [(ngModel)]="recipe.preparationTime" name="preparationTime">
+        <input type="number" matInput placeholder="Preparation Time [minutes]" [ngModel]="recipe().preparationTime" (ngModelChange)="updateRecipeField('preparationTime', $event)" name="preparationTime">
       </mat-form-field>
       <div class="r-stepper-footer">
         <button mat-button matStepperNext>Next</button>
@@ -38,7 +44,7 @@
     <ng-template matStepLabel>Igredients</ng-template>
     <div class="r-ingredients">
       <div class="r-ingredients-list">
-        <div class="r-ingredient-list-item" *ngFor="let item of recipe.ingredients; let i= index;">
+        <div class="r-ingredient-list-item" *ngFor="let item of recipe().ingredients; let i= index;">
             <div>
               {{item.name}} - {{item.quantity}} {{item.unit}}
             </div>
@@ -80,7 +86,7 @@
     <form class="r-form-recipes-data-instructions  r-overflow-auto">
       <ng-template matStepLabel>Fill out instructions</ng-template>
       <div cdkDropList class="r-list" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" (cdkDropListDropped)="drop($event)">
-        <div class="r-box" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" [attr.data-drag-data]="instruction" *ngFor="let instruction of recipe.instructions; let i= index; trackBy:trackByFn" cdkDrag>
+        <div class="r-box" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" [attr.data-drag-data]="instruction" *ngFor="let instruction of recipe().instructions; let i= index; trackBy:trackByFn" cdkDrag>
           {{instruction}}
           <div class="r-item-action-buttons">
             <button mat-mini-fab class="recipe-mat-fab-secondary" (click)="deleteInstruction(i)" matTooltip="Delete instruction">
@@ -96,7 +102,7 @@
         <mat-label>Next instruction</mat-label>
         <textarea matInput placeholder="instruction step" (keyup.enter)="addNewInstruction()" [(ngModel)]="newInstruction" name="newInstructions"></textarea>
       </mat-form-field>
-      <button mat-fab extended class="recipe-mat-btn-tertiary" (click)="addNewInstruction()" [disabled]="recipe.instructions.length > 10">
+      <button mat-fab extended class="recipe-mat-btn-tertiary" (click)="addNewInstruction()" [disabled]="recipe().instructions.length > 10">
         <mat-icon>add</mat-icon>
         Add instruction
       </button>
@@ -111,19 +117,19 @@
     <div class="r-form-recipes-data">
       <mat-form-field class="r-full-width">
         <mat-label>Category</mat-label>
-        <input type="text" matInput [(ngModel)]="recipe.category" [matAutocomplete]="auto" (ngModelChange)="categoryChanged($event)">
+        <input type="text" matInput [ngModel]="recipe().category" [matAutocomplete]="auto" (ngModelChange)="categoryChanged($event)">
         <mat-autocomplete #auto="matAutocomplete" autoSelectActiveOption="true">
-          <mat-option *ngFor="let category of filteredOptions"
+          <mat-option *ngFor="let category of filteredOptions()"
             [value]="category">
               {{category}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-      <mat-slide-toggle [(ngModel)]="recipe.published" checked="true" class="r-slide-toggle">Published</mat-slide-toggle>
+      <mat-slide-toggle [ngModel]="recipe().published" (ngModelChange)="updateRecipeField('published', $event)" checked="true" class="r-slide-toggle">Published</mat-slide-toggle>
       <mat-form-field class="r-full-width">
         <mat-label>Tags</mat-label>
         <mat-chip-grid #chipGrid aria-label="Fruit selection">
-          <mat-chip-row *ngFor="let tag of recipe.tags" (removed)="removeTag(tag)">
+          <mat-chip-row *ngFor="let tag of recipe().tags" (removed)="removeTag(tag)">
             {{tag}}
             <button matChipRemove [attr.aria-label]="'remove ' + tag">
               <mat-icon>cancel</mat-icon>
@@ -135,7 +141,7 @@
           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
           (matChipInputTokenEnd)="addTag($event)"/>
         <mat-autocomplete #autoTags="matAutocomplete" (optionSelected)="selectedTag($event)">
-          <mat-option *ngFor="let tag of $tags | async" [value]="tag">
+          <mat-option *ngFor="let tag of availableTags()" [value]="tag">
             {{tag}}
           </mat-option>
         </mat-autocomplete>

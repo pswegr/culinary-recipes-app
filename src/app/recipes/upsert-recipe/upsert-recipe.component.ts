@@ -1,10 +1,9 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, effect, inject } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, effect } from '@angular/core';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { IngredientModel } from 'src/app/shared/models/igredient.model';
-import { RecipesService } from '../../shared/services/recipes.service';
-import { Observable,  Subject,  Subscription,  filter,  map, of, share, switchMap } from 'rxjs';
+import { Observable, Subject, Subscription, map, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/cdk/stepper';
@@ -12,16 +11,17 @@ import { MatStepper } from '@angular/material/stepper';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { FileInputComponent } from './custom-controls/file-input/file-input.component';
-import { HttpEventType } from '@angular/common/http';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { FormControl } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { UpsertRecipeStore } from './upsert-recipe.store';
 
 @Component({
     selector: 'app-upsert-recipe',
     templateUrl: './upsert-recipe.component.html',
     styleUrls: ['./upsert-recipe.component.scss'],
+    providers: [UpsertRecipeStore],
     standalone: false
 })
 export class UpsertRecipeComponent implements OnInit, OnDestroy {
@@ -39,28 +39,17 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
   uploadSub: Subscription = new Subscription();
 
-  $recipe: Observable<RecipeModel> = this.route.paramMap.pipe(
-    takeUntil(this.destroy$),
-    filter(p => p.get('recipeId') !== null),
-    map(p => p.get('recipeId') ?? ''),
-    switchMap(id => this.recipesService.getRecipe(id))
-  ).pipe(share());
+  readonly recipe = this.upsertRecipeStore.recipe;
+  readonly filteredOptions = this.upsertRecipeStore.filteredCategories;
+  readonly availableTags = this.upsertRecipeStore.availableTags;
 
-  $tags = this.recipesService.getTagsUpsertRecipe().pipe(takeUntil(this.destroy$))
-
-  recipe: RecipeModel = {servings: 0, title: '', id: '', imageUrl: '', category: '', description: '', preparationTime: 0, cookingTime: 0, ingredients: [], instructions: [], tags: [], photo: {publicId: '', url: '', mainColor: ''}, published: false, likedByUsers: [] };
   newInstruction: string = '';
   newIngredient: IngredientModel = {name: '', quantity: '', unit: ''};
-  
-  categories: string[] = [];
-  filteredOptions: string[] = [];
-  photoUploaded: File | null = null;
-  
 
   constructor(breakpointObserver: BreakpointObserver, 
     private route: ActivatedRoute,
     private router: Router,
-    private recipesService: RecipesService,
+    private upsertRecipeStore: UpsertRecipeStore,
     private themeModeService: ThemeModeService,
     private announcer: LiveAnnouncer){
     this.stepperOrientation = breakpointObserver
@@ -72,30 +61,43 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
   
     effect(() => {
       this.isDarkMode = this.themeModeService.isDark();
-    }) 
+    });
+
+    effect(() => {
+      const progress = this.upsertRecipeStore.uploadProgress();
+      if (this.fileInput) {
+        this.fileInput.uploadProgress = progress;
+      }
+    });
    }
 
   ngOnDestroy(): void {
+    this.uploadSub.unsubscribe();
     this.destroy$.next();
     this.destroy$.complete();
   }
    
   ngOnInit(): void {
-    this.$recipe.pipe(takeUntil(this.destroy$)).subscribe(x => this.recipe = x)
-
-    this.recipesService.getCategories().pipe(takeUntil(this.destroy$)).subscribe(x => {
-      this.categories = x;
-      this.filteredOptions = this.categories
-    });
+    this.route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.recipeId = params.get('recipeId');
+        this.upsertRecipeStore.init(this.recipeId);
+      });
   }
 
   categoryChanged(event: string): void {
-    if(event !== ''){
-      this.filteredOptions = this.categories.filter(x => x.startsWith(event));
-    }
-    else{
-      this.filteredOptions = this.categories;
-    }
+    this.upsertRecipeStore.updateRecipeField('category', event);
+    this.upsertRecipeStore.setCategoryFilter(event);
+  }
+
+  updateRecipeField<K extends keyof RecipeModel>(key: K, value: RecipeModel[K]): void {
+    this.upsertRecipeStore.updateRecipeField(key, value);
+  }
+
+  revertChanges(): void {
+    this.upsertRecipeStore.revertToOriginal();
+    this.fileInput?.reset();
   }
 
   checkCompletion(){
@@ -103,7 +105,9 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.recipe.instructions, event.previousIndex, event.currentIndex);
+    const instructions = [...this.recipe().instructions];
+    moveItemInArray(instructions, event.previousIndex, event.currentIndex);
+    this.upsertRecipeStore.setInstructions(instructions);
   }
 
   trackByFn(index: any, item: any) {
@@ -111,73 +115,58 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
   }
 
   addNewInstruction(){
-    this.recipe.instructions.push(structuredClone(this.newInstruction))
+    this.upsertRecipeStore.addInstruction(this.newInstruction);
     this.newInstruction = '';
   }
 
   save(){
-    const formData = new FormData();
-    formData.append('recipe', JSON.stringify(this.recipe));
-    if (this.photoUploaded) {
-      formData.append('photo', this.photoUploaded);
-    }
-      const upload$ = this.recipesService.upsertRecipe(formData)
+    this.uploadSub.unsubscribe();
+    this.uploadSub = this.upsertRecipeStore.upsertRecipe()
       .pipe(
-          finalize(() => this.fileInput?.reset())
-      );
-    
-      this.uploadSub = upload$.subscribe(event => {
-        if (event.type == HttpEventType.UploadProgress && event.total) {
-          if(this.fileInput){
-            this.fileInput.uploadProgress = Math.round(100 * (event.loaded / event.total));
-          }
-        }
-        this.router.navigate(['']);
-      })
-    
+        finalize(() => this.fileInput?.reset())
+      )
+      .subscribe({
+        next: () => this.router.navigate([''])
+      });
   }
 
   deleteInstruction(index: number)
   {
-    if (index > -1) {
-      this.recipe.instructions.splice(index, 1);
-    }
+    this.upsertRecipeStore.removeInstruction(index);
   }
 
   editInstruction(index: number)
   {
-    this.newInstruction = this.recipe.instructions[index];
-
-    if (index > -1) {
-      this.recipe.instructions.splice(index, 1);
+    const instruction = this.recipe().instructions[index];
+    if (instruction !== undefined) {
+      this.newInstruction = instruction;
+      this.upsertRecipeStore.removeInstruction(index);
     }
   }
 
   addNewIngrdient() {
-    this.recipe.ingredients.push(this.newIngredient);
+    this.upsertRecipeStore.addIngredient(this.newIngredient);
     this.newIngredient = {name: '', quantity: '', unit: ''};
   }
 
   editIngredient(index: number) {
-    this.newIngredient = this.recipe.ingredients[index];
-
-    if(index > -1) {
-      this.recipe.ingredients.splice(index, 1);
+    const ingredient = this.recipe().ingredients[index];
+    if (ingredient) {
+      this.newIngredient = { ...ingredient };
+      this.upsertRecipeStore.removeIngredient(index);
     }
   }
 
   deleteIngredient(index: number) {
-    if(index > -1) {
-      this.recipe.ingredients.splice(index, 1);
-    }
+    this.upsertRecipeStore.removeIngredient(index);
   }
 
   uploadedFile(event: File | null){
-    this.photoUploaded = event;
+    this.upsertRecipeStore.setPhotoFile(event);
   }
 
   selectedTag(event: MatAutocompleteSelectedEvent): void {
-    this.recipe.tags.push(event.option.viewValue);
+    this.upsertRecipeStore.addTag(event.option.viewValue);
     this.tagInput.nativeElement.value = '';
     this.tagCtrl.setValue(null);
   }
@@ -187,7 +176,7 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
 
     // Add our fruit
     if (value) {
-      this.recipe.tags.push(value);
+      this.upsertRecipeStore.addTag(value);
     }
 
     // Clear the input value
@@ -197,12 +186,7 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
   }
 
   removeTag(tag: string): void {
-    const index = this.recipe.tags.indexOf(tag);
-
-    if (index >= 0) {
-      this.recipe.tags.splice(index, 1);
-
-      this.announcer.announce(`Removed ${tag}`);
-    }
+    this.upsertRecipeStore.removeTag(tag);
+    this.announcer.announce(`Removed ${tag}`);
   }
 }
