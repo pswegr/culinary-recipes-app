@@ -92,7 +92,7 @@ export class RecipesListComponent {
   }
 
   public readonly overlayOptions: Partial<CdkConnectedOverlay> = {
-    hasBackdrop: true,
+    hasBackdrop: false,
     positions: [
       { originX: 'end', originY: 'bottom', overlayX: 'start', overlayY: 'top' }
     ]
