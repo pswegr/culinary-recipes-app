@@ -6,6 +6,18 @@ html, body, app-root, .app-frame {
   -webkit-overflow-scrolling: touch;
 }
 
+.app-frame {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.app-content {
+  flex: 1;
+  display: block;
+}
+
 body::-webkit-scrollbar {
   width: 0;
   height: 0;

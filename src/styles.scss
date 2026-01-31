@@ -1,76 +1,261 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
+@use 'sass:map';
 @include mat.elevation-classes();
 @include mat.app-background();
 
 $theme-ignore-duplication-warnings: true;
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$culinary-recipes-app-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
-$culinary-recipes-app-accent: mat.m2-define-palette(mat.$m2-green-palette, A400, 900, A700);
 
-// The warn palette is optional (defaults to red).
-$culinary-recipes-app-warn: mat.m2-define-palette(mat.$m2-red-palette);
+$culinary-primary: (
+  0: #000000,
+  10: #241a07,
+  20: #3d2d0d,
+  25: #4a3611,
+  30: #564015,
+  35: #624a1a,
+  40: #6f551f,
+  50: #886b2f,
+  60: #a18442,
+  70: #bb9e5d,
+  80: #d6b97a,
+  90: #f0d9a7,
+  95: #f8e8c3,
+  98: #fdf4e0,
+  99: #fffaef,
+  100: #ffffff,
+  secondary: (
+    0: #000000,
+    10: #221a14,
+    20: #382f26,
+    25: #433a31,
+    30: #4f453c,
+    35: #5b5147,
+    40: #675d52,
+    50: #80756a,
+    60: #9a8f83,
+    70: #b5a99d,
+    80: #d1c4b7,
+    90: #eee0d3,
+    95: #fbefe2,
+    98: #fff8f3,
+    99: #fffbf8,
+    100: #ffffff,
+  ),
+  neutral: (
+    0: #000000,
+    10: #151310,
+    20: #2a2621,
+    25: #35302a,
+    30: #403a34,
+    35: #4c463f,
+    40: #58524b,
+    50: #716a62,
+    60: #8a837a,
+    70: #a59d93,
+    80: #c0b8ad,
+    90: #ddd5ca,
+    95: #ebe4da,
+    98: #f6f1ea,
+    99: #fbf7f2,
+    100: #ffffff,
+    4: #0c0a08,
+    6: #100e0b,
+    12: #1a1713,
+    17: #24201b,
+    22: #2e2923,
+    24: #332e28,
+    87: #d2c8bc,
+    92: #e4dacf,
+    94: #eae0d6,
+    96: #f0e7dd,
+  ),
+  neutral-variant: (
+    0: #000000,
+    10: #17140f,
+    20: #2c2721,
+    25: #37312b,
+    30: #423c35,
+    35: #4e4740,
+    40: #5a534b,
+    50: #736c63,
+    60: #8c857c,
+    70: #a79f95,
+    80: #c2b9ae,
+    90: #dfd4c8,
+    95: #ede3d9,
+    98: #f7f1ea,
+    99: #fbf7f2,
+    100: #ffffff,
+  ),
+  error: map.get(mat.$red-palette, error),
+);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-// $culinary-recipes-app-theme: mat.m2-define-light-theme((color: (primary: $culinary-recipes-app-primary,
-//         accent: $culinary-recipes-app-accent,
-//         warn: $culinary-recipes-app-warn,
-//       )));
+$culinary-tertiary-base: (
+  0: #000000,
+  10: #2a1406,
+  20: #44270f,
+  25: #503114,
+  30: #5c3b18,
+  35: #68461d,
+  40: #745223,
+  50: #8d6833,
+  60: #a88248,
+  70: #c39c63,
+  80: #dfb67f,
+  90: #f4d7a7,
+  95: #fae7c3,
+  98: #fef3de,
+  99: #fff9ee,
+  100: #ffffff,
+);
 
-// $culinary-recipes-app-theme-dark: mat.m2-define-dark-theme((color: (primary: $culinary-recipes-app-primary,
-//         accent: $culinary-recipes-app-accent,
-//         warn: $culinary-recipes-app-warn,
-//       )));
+$culinary-tertiary: map.merge(
+  $culinary-tertiary-base,
+  (
+    secondary: map.get($culinary-primary, secondary),
+    neutral: map.get($culinary-primary, neutral),
+    neutral-variant: map.get($culinary-primary, neutral-variant),
+    error: map.get($culinary-primary, error),
+  )
+);
 
-//mat 3
-$dark-theme: mat.define-theme((color: (theme-type: dark,
-        primary: mat.$yellow-palette,
-        tertiary: mat.$green-palette,
-      ),
-      typography: (brand-family: 'Comic Sans',
-        bold-weight: 900),
-      density: (scale: -1)));
+$dark-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: $culinary-primary,
+    tertiary: $culinary-tertiary,
+  ),
+  typography: (
+    brand-family: ('Fraunces', serif),
+    plain-family: ('Karla', sans-serif),
+    bold-weight: 700,
+    medium-weight: 600,
+    regular-weight: 400,
+  ),
+  density: (
+    scale: 0,
+  )
+));
 
-$light-theme: mat.define-theme((color: (theme-type: light,
-        primary: mat.$yellow-palette,
-        tertiary: mat.$green-palette ),
-      typography: (brand-family: 'Comic Sans',
-        bold-weight: 900),
-      density: (scale: -1)));
-
-//
+$light-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: $culinary-primary,
+    tertiary: $culinary-tertiary,
+  ),
+  typography: (
+    brand-family: ('Fraunces', serif),
+    plain-family: ('Karla', sans-serif),
+    bold-weight: 700,
+    medium-weight: 600,
+    regular-weight: 400,
+  ),
+  density: (
+    scale: 0,
+  )
+));
 
 /* You can add global styles to this file, and also import other style files */
 @import 'base/typography';
+
+:root {
+  --r-font-display: 'Fraunces', serif;
+  --r-font-sans: 'Karla', sans-serif;
+  --r-radius-xl: 30px;
+  --r-radius-lg: 22px;
+  --r-radius-md: 14px;
+  --r-radius-sm: 10px;
+  --r-shadow-soft: 0 10px 24px rgba(8, 6, 4, 0.24);
+  --r-shadow-medium: 0 18px 38px rgba(8, 6, 4, 0.32);
+  --r-border: rgba(245, 231, 214, 0.1);
+  --r-bg: #16110c;
+  --r-bg-1: #1c1510;
+  --r-bg-2: #231b14;
+  --r-spot-1: rgba(224, 176, 109, 0.18);
+  --r-spot-2: rgba(125, 82, 55, 0.22);
+  --r-surface: #1e1611;
+  --r-surface-2: #231a13;
+  --r-surface-3: #2b2018;
+  --r-text: rgba(249, 241, 231, 0.92);
+  --r-muted: rgba(249, 241, 231, 0.64);
+  --r-brand: #d29a5c;
+  --r-brand-strong: #b67a43;
+  --r-accent: #e0b36b;
+  --r-accent-strong: #c38a4b;
+  --r-glass: rgba(28, 21, 15, 0.78);
+}
 
 html,
 body {
   height: 100%;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: Inter, "Helvetica Neue", sans-serif;
+  font-family: var(--r-font-sans);
+  color: var(--r-text);
+  background-color: var(--r-bg);
+  background-image:
+    radial-gradient(1200px 700px at 10% -10%, var(--r-spot-1), transparent 60%),
+    radial-gradient(900px 600px at 90% 0%, var(--r-spot-2), transparent 55%),
+    linear-gradient(180deg, var(--r-bg-1), var(--r-bg-2));
+  line-height: 1.6;
+  letter-spacing: 0.008em;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--r-font-display);
+  letter-spacing: 0.015em;
+  color: var(--r-text);
+  margin: 0.5rem 0;
+}
+
+p {
+  color: var(--r-muted);
+}
+
+::selection {
+  background: rgba(217, 162, 92, 0.3);
 }
 
 .theme-light {
-  // Include theme styles for core and each component used in your app.
-  // Alternatively, you can import and @include the theme mixins for each component
-  // that you are using.
   @include mat.all-component-themes($light-theme);
 
+  color-scheme: light;
+
   @include mat.chips-overrides((
-    outline-color: inherit,
-    label-text-color: #1c1c17bb
+    outline-color: rgba(43, 32, 23, 0.18),
+    label-text-color: rgba(43, 32, 23, 0.86)
   ));
 
   .recipe-mat-fab-tertiary {
@@ -85,41 +270,61 @@ body {
     @include mat.button-color($light-theme, $color-variant: tertiary);
   }
 
+  --r-border: rgba(63, 46, 33, 0.12);
+  --r-bg: #f6f0e6;
+  --r-bg-1: #fdf7ef;
+  --r-bg-2: #eee3d5;
+  --r-spot-1: rgba(224, 176, 109, 0.25);
+  --r-spot-2: rgba(123, 78, 52, 0.15);
+  --r-surface: #fffdf9;
+  --r-surface-2: #f7efe3;
+  --r-surface-3: #f0e4d5;
+  --r-text: #2b2017;
+  --r-muted: #7a6a5b;
+  --r-brand: #7a4a2f;
+  --r-brand-strong: #5c3420;
+  --r-accent: #d9a25c;
+  --r-accent-strong: #b7793c;
+  --r-glass: rgba(255, 250, 243, 0.82);
+  --r-shadow-soft: 0 8px 20px rgba(42, 28, 18, 0.08);
+  --r-shadow-medium: 0 16px 34px rgba(42, 28, 18, 0.14);
+
   /* width */
   ::-webkit-scrollbar {
-    width: 5px;
+    width: 6px;
   }
 
   /* Track */
   ::-webkit-scrollbar-track {
-    background: #f1f1f19f;
+    background: rgba(43, 32, 23, 0.08);
   }
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: rgba(43, 32, 23, 0.28);
     -webkit-appearance: none;
-    border-radius: 5px;
+    border-radius: 999px;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: rgba(43, 32, 23, 0.42);
   }
 
-  --mat-app-text-color: #1c1c17bb;
-  --mat-chip-label-text-color: #1c1c17bb;
+  --mat-app-text-color: rgba(43, 32, 23, 0.92);
+  --mat-chip-label-text-color: rgba(43, 32, 23, 0.82);
+  --mat-sys-color-on-surface: rgba(43, 32, 23, 0.88);
+  --mat-sys-color-on-background: rgba(43, 32, 23, 0.88);
 }
 
 .theme-dark {
-  // Include theme styles for core and each component used in your app.
-  // Alternatively, you can import and @include the theme mixins for each component
-  // that you are using.
   @include mat.all-component-themes($dark-theme);
 
+  color-scheme: dark;
+
   @include mat.chips-overrides((
-    outline-color: dimgray,
-    label-text-color: dimgray
+    outline-color: rgba(255, 255, 255, 0.16),
+    label-text-color: rgba(255, 255, 255, 0.72)
   ));
 
   .recipe-mat-fab-tertiary {
@@ -136,29 +341,169 @@ body {
 
   /* width */
   ::-webkit-scrollbar {
-    width: 5px;
+    width: 6px;
   }
 
   /* Track */
   ::-webkit-scrollbar-track {
-    background: #1f1f1f;
+    background: rgba(255, 255, 255, 0.06);
   }
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #2e2e2e;
+    background: rgba(255, 255, 255, 0.18);
     -webkit-appearance: none;
-    border-radius: 5px;
+    border-radius: 999px;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #383838;
+    background: rgba(255, 255, 255, 0.3);
   }
 
-    --mat-sys-color-on-surface: rgba(255, 255, 255, 0.7);
-    --mat-sys-color-on-background: rgba(255, 255, 255, 0.7);
+  --mat-sys-color-on-surface: rgba(255, 255, 255, 0.82);
+  --mat-sys-color-on-background: rgba(255, 255, 255, 0.82);
 }
 
+mat-toolbar {
+  backdrop-filter: blur(18px) saturate(1.1);
+  background: var(--r-glass);
+}
 
+.mat-mdc-menu-panel {
+  border-radius: var(--r-radius-md);
+  border: 1px solid var(--r-border);
+  background: var(--r-surface);
+  box-shadow: var(--r-shadow-soft);
+  backdrop-filter: blur(16px);
+}
 
+.mat-mdc-menu-content {
+  padding: 0.4rem;
+}
+
+.mat-mdc-menu-item {
+  border-radius: var(--r-radius-sm);
+  margin: 0.1rem 0.2rem;
+}
+
+.mat-mdc-card,
+.mat-mdc-dialog-container,
+.mat-mdc-snack-bar-container {
+  border-radius: var(--r-radius-lg);
+  border: 1px solid var(--r-border);
+  background: var(--r-surface);
+  box-shadow: var(--r-shadow-soft);
+}
+
+.mat-mdc-form-field {
+  --mdc-filled-text-field-container-shape: var(--r-radius-md);
+  --mdc-outlined-text-field-container-shape: var(--r-radius-md);
+  --mdc-outlined-text-field-outline-color: var(--r-border);
+  --mdc-outlined-text-field-hover-outline-color: var(--r-accent);
+  --mdc-outlined-text-field-focus-outline-color: var(--r-accent-strong);
+  --mdc-filled-text-field-container-color: var(--r-surface-2);
+  --mdc-filled-text-field-label-text-color: var(--r-muted);
+  --mdc-outlined-text-field-label-text-color: var(--r-muted);
+  --mdc-filled-text-field-input-text-color: var(--r-text);
+  --mdc-outlined-text-field-input-text-color: var(--r-text);
+  margin-bottom: 0.5rem;
+}
+
+.mat-mdc-text-field-wrapper {
+  border-radius: var(--r-radius-md);
+  background: var(--r-surface-2);
+}
+
+.mat-mdc-form-field-focus-overlay {
+  background-color: transparent;
+}
+
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-outlined-button {
+  border-radius: var(--r-radius-md);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.mat-mdc-raised-button,
+.mat-mdc-unelevated-button {
+  box-shadow: var(--r-shadow-soft);
+}
+
+.mat-mdc-raised-button:hover,
+.mat-mdc-unelevated-button:hover {
+  box-shadow: var(--r-shadow-medium);
+  transform: translateY(-1px);
+}
+
+.mat-mdc-raised-button:active,
+.mat-mdc-unelevated-button:active {
+  box-shadow: var(--r-shadow-soft);
+  transform: translateY(0);
+}
+
+.mat-mdc-fab,
+.mat-mdc-mini-fab {
+  border-radius: var(--r-radius-lg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mat-mdc-fab:hover,
+.mat-mdc-mini-fab:hover {
+  box-shadow: var(--r-shadow-medium);
+  transform: translateY(-1px);
+}
+
+.mat-mdc-chip {
+  border-radius: 999px;
+  border: 1px solid var(--r-border);
+  background: var(--r-surface-2);
+}
+
+.mat-mdc-progress-bar {
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.mat-mdc-tooltip {
+  font-family: var(--r-font-sans);
+  letter-spacing: 0.02em;
+}
+
+.mat-stepper-horizontal,
+.mat-stepper-vertical {
+  background: transparent;
+}
+
+.mat-step-header {
+  border-radius: 999px;
+  border: 1px solid var(--r-border);
+  background: var(--r-surface-2);
+  margin: 0.5rem 0.4rem 1rem;
+  padding: 0.2rem 0.8rem;
+}
+
+.mat-step-header .mat-step-icon {
+  background: var(--r-accent);
+  color: #1c1814;
+}
+
+.cdk-overlay-backdrop.r-search-backdrop {
+  background: rgba(18, 12, 8, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.r-favorite {
+  color: var(--r-accent);
+}
+
+.r-sub-header {
+  font-family: var(--r-font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+}

@@ -3,6 +3,10 @@
   position: sticky;
   top: env(safe-area-inset-top);
   z-index: 1000;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  min-height: 72px;
+  gap: 0.5rem;
 }
 
 .r-spacer {
@@ -12,33 +16,38 @@
 .r-header-title {
   text-decoration: none;
   color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .r-logo { 
-  height: 40px;
+  height: 44px;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.2));
 }
 
 .r-logo-image {
   height: 50px;
-  
 }
 
 .r-logo-h3 {
   margin-left: 0.5rem;
-  color: #33bfb8;
-  font-weight: 300;
-  font-size: 24px;
-  line-height: 0.65;
+  color: var(--r-brand);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 0.9;
   text-transform: uppercase;
-  font-family: 'Architects Daughter', cursive;
+  font-family: var(--r-font-display);
+  letter-spacing: 0.18em;
 }
 
 .r-logo-p {
-  font-size: 16px;
-  color: #0baa92;
-  font-weight: 400;
+  font-size: 12px;
+  color: var(--r-muted);
+  font-weight: 500;
   text-transform: uppercase;
-  font-family: 'Architects Daughter', cursive;
+  font-family: var(--r-font-sans);
+  letter-spacing: 0.2em;
 }
 
 
@@ -47,7 +56,7 @@
 }
 
 .r-slide-toggle {
-  transform: scale(0.7);
+  transform: scale(0.8);
 }
 
 .r-display-none {

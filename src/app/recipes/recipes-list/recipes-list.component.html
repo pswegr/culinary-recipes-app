@@ -23,6 +23,7 @@
         <ng-template #connectedOverlay="cdkConnectedOverlay" cdkConnectedOverlay
           [cdkConnectedOverlayOpen]="overlayOpen()" [cdkConnectedOverlayOrigin]="overlayPosition"
           [cdkConnectedOverlayHasBackdrop]="overlayOptions.hasBackdrop" (overlayOutsideClick)="overlayOpen.set(false)"
+          [cdkConnectedOverlayBackdropClass]="'r-search-backdrop'"
           [cdkConnectedOverlayFlexibleDimensions]="overlayOptions.flexibleDimensions">
           <app-search-overlay [recentSearches]="recentSearches()" [filteredRecipesList]="filteredRecipesList()!" 
             (onHistoryItemChoosen)="searchText.setValue($event)"></app-search-overlay>

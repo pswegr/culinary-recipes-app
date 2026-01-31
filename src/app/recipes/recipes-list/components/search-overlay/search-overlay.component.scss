@@ -1,20 +1,37 @@
 .overlay-container {
-  border-radius: 0 0 2rem 2rem;
-  background-color: rgba($color: #cabd04, $alpha: .1);
-  backdrop-filter: blur(10px);
-  max-height: 60vh;
-  max-height: 60dvh;
+  border-radius: 0 0 var(--r-radius-md) var(--r-radius-md);
+  border: 1px solid var(--r-border);
+  border-top: none;
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  background: var(--r-glass);
+  box-shadow: var(--r-shadow-medium);
+  max-height: 70vh;
   overflow: auto;
-  padding-bottom: 1rem;
-  width: 55vw;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  width: min(55vw, 720px);
 
   @media screen and (max-width: 600px) {
-    width: 75vw;
+    width: min(88vw, 520px);
+  }
+}
+
+@supports (height: 100dvh) {
+  .overlay-container {
+    max-height: 70dvh;
+  }
+}
+
+@supports (height: 100svh) {
+  .overlay-container {
+    max-height: 70svh;
   }
 }
 
 
 .loading-item {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,7 +46,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.5), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 162, 92, 0.32), transparent);
     animation: loading 2.5s infinite;
     overflow: hidden;
   }

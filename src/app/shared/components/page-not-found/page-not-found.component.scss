@@ -1,8 +1,16 @@
 .r-center {
   text-align: center;
-  margin: 2rem auto;
+  margin: 2.5rem auto;
+  padding: 2rem;
+  max-width: 720px;
+  background: var(--r-surface);
+  border: 1px solid var(--r-border);
+  border-radius: var(--r-radius-lg);
+  box-shadow: var(--r-shadow-soft);
 }
 
 .r-extreme-large {
-  font-size: 10em;
+  font-size: clamp(6rem, 10vw, 10rem);
+  font-family: var(--r-font-display);
+  letter-spacing: 0.08em;
 }

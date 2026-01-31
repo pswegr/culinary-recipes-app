@@ -11,7 +11,7 @@
     </button>
   </div>
 </div>
-<mat-stepper  linear="false"  [orientation]="(stepperOrientation | async) ?? 'horizontal'" #stepper (selectionChange)="checkCompletion()" >
+<mat-stepper class="r-stepper" linear="false" [orientation]="(stepperOrientation | async) ?? 'horizontal'" #stepper (selectionChange)="checkCompletion()" >
   <mat-step>
     <form class="r-form-recipes-data">
       <ng-template matStepLabel>Fill out recipe data</ng-template>

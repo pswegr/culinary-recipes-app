@@ -1,46 +1,54 @@
 .r-container {
-  --card-min: 500px;
-  --gap: 4rem;
+  --card-min: 420px;
+  --gap: 2.5rem;
 
   &.r-desktop {
-    margin: 0.25rem auto;
-    padding: 0.5rem 0.25rem;
-    width: calc(70% + 10rem);
+    margin: 1.5rem auto 3rem;
+    padding: 1.5rem 0;
+    width: min(92vw, 1500px);
   }
 
   &.r-handset-poitret-mode {
-    width: 95%;
-    margin: 0.25rem auto;
-    padding: 0.5rem 0.25rem;
+    width: min(94vw, 720px);
+    margin: 1rem auto 2rem;
+    padding: 0.75rem 0;
   }
 
   .r-header {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
 
     .r-title{
-      font-size: 2rem;
+      font-family: var(--r-font-display);
+      font-size: clamp(1.8rem, 2vw + 1rem, 2.6rem);
       font-weight: 600;
       text-align: center;
+      letter-spacing: 0.04em;
     }
 
     &__top {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
 
       .r-add-button {
         margin: 0.25rem;
-        transform: scale(0.7);
+        transform: scale(0.85);
       }
 
       .r-search-bar-container {
-        border-radius: 2rem;
+        border-radius: 999px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: rgba($color: #cabd04, $alpha: .05);
+        background-color: var(--r-surface);
+        border: 1px solid var(--r-border);
+        box-shadow: var(--r-shadow-soft);
         width: 55vw;
+        padding: 0.2rem 0.6rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 
         @media screen and (max-width: 600px) {
           width: 75vw;
@@ -48,15 +56,21 @@
 
         &__left {
           display: flex;
-          padding-left: 1rem;
+          padding-left: 0.4rem;
+          align-items: center;
+          gap: 0.4rem;
 
           .r-input {
-            font-size: 1.1rem;
+            font-size: 1rem;
             outline: none;
             border: none;
             background: transparent;
-            margin-left: 0.5rem;
             flex-grow: 1;
+            color: var(--r-text);
+
+            &::placeholder {
+              color: var(--r-muted);
+            }
 
 
             @media screen and (max-width: 600px) {
@@ -64,21 +78,30 @@
             }
 
             &.r-dark-mode {
-              color: rgb(187, 187, 187);
+              color: var(--r-text);
             }
           }
         }
 
         .r-clear-filter {
           margin-right: 1rem;
+          opacity: 0.6;
         }
 
         &.opened {
-          background-color: rgba($color: #cabd04, $alpha: .2);
-          border-radius: 2rem 2rem 0 0;
+          position: relative;
+          z-index: 1001;
+          border-radius: 24px 24px 0 0;
+          box-shadow: var(--r-shadow-medium);
         }
       }
     }
+  }
+
+  .r-chips {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 0 0;
   }
 
   .r-content {

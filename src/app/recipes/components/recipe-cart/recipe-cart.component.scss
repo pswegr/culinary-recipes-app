@@ -1,9 +1,9 @@
 @import "abstract/variables";
 .r-container {
-  border-radius: 15px;
+  border-radius: var(--r-radius-lg);
   
   &.r-dark-mode {
-    color: rgba(255,255,255,0.6);
+    color: var(--r-text);
   }
 
   &.r-desktop {
@@ -154,13 +154,27 @@
         grid-area: 4 / 3 / 5 / 4;
       }
     }
+
+    h4 {
+      font-family: var(--r-font-sans);
+      font-weight: 500;
+      color: var(--r-muted);
+      letter-spacing: 0.02em;
+    }
+
+    mat-chip-listbox {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
   }
 
   .r-img {
     object-fit: contain;
-    border-radius: 15px;
+    border-radius: var(--r-radius-md);
     width: 100%;
     height: auto;
+    box-shadow: var(--r-shadow-soft);
   }
 
   .r-ul{
@@ -171,7 +185,7 @@
 
     .r-li{
       padding: 1rem;
-      font-size: 1rem;
+      font-size: 0.95rem;
       text-align: center;
 
       .r-quantity {
@@ -179,7 +193,7 @@
       }
 
       &:not(:last-child) {
-        border-bottom: 1px solid rgba($r-color-grey-light, .22);
+        border-bottom: 1px solid var(--r-border);
       }
     }
   
@@ -190,21 +204,24 @@
 
     .r-li{
       padding: 1rem;
-      font-size: 1rem;
+      font-size: 0.95rem;
 
       .r-quantity {
         opacity: .75;
       }
 
       &:not(:last-child) {
-        border-bottom: 1px solid rgba($r-color-grey-light, .22);
+        border-bottom: 1px solid var(--r-border);
       }
     }
   }
 
   .r-item {
-    padding: .5rem;
-    border-radius: 15px;
+    padding: 1rem;
+    border-radius: var(--r-radius-lg);
+    border: 1px solid var(--r-border);
+    box-shadow: var(--r-shadow-soft);
+    overflow: hidden;
   }
 
   .r-header {
@@ -214,6 +231,24 @@
     justify-content: space-between;
     align-content: center;
     flex-flow: row wrap;
+    gap: 0.5rem;
+
+    .r-title {
+      font-family: var(--r-font-display);
+      letter-spacing: 0.04em;
+    }
+
+    .r-category {
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--r-muted);
+    }
+
+    .r-description {
+      font-family: var(--r-font-sans);
+      font-weight: 400;
+      color: var(--r-muted);
+    }
   }
 
   .r-igredients, .r-instructions, .r-header {
@@ -221,7 +256,7 @@
   }
 
   .r-content, .r-header {
-    border-radius: 15px;
+    border-radius: var(--r-radius-md);
   }
 
   .r-card-footer {

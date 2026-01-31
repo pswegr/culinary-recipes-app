@@ -8,21 +8,33 @@
   .r-container {
     height: 100%;
     align-content: stretch;
-    border-radius: 2rem;
+    border-radius: var(--r-radius-lg);
+    overflow: hidden;
 
     .r-list-item-container {
-      border-radius: 2rem;
+      border-radius: var(--r-radius-lg);
       height: 100%;
       align-content: stretch;
+      background: var(--r-surface);
+      border: 1px solid var(--r-border);
+      box-shadow: var(--r-shadow-soft);
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--r-shadow-medium);
+      }
 
       .r-list-item {
-        border-radius: 2rem;
+        border-radius: var(--r-radius-lg);
         cursor: pointer;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-content: stretch;
+        background: var(--r-surface);
 
         .main-cart {
           display: flex;
@@ -32,11 +44,11 @@
         }
 
         &.dark-mode-shadow {
-          box-shadow: 0px 0px 20px -2px rgba(255, 255, 255, 0.03);
+          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
         }
 
         &.light-mode-shadow {
-          box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.03);
+          box-shadow: 0 18px 45px rgba(12, 10, 8, 0.08);
         }
 
         .r-img-container {
@@ -46,8 +58,9 @@
           .r-img {
             object-fit: cover;
             height: auto;
-            border-radius: 2rem;
+            border-radius: var(--r-radius-md);
             width: 100%;
+            box-shadow: var(--r-shadow-soft);
           }
         }
 
@@ -60,7 +73,7 @@
 
           .r-li {
             padding: 0.75rem;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             text-align: center;
 
             .r-quantity {
@@ -68,7 +81,7 @@
             }
 
             &:not(:last-child) {
-              border-bottom: 1px solid rgba($r-color-grey-light, .22);
+              border-bottom: 1px solid var(--r-border);
             }
           }
 
@@ -79,14 +92,14 @@
 
           .r-li {
             padding: 0.75rem;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
 
             .r-quantity {
               opacity: .75;
             }
 
             &:not(:last-child) {
-              border-bottom: 1px solid rgba($r-color-grey-light, .22);
+              border-bottom: 1px solid var(--r-border);
             }
           }
         }
@@ -94,12 +107,19 @@
         .r-list-item-content,
         .r-list-item-header,
         .r-top-section {
-          border-radius: 2rem;
+          border-radius: var(--r-radius-lg);
         }
 
         .r-top-section {
           &__bottom {
             padding: 0 1rem 0 1rem;
+            color: var(--r-muted);
+
+            h6 {
+              font-family: var(--r-font-sans);
+              font-weight: 500;
+              letter-spacing: 0.02em;
+            }
           }
         }
 
@@ -113,18 +133,22 @@
           justify-content: center;
 
           &__title {
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-family: var(--r-font-display);
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
           }
 
           &__category {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-style: italic;
             opacity: 0.8;
           }
 
           &__created-by {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
             opacity: 0.7;
           }
         }
@@ -133,11 +157,20 @@
           display: flex;
           justify-content: center;
           margin: 0rem 1rem 0rem 1.5rem;
+
+          mat-chip-listbox {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            justify-content: center;
+          }
         }
 
         .r-description {
-          font-size: 0.7rem;
+          font-size: 0.85rem;
           padding: 0rem 1rem 0 1rem;
+          color: var(--r-muted);
+          line-height: 1.5;
         }
 
         .r-igredients,
@@ -146,7 +179,7 @@
         }
 
         .r-dark-mode {
-          color: rgba(255, 255, 255, 0.6);
+          color: var(--r-text);
         }
 
         .r-display-grid-2-header {
@@ -178,6 +211,8 @@
           display: flex;
           justify-content: space-between;
           padding: 1rem;
+          align-items: center;
+          gap: 0.75rem;
         }
       }
     }

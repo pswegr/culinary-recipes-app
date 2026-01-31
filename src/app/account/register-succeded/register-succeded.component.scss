@@ -1,4 +1,10 @@
 .r-center {
   text-align: center;
-  margin: 2rem auto;
+  margin: 2.5rem auto;
+  padding: 2rem;
+  max-width: 640px;
+  background: var(--r-surface);
+  border: 1px solid var(--r-border);
+  border-radius: var(--r-radius-lg);
+  box-shadow: var(--r-shadow-soft);
 }

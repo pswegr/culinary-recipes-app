@@ -6,27 +6,30 @@
     }
 
     .footer-content {
-        max-width: 1600px;
+        max-width: 1400px;
         margin: 0 auto;
-        padding: 0 1rem;
+        padding: 0 1.5rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
     }
 
     .footer-content p {
         margin: 0;
-        color: #6c757d;
-        font-size: 0.875rem;
+        color: var(--r-muted);
+        font-size: 0.9rem;
+        letter-spacing: 0.02em;
     }
 
     .social-links a {
-        color: #666;
+        color: var(--r-muted);
         transition: color 0.3s ease;
     }
 
     .social-links a:hover {
-        color: #bec111;
+        color: var(--r-accent);
     }
 
     .instagram-link svg {
