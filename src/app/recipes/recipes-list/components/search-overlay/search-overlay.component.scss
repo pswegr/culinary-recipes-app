@@ -10,10 +10,10 @@
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-  width: min(55vw, 720px);
+  width: 55vw;
 
   @media screen and (max-width: 600px) {
-    width: min(88vw, 520px);
+    width: 75vw;
   }
 }
 
