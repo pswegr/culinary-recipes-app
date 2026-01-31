@@ -20,10 +20,12 @@
             <mat-icon>close</mat-icon>
           </button>
         </div>
+        @if (overlayOpen()) {
+          <div class="r-search-backdrop" (click)="overlayOpen.set(false)" aria-hidden="true"></div>
+        }
         <ng-template #connectedOverlay="cdkConnectedOverlay" cdkConnectedOverlay
           [cdkConnectedOverlayOpen]="overlayOpen()" [cdkConnectedOverlayOrigin]="overlayPosition"
           [cdkConnectedOverlayHasBackdrop]="overlayOptions.hasBackdrop" (overlayOutsideClick)="overlayOpen.set(false)"
-          [cdkConnectedOverlayBackdropClass]="'r-search-backdrop'"
           [cdkConnectedOverlayFlexibleDimensions]="overlayOptions.flexibleDimensions">
           <app-search-overlay [recentSearches]="recentSearches()" [filteredRecipesList]="filteredRecipesList()!" 
             (onHistoryItemChoosen)="searchText.setValue($event)"></app-search-overlay>
