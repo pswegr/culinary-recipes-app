@@ -10,18 +10,31 @@ import { OverlayContainer } from '@angular/cdk/overlay';
     standalone: false
 })
 export class AppComponent implements OnInit {
+  private readonly themeClasses = ['theme-dark', 'theme-light'];
 
   constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, private themeModeService : ThemeModeService, private overlay: OverlayContainer) {}
 
   ngOnInit(): void {
-    this.renderer.setAttribute(this.document.body, 'class', 'theme-dark');
-    this.themeModeService.isDark.set(true);
+    this.applyTheme(true);
   }
 
   switchMode(isDarkMode: boolean){
+    this.applyTheme(isDarkMode);
+  }
+
+  private applyTheme(isDarkMode: boolean) {
     const hostClass = isDarkMode ? 'theme-dark' : 'theme-light';
-    this.renderer.setAttribute(this.document.body, 'class', hostClass);
+
+    this.themeClasses.forEach((themeClass) => {
+      this.renderer.removeClass(this.document.body, themeClass);
+    });
+    this.renderer.addClass(this.document.body, hostClass);
     this.themeModeService.isDark.set(isDarkMode);
-    this.overlay.getContainerElement().classList.add(hostClass);
+
+    const overlayContainer = this.overlay.getContainerElement();
+    this.themeClasses.forEach((themeClass) => {
+      overlayContainer.classList.remove(themeClass);
+    });
+    overlayContainer.classList.add(hostClass);
   }
 }

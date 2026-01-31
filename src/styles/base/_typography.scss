@@ -1,17 +1,19 @@
 @import '../abstract/variables';
 
 .r-heading-secondary {
-  font-size: 1rem;
-  font-weight: 700;
+  font-family: var(--r-font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
   display: inline-block;
-  background-image: linear-gradient(to right, $r-color-primary, $r-color-primary-dark);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background-image: linear-gradient(120deg, $r-color-primary, $r-color-primary-dark);
   -webkit-background-clip: text;
   color: transparent;
-  letter-spacing: .2rem;
-  transition: all .2s;
+  transition: filter 0.2s ease, transform 0.2s ease;
 
   &:hover {
-      transform: skewY(.2deg) skewX(2deg) scale(1.01);
-      text-shadow: .5rem 1rem 2rem rgba($r-color-black, .2);
+    filter: drop-shadow(0 10px 24px rgba($r-color-black, 0.2));
+    transform: translateY(-1px);
   }
 }

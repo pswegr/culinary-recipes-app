@@ -1,6 +1,6 @@
 import { Component, Signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { filter, map, share, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, share, switchMap, tap } from 'rxjs';
 import { RecipesService } from '../../shared/services/recipes.service';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
 import { Meta, Title } from '@angular/platform-browser';
@@ -13,9 +13,10 @@ import { Meta, Title } from '@angular/platform-browser';
 })
 export class RecipeComponent {
   isDark: Signal<boolean> = this.themeModeService.isDark;
-  recipe$ = this.route.params.pipe(
-    filter(p => p['recipeId'] !== null),
-    map(p => p['recipeId']),
+  refreshToken: BehaviorSubject<null> = new BehaviorSubject(null);
+  recipe$ = combineLatest([this.refreshToken, this.route.params]).pipe(
+    filter(p => p[1]['recipeId'] !== null),
+    map(p => p[1]['recipeId']),
     switchMap(recipeId => this.recipesService.getRecipe(recipeId)),
     tap(recipe => {
       this.titleService.setTitle(`${recipe.title} - Netreci - Recipes with Passion / przepisy kulinarne`);
@@ -24,4 +25,10 @@ export class RecipeComponent {
   ).pipe(share());
 
   constructor(private route: ActivatedRoute, private recipesService: RecipesService, private themeModeService: ThemeModeService, private titleService: Title, private metaService: Meta) { }
+
+  onLikeToggle(recipeId: string) {
+    this.recipesService.likeToggle(recipeId).subscribe(
+      x => this.refreshToken.next(null)
+    );
+  }
 }
