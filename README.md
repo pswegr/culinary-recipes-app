@@ -2,7 +2,7 @@
 
 Modern Angular app for discovering, creating, and managing recipes. Built with a warm, polished UI, responsive layouts, and Material Design components tailored for a cozy cooking experience.
 
-![Netreci website preview](https://www.pswegr.com/projects/netreci/website-view.png)
+![Netreci website preview](docs/screens/website-view.jpg)
 
 ## Features
 - Browse and search recipes with fast filtering and tags
@@ -31,12 +31,11 @@ App runs at `http://localhost:4200`.
 - `npm run test` - unit tests
 
 ## Screenshots
-![Netreci website view 1](https://www.pswegr.com/projects/netreci/website-view.png)
-![Netreci website view 2](https://www.pswegr.com/projects/netreci/website-view2.png)
-![Netreci website view 3](https://www.pswegr.com/projects/netreci/website-view3.png)
-![Netreci website view 4](https://www.pswegr.com/projects/netreci/website-view4.png)
-![Netreci website view 5](https://www.pswegr.com/projects/netreci/website-view5.png)
-
+![Netreci website view 1](docs/screens/website-view.jpg)
+![Netreci website view 2](docs/screens/website-view2.jpg)
+![Netreci website view 3](docs/screens/website-view3.jpg)
+![Netreci website view 4](docs/screens/website-view4.jpg)
+![Netreci website view 5](docs/screens/website-view5.jpg)
 
 
 
