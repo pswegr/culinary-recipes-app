@@ -1,4 +1,4 @@
-<ng-container *ngIf="recipes$ | async as recipes">
+<ng-container *ngIf="recipes$ | async as recipes; else recipesLoading">
   <div class="r-container" [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']" appResponsiveness>
     <div class="r-header" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
       <h2 class="r-title">{{title}}
@@ -48,3 +48,26 @@
     </div>
   </div>
 </ng-container>
+<ng-template #recipesLoading>
+  <div class="r-container r-skeleton-container" [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']" appResponsiveness>
+    <div class="r-header" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
+      <div class="r-title r-skeleton r-skeleton-title"></div>
+      <div class="r-header__top">
+        <div class="r-search-bar-container r-skeleton-bar">
+          <div class="r-skeleton r-skeleton-line"></div>
+        </div>
+        <div class="r-skeleton r-skeleton-fab"></div>
+      </div>
+      <div class="r-chips r-skeleton-chips">
+        <span class="r-skeleton r-skeleton-pill" *ngFor="let _ of skeletonChips"></span>
+      </div>
+    </div>
+    <div class="r-content" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
+      <div class="r-skeleton-card" *ngFor="let _ of skeletonCards">
+        <div class="r-skeleton r-skeleton-media"></div>
+        <div class="r-skeleton r-skeleton-line"></div>
+        <div class="r-skeleton r-skeleton-line short"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

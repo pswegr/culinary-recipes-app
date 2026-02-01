@@ -1,108 +1,22 @@
-.loading-block {
+.loading-bar {
   position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: clamp(1rem, 2vw, 2rem);
-  background: rgba(14, 14, 13, 0.35);
-  backdrop-filter: blur(8px) saturate(1.1);
-  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
   z-index: 20000;
+  pointer-events: none;
   overflow: hidden;
 }
 
-.loading-skeleton {
-  width: min(1100px, 92vw);
-  display: grid;
-  gap: clamp(1rem, 2vw, 1.5rem);
+.loading-bar__line {
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, var(--r-accent), transparent);
+  animation: loading-bar 1.4s ease-in-out infinite;
 }
 
-.skeleton {
-  --skeleton-base: var(--r-surface-2);
-  --skeleton-highlight: var(--r-surface-3);
-  background: linear-gradient(90deg, var(--skeleton-base), var(--skeleton-highlight), var(--skeleton-base));
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.6s ease-in-out infinite;
-  border-radius: 999px;
-}
-
-@supports (color: color-mix(in srgb, white, black)) {
-  .skeleton {
-    --skeleton-base: color-mix(in srgb, var(--r-surface-2) 85%, transparent);
-    --skeleton-highlight: color-mix(in srgb, var(--r-surface-3) 75%, transparent);
-  }
-}
-
-.skeleton-top {
-  display: grid;
-  gap: 0.6rem;
-}
-
-.skeleton-title {
-  height: 26px;
-  width: min(60%, 420px);
-}
-
-.skeleton-subtitle {
-  height: 16px;
-  width: min(80%, 520px);
-}
-
-.skeleton-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  align-items: center;
-}
-
-.skeleton-search {
-  height: 42px;
-  flex: 1 1 280px;
-  border-radius: 999px;
-}
-
-.skeleton-chip {
-  height: 28px;
-  width: 80px;
-  border-radius: 999px;
-}
-
-.skeleton-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-}
-
-.skeleton-card {
-  display: grid;
-  gap: 0.6rem;
-  padding: 1rem;
-  border-radius: var(--r-radius-lg);
-  border: 1px solid var(--r-border);
-  background: color-mix(in srgb, var(--r-surface) 92%, transparent);
-  box-shadow: var(--r-shadow-soft);
-
-  .skeleton {
-    border-radius: var(--r-radius-md);
-  }
-}
-
-.skeleton-media {
-  height: 140px;
-  border-radius: var(--r-radius-md);
-}
-
-.skeleton-line {
-  height: 14px;
-  width: 100%;
-}
-
-.skeleton-line.short {
-  width: 60%;
-}
-
-@keyframes skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+@keyframes loading-bar {
+  0% { transform: translateX(-60%); }
+  100% { transform: translateX(260%); }
 }

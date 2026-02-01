@@ -42,6 +42,7 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
   readonly recipe = this.upsertRecipeStore.recipe;
   readonly filteredOptions = this.upsertRecipeStore.filteredCategories;
   readonly availableTags = this.upsertRecipeStore.availableTags;
+  readonly isLoading = this.upsertRecipeStore.isLoading;
 
   newInstruction: string = '';
   newIngredient: IngredientModel = {name: '', quantity: '', unit: ''};

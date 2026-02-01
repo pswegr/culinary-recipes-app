@@ -1,3 +1,23 @@
-<div *ngIf="recipe$ | async as recipe">
+<ng-container *ngIf="recipe$ | async as recipe; else recipeLoading">
   <app-recipe-cart [recipe]="recipe" (likeToggleClicked)="onLikeToggle($event)"></app-recipe-cart>
-</div>
+</ng-container>
+<ng-template #recipeLoading>
+  <div class="r-recipe-skeleton">
+    <div class="r-recipe-skeleton-card">
+      <div class="r-skeleton r-skeleton-title"></div>
+      <div class="r-skeleton r-skeleton-subtitle"></div>
+      <div class="r-recipe-skeleton-media r-skeleton"></div>
+      <div class="r-recipe-skeleton-meta">
+        <span class="r-skeleton r-skeleton-pill" *ngFor="let _ of skeletonMeta"></span>
+      </div>
+      <div class="r-recipe-skeleton-section">
+        <div class="r-skeleton r-skeleton-line short"></div>
+        <div class="r-skeleton r-skeleton-line" *ngFor="let _ of skeletonLines"></div>
+      </div>
+      <div class="r-recipe-skeleton-section">
+        <div class="r-skeleton r-skeleton-line short"></div>
+        <div class="r-skeleton r-skeleton-line" *ngFor="let _ of skeletonLines"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

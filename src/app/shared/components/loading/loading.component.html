@@ -1,22 +1,3 @@
-<div class="loading-block" *ngIf="loadingService.loadingSubject | async">
-  <div class="loading-skeleton" aria-hidden="true">
-    <div class="skeleton-top">
-      <div class="skeleton-title skeleton"></div>
-      <div class="skeleton-subtitle skeleton"></div>
-    </div>
-
-    <div class="skeleton-toolbar">
-      <div class="skeleton-search skeleton"></div>
-      <div class="skeleton-chip skeleton" *ngFor="let _ of skeletonChips"></div>
-    </div>
-
-    <div class="skeleton-grid">
-      <div class="skeleton-card" *ngFor="let _ of skeletonCards">
-        <div class="skeleton-media skeleton"></div>
-        <div class="skeleton-line skeleton"></div>
-        <div class="skeleton-line short skeleton"></div>
-        <div class="skeleton-line skeleton" *ngFor="let __ of skeletonLines"></div>
-      </div>
-    </div>
-  </div>
+<div class="loading-bar" *ngIf="loadingService.loadingSubject | async">
+  <div class="loading-bar__line"></div>
 </div>
