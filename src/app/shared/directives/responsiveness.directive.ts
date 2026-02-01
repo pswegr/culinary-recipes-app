@@ -28,7 +28,7 @@ export class ResponsivenessDirective implements OnInit, OnDestroy {
     this.breakpointSubsription = this.breakpointObserver
     .observe([
       Breakpoints.HandsetPortrait,
-      Breakpoints.TabletPortrait
+      Breakpoints.TabletPortrait,
     ])
     .subscribe(result => {
       const breakpoints = result.breakpoints;
@@ -38,7 +38,7 @@ export class ResponsivenessDirective implements OnInit, OnDestroy {
         });
         this.mediumScreens.forEach(x => {
           this.renderer.removeClass(this.el.nativeElement,x)
-        })
+        });
         this.smallScreens.forEach(x => {
           this.renderer.addClass(this.el.nativeElement,x)
         });
@@ -52,7 +52,7 @@ export class ResponsivenessDirective implements OnInit, OnDestroy {
         });
         this.mediumScreens.forEach(x => {
           this.renderer.addClass(this.el.nativeElement,x)
-        })
+        });
       }
       else{
         this.smallScreens.forEach(x => {
@@ -60,7 +60,7 @@ export class ResponsivenessDirective implements OnInit, OnDestroy {
         });
         this.mediumScreens.forEach(x => {
           this.renderer.removeClass(this.el.nativeElement,x)
-        })
+        });
         this.largeScreens.forEach(x => {
           this.renderer.addClass(this.el.nativeElement,x)
         });
