@@ -13,6 +13,8 @@ import { Meta, Title } from '@angular/platform-browser';
 })
 export class RecipeComponent {
   isDark: Signal<boolean> = this.themeModeService.isDark;
+  skeletonLines = Array.from({ length: 4 });
+  skeletonMeta = Array.from({ length: 3 });
   refreshToken: BehaviorSubject<null> = new BehaviorSubject(null);
   recipe$ = combineLatest([this.refreshToken, this.route.params]).pipe(
     filter(p => p[1]['recipeId'] !== null),

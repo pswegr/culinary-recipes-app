@@ -1,2 +1,42 @@
 
+.r-recipe-skeleton {
+  max-width: 1200px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
 
+.r-recipe-skeleton-card {
+  border-radius: var(--r-radius-lg);
+  border: 1px solid var(--r-border);
+  background: var(--r-surface);
+  box-shadow: var(--r-shadow-soft);
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.r-recipe-skeleton-media {
+  height: 240px;
+  border-radius: var(--r-radius-md);
+}
+
+.r-recipe-skeleton-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.r-recipe-skeleton-section {
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media screen and (max-width: 600px) {
+  .r-recipe-skeleton-card {
+    padding: 1.1rem;
+  }
+
+  .r-recipe-skeleton-media {
+    height: 180px;
+  }
+}

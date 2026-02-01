@@ -492,6 +492,58 @@ mat-toolbar {
   color: #1c1814;
 }
 
+.r-skeleton {
+  --skeleton-base: var(--r-surface-2);
+  --skeleton-highlight: var(--r-surface-3);
+  background: linear-gradient(90deg, var(--skeleton-base), var(--skeleton-highlight), var(--skeleton-base));
+  background-size: 200% 100%;
+  animation: r-skeleton-shimmer 1.6s ease-in-out infinite;
+  border-radius: 999px;
+}
+
+@supports (color: color-mix(in srgb, white, black)) {
+  .r-skeleton {
+    --skeleton-base: color-mix(in srgb, var(--r-surface-2) 85%, transparent);
+    --skeleton-highlight: color-mix(in srgb, var(--r-surface-3) 75%, transparent);
+  }
+}
+
+.r-skeleton-line {
+  height: 14px;
+  width: 100%;
+}
+
+.r-skeleton-line.short {
+  width: 60%;
+}
+
+.r-skeleton-title {
+  height: 26px;
+  width: min(60%, 420px);
+}
+
+.r-skeleton-subtitle {
+  height: 16px;
+  width: min(80%, 520px);
+}
+
+.r-skeleton-pill {
+  height: 26px;
+  width: 80px;
+  border-radius: 999px;
+}
+
+.r-skeleton-media {
+  height: 160px;
+  width: 100%;
+  border-radius: var(--r-radius-md);
+}
+
+@keyframes r-skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 .r-favorite {
   color: var(--r-accent);
 }

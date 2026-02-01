@@ -22,6 +22,8 @@ export class RecipesListComponent {
   category: string | null = null;
   overlayOpen = this.searchBarService.overlayoppen;
   recentSearches = this.searchBarService.recentSearches;
+  skeletonCards = Array.from({ length: 6 });
+  skeletonChips = Array.from({ length: 6 });
 
   refreshToken: BehaviorSubject<null> = new BehaviorSubject(null);
   chosenTags: BehaviorSubject<string[]> = new BehaviorSubject([''])

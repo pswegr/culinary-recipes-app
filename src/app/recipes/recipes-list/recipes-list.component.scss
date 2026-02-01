@@ -128,4 +128,36 @@
       gap: 2rem;
     }
   }
+
+  &.r-skeleton-container {
+    .r-search-bar-container.r-skeleton-bar {
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 44px;
+      pointer-events: none;
+    }
+
+    .r-skeleton-fab {
+      height: 48px;
+      width: 48px;
+      border-radius: 50%;
+    }
+
+    .r-skeleton-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .r-skeleton-card {
+      border-radius: var(--r-radius-lg);
+      border: 1px solid var(--r-border);
+      background: var(--r-surface);
+      box-shadow: var(--r-shadow-soft);
+      padding: 1rem;
+      display: grid;
+      gap: 0.6rem;
+    }
+  }
 }
