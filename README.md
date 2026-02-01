@@ -1,27 +1,43 @@
-# CulinaryRecipesApp
+# Netreci - Culinary Recipes App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.3.
+Modern Angular app for discovering, creating, and managing recipes. Built with a warm, polished UI, responsive layouts, and Material Design components tailored for a cozy cooking experience.
 
-## Development server
+![Netreci website preview](https://www.pswegr.com/projects/netreci/website-view.png)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Features
+- Browse and search recipes with fast filtering and tags
+- Create, edit, and manage your own recipes
+- Favorite recipes and keep a personal collection
+- Responsive layout for desktop, tablet, and mobile
+- Light and dark modes with custom theming
 
-## Code scaffolding
+## Tech Stack
+- Angular 20
+- Angular Material + CDK
+- RxJS
+- TypeScript
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Getting Started
+```bash
+npm install
+npm run start
+```
 
-## Build
+App runs at `http://localhost:4200`.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Scripts
+- `npm run start` - start dev server
+- `npm run build` - production build
+- `npm run test` - unit tests
 
-## Running unit tests
+## Screenshots
+![Netreci website view 1](https://www.pswegr.com/projects/netreci/website-view.png)
+![Netreci website view 2](https://www.pswegr.com/projects/netreci/website-view2.png)
+![Netreci website view 3](https://www.pswegr.com/projects/netreci/website-view3.png)
+![Netreci website view 4](https://www.pswegr.com/projects/netreci/website-view4.png)
+![Netreci website view 5](https://www.pswegr.com/projects/netreci/website-view5.png)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
