@@ -20,6 +20,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatDivider } from '@angular/material/divider';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [],
@@ -45,6 +46,7 @@ import { MatDivider } from '@angular/material/divider';
     MatSnackBarModule,
     MatFormFieldModule,
     MatCheckboxModule,
+    MatBadgeModule,
     MatDivider,
   ],
   exports: [
@@ -68,6 +70,7 @@ import { MatDivider } from '@angular/material/divider';
     MatSnackBarModule,
     MatFormFieldModule,
     MatCheckboxModule,
+    MatBadgeModule,
     MatDivider
   ]
 })

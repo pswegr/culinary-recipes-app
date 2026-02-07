@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, finalize, throwError } from 'rxjs';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { AlertService } from 'src/app/shared/services/alert.service';
@@ -30,20 +30,59 @@ export class LoadingInterceptor implements HttpInterceptor {
           this.loadingService.loadingOff();
         }
       }),
-      catchError(err => {
-        const message = err.status === 401? 'Unathorized': 'Could not load resources';
+      catchError((err: HttpErrorResponse) => {
+        const message = this.getErrorMessage(err);
         this.alertService.openSnackBar(message, 'close');
-        if(err.status === 401){
+        if (err.status === 401) {
           this.accountService.logout();
           this.router.navigateByUrl(`/account/login?returnUrl=${this.router.url}`);
         }
-        this.totalRequests--;
-        if (this.totalRequests <= 0) {
-          this.loadingService.loadingOff();
-        }
-        console.log(message, err);
-        return throwError(() => new Error(err));
+        console.error('HTTP request failed', {
+          method: request.method,
+          url: request.urlWithParams,
+          status: err.status,
+          error: err.error
+        });
+        return throwError(() => err);
       })
     );
+  }
+
+  private getErrorMessage(err: HttpErrorResponse): string {
+    if (err.status === 401) {
+      return 'Unauthorized';
+    }
+
+    return this.extractApiMessage(err.error) ?? 'Could not load resources';
+  }
+
+  private extractApiMessage(error: unknown): string | null {
+    if (typeof error === 'string' && error.trim()) {
+      return error;
+    }
+
+    if (!error || typeof error !== 'object') {
+      return null;
+    }
+
+    const payload = error as Record<string, unknown>;
+
+    if (typeof payload['message'] === 'string' && payload['message'].trim()) {
+      return payload['message'];
+    }
+
+    if (typeof payload['title'] === 'string' && payload['title'].trim()) {
+      return payload['title'];
+    }
+
+    const errors = payload['errors'];
+    if (errors && typeof errors === 'object' && !Array.isArray(errors)) {
+      const firstField = Object.values(errors)[0];
+      if (Array.isArray(firstField) && typeof firstField[0] === 'string') {
+        return firstField[0];
+      }
+    }
+
+    return null;
   }
 }

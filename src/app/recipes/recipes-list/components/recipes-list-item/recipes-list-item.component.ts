@@ -31,6 +31,7 @@ export class RecipesListItemComponent implements OnDestroy {
   @Input() recipe: RecipeModel | undefined;
   @Output() tag: EventEmitter<string> = new EventEmitter<string>();
   @Output() likeToggleClicked: EventEmitter<string> = new EventEmitter<string>();
+  @Output() messageAuthorClicked: EventEmitter<{ recipientUserId: string; recipientLabel?: string }> = new EventEmitter<{ recipientUserId: string; recipientLabel?: string }>();
   destroyed = new Subject<void>();
   isDark: Signal<boolean> = this.themeModeService.isDark;
   
@@ -70,5 +71,36 @@ export class RecipesListItemComponent implements OnDestroy {
 
   protected updateDisplayDetails() {
     this.showDetails.update(s => !s);
+  }
+
+  canMessageAuthor(): boolean {
+    const recipe = this.recipe;
+    const currentUser = this.accountService.currentUser();
+    const recipientUserId = this.resolveRecipientUserId();
+
+    if (!recipientUserId || !recipe?.createdBy || !currentUser) {
+      return false;
+    }
+
+    return recipientUserId !== currentUser.userId && recipe.createdBy !== currentUser.nick;
+  }
+
+  onMessageAuthor(event: MouseEvent): void {
+    event.stopPropagation();
+
+    const recipientUserId = this.resolveRecipientUserId();
+
+    if (!recipientUserId) {
+      return;
+    }
+
+    this.messageAuthorClicked.emit({
+      recipientUserId,
+      recipientLabel: this.recipe?.createdBy ?? recipientUserId,
+    });
+  }
+
+  private resolveRecipientUserId(): string | null {
+    return this.recipe?.createdByUserId ?? this.recipe?.createdBy ?? null;
   }
 }

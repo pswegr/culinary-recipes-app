@@ -1,5 +1,5 @@
 <mat-toolbar>
-  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with menu icon">
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Open app menu">
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
@@ -13,18 +13,77 @@
   <mat-menu #categoriesMenu="matMenu">
     <button mat-menu-item *ngFor="let item of categories$| async" (click)="navigateToCategory(item)">{{item}}</button>
   </mat-menu>
+
   <a routerLink="/recipes" routerLinkActive="router-link-active" class="r-header-title">
     <img src="/assets/logo/logo.png" class="r-logo" alt="Netreci - Recipes with Passion">
   </a>
+
   <button class="r-favorites-btn" appResponsiveness [smallScreens]="['r-display-none']" mat-button routerLink="/recipes/favorites">Favorites</button>
+
   <span class="r-spacer"></span>
-  <mat-slide-toggle class="r-slide-toggle" (change)="onDarkModeSwithed($event)" checked="true"> 
+
+  <button
+    *appIfAuth="true"
+    mat-icon-button
+    class="r-toolbar-icon"
+    matTooltip="Messenger"
+    (click)="openMessenger()">
+    <mat-icon>chat</mat-icon>
+  </button>
+
+  <button
+    *appIfAuth="true"
+    mat-icon-button
+    class="r-toolbar-icon"
+    [matMenuTriggerFor]="notificationsMenu"
+    [matBadge]="notificationService.unreadCount()"
+    [matBadgeHidden]="notificationService.unreadCount() === 0"
+    matBadgeColor="warn"
+    matBadgeSize="small"
+    matTooltip="Notifications"
+    (menuOpened)="loadNotifications()">
+    <mat-icon>notifications</mat-icon>
+  </button>
+
+  <mat-menu #notificationsMenu="matMenu" class="r-notifications-menu">
+    @if (notificationService.isLoading()) {
+      <div class="r-notification-status">Loading notifications...</div>
+    } @else if (notificationService.notifications().length === 0) {
+      <div class="r-notification-status">No notifications yet.</div>
+    } @else {
+      <button
+        mat-menu-item
+        class="r-notification-item"
+        *ngFor="let notification of notificationService.notifications(); trackBy: trackByNotification"
+        (click)="openNotification(notification)">
+        <div class="r-notification-item__content">
+          <div class="r-notification-item__title">{{ notificationLabel(notification) }}</div>
+          <div class="r-notification-item__message">{{ notification.message || 'Open details' }}</div>
+          <small>{{ notification.createdAt | date : 'short' }}</small>
+        </div>
+        <mat-icon
+          class="r-notification-unread"
+          *ngIf="!notification.isRead"
+          (click)="$event.stopPropagation(); markAsRead(notification)">
+          circle
+        </mat-icon>
+      </button>
+    }
+    <button mat-menu-item (click)="openMessenger()">
+      <mat-icon>chat</mat-icon>
+      Open messenger
+    </button>
+  </mat-menu>
+
+  <mat-slide-toggle class="r-slide-toggle" (change)="onDarkModeSwithed($event)" checked="true">
     <mat-icon>bedtime</mat-icon>
   </mat-slide-toggle>
+
   <button mat-button class="r-login-btn" routerLink="/account/login" *ngIf="!(hasRoute('login') || accountService.currentUser())">
-    <mat-icon >login</mat-icon>
+    <mat-icon>login</mat-icon>
     Sign in
   </button>
+
   <button mat-button class="r-logout-btn" (click)="accountService.logout()" *ngIf="accountService.currentUser()">
     <mat-icon routerLink="/account/logout">logout</mat-icon>
     Log out

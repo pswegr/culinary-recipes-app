@@ -34,11 +34,14 @@ export class RegisterComponent implements OnDestroy {
     if (this.registerForm.valid) {
       const { email, nickname, password } = this.registerForm.value;
 
-      this.registerSub = this.accountService.register({ email, nick: nickname, password }).subscribe(
-        x => {
+      this.registerSub = this.accountService.register({ email, nick: nickname, password }).subscribe({
+        next: () => {
           this.router.navigate(['/account/register-succeded']);
+        },
+        error: () => {
+          // Error feedback is handled globally in the loading interceptor.
         }
-      )
+      });
     }
   }
 
