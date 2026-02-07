@@ -9,6 +9,7 @@ import { SearchBarService } from 'src/app/shared/services/search-bar.service';
 import { CdkConnectedOverlay } from '@angular/cdk/overlay';
 import { FormControl } from '@angular/forms';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { MessagingService } from 'src/app/shared/services/messaging.service';
 
 @Component({
   selector: 'app-recipes-list',
@@ -66,7 +67,14 @@ export class RecipesListComponent {
 
   likeToggleSub = Subscription.EMPTY;
 
-  constructor(protected recipeService: RecipesService, private router: Router, protected route: ActivatedRoute, private loadingService: LoadingService, private searchBarService: SearchBarService) {
+  constructor(
+    protected recipeService: RecipesService,
+    private router: Router,
+    protected route: ActivatedRoute,
+    private loadingService: LoadingService,
+    private searchBarService: SearchBarService,
+    private messagingService: MessagingService
+  ) {
   }
 
   chipsChanged(event: MatChipListboxChange) {
@@ -87,6 +95,10 @@ export class RecipesListComponent {
     this.recipeService.likeToggle(recipeId).subscribe(
       x => this.refreshToken.next(null)
     );
+  }
+
+  openMessaging(recipientUserId: string, recipientLabel?: string): void {
+    this.messagingService.openWidget(recipientUserId, recipientLabel);
   }
 
   disableCombination(recipes: RecipeModel[], tag: string) {

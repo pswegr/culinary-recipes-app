@@ -16,6 +16,7 @@ export interface RecipeModel {
   photo?: PhotoModel;
   published: boolean;
   createdBy?: string;
+  createdByUserId?: string;
   updatedBy?: string;
   createdAt?: Date;
   updatedAt?: Date;

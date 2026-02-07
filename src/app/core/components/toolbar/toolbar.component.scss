@@ -66,3 +66,43 @@
 .r-favorites-btn {
   margin-left: 1rem;
 }
+
+.r-toolbar-icon {
+  margin-right: 0.2rem;
+}
+
+.r-notification-status {
+  padding: 0.8rem 1rem;
+  max-width: 360px;
+  min-width: 320px;
+  color: var(--r-muted);
+  font-size: 0.85rem;
+}
+
+.r-notification-item {
+  white-space: normal;
+  line-height: 1.35;
+  align-items: flex-start;
+  max-width: 360px;
+}
+
+.r-notification-item__content {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.r-notification-item__title {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.r-notification-item__message {
+  font-size: 0.78rem;
+  color: var(--r-muted);
+}
+
+.r-notification-unread {
+  font-size: 0.55rem;
+  margin-left: auto;
+  color: var(--r-brand);
+}

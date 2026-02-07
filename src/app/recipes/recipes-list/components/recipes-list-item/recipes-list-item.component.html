@@ -81,6 +81,15 @@
           matTooltip="recipe details">
           Details
         </button>
+        <button
+          class="r-add-button"
+          matButton
+          *appIfAuth="true"
+          [disabled]="!canMessageAuthor()"
+          (click)="onMessageAuthor($event)"
+          matTooltip="Message author">
+          Message
+        </button>
         <button class="r-add-button" mat-mini-fab routerLink="/recipes/upsert/{{recipe.id}}" matTooltip="Edit recipe"
           *appIfAdminOrOwner="recipe.createdBy">
           <mat-icon>edit</mat-icon>
