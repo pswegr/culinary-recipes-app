@@ -25,9 +25,17 @@ export class ToolbarComponent {
   readonly messagingService = inject(MessagingService);
 
   readonly categories$ = this.recipesService.getCategories().pipe(shareReplay(1));
+  isDarkMode = true;
+  isMobileActionsMenuOpen = false;
 
   onDarkModeSwithed({ checked }: MatSlideToggleChange): void {
+    this.isDarkMode = checked;
     this.darkModeSwitched.emit(checked);
+  }
+
+  toggleDarkMode(): void {
+    this.isDarkMode = !this.isDarkMode;
+    this.darkModeSwitched.emit(this.isDarkMode);
   }
 
   navigateToCategory(category: string): void {
@@ -44,6 +52,14 @@ export class ToolbarComponent {
 
   loadNotifications(): void {
     void this.notificationService.loadNotifications(false, 50);
+  }
+
+  onMobileActionsMenuOpened(): void {
+    this.isMobileActionsMenuOpen = true;
+  }
+
+  onMobileActionsMenuClosed(): void {
+    this.isMobileActionsMenuOpen = false;
   }
 
   markAsRead(notification: NotificationModel): void {

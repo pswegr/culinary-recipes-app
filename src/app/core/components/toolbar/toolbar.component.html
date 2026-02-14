@@ -22,28 +22,44 @@
 
   <span class="r-spacer"></span>
 
-  <button
-    *appIfAuth="true"
-    mat-icon-button
-    class="r-toolbar-icon"
-    matTooltip="Messenger"
-    (click)="openMessenger()">
-    <mat-icon>chat</mat-icon>
-  </button>
+  <div class="r-toolbar-actions">
+    <button
+      *appIfAuth="true"
+      mat-icon-button
+      class="r-toolbar-icon"
+      matTooltip="Messenger"
+      (click)="openMessenger()">
+      <mat-icon>chat</mat-icon>
+    </button>
 
-  <button
-    *appIfAuth="true"
-    mat-icon-button
-    class="r-toolbar-icon"
-    [matMenuTriggerFor]="notificationsMenu"
-    [matBadge]="notificationService.unreadCount()"
-    [matBadgeHidden]="notificationService.unreadCount() === 0"
-    matBadgeColor="warn"
-    matBadgeSize="small"
-    matTooltip="Notifications"
-    (menuOpened)="loadNotifications()">
-    <mat-icon>notifications</mat-icon>
-  </button>
+    <button
+      *appIfAuth="true"
+      mat-icon-button
+      class="r-toolbar-icon"
+      [matMenuTriggerFor]="notificationsMenu"
+      [matBadge]="notificationService.unreadCount()"
+      [matBadgeHidden]="notificationService.unreadCount() === 0"
+      matBadgeColor="warn"
+      matBadgeSize="small"
+      matTooltip="Notifications"
+      (menuOpened)="loadNotifications()">
+      <mat-icon>notifications</mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="toggleDarkMode()">
+      <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+
+    <button mat-button class="r-login-btn" routerLink="/account/login" *ngIf="!(hasRoute('login') || accountService.currentUser())">
+      <mat-icon>login</mat-icon>
+      Sign in
+    </button>
+
+    <button mat-button class="r-logout-btn" (click)="accountService.logout()" *ngIf="accountService.currentUser()">
+      <mat-icon routerLink="/account/logout">logout</mat-icon>
+      Log out
+    </button>
+  </div>
 
   <mat-menu #notificationsMenu="matMenu" class="r-notifications-menu">
     @if (notificationService.isLoading()) {
@@ -75,17 +91,50 @@
     </button>
   </mat-menu>
 
-  <mat-slide-toggle class="r-slide-toggle" (change)="onDarkModeSwithed($event)" checked="true">
-    <mat-icon>bedtime</mat-icon>
-  </mat-slide-toggle>
-
-  <button mat-button class="r-login-btn" routerLink="/account/login" *ngIf="!(hasRoute('login') || accountService.currentUser())">
-    <mat-icon>login</mat-icon>
-    Sign in
+  <button
+    mat-icon-button
+    class="r-mobile-actions-btn"
+    [matMenuTriggerFor]="mobileActionsMenu"
+    [matBadge]="notificationService.unreadCount()"
+    [matBadgeHidden]="notificationService.unreadCount() === 0 || !accountService.currentUser()"
+    matBadgeColor="warn"
+    matBadgeSize="small"
+    [attr.aria-expanded]="isMobileActionsMenuOpen"
+    aria-label="Open quick actions"
+    (menuOpened)="onMobileActionsMenuOpened()"
+    (menuClosed)="onMobileActionsMenuClosed()">
+    <mat-icon>{{ isMobileActionsMenuOpen ? 'close' : 'apps' }}</mat-icon>
   </button>
 
-  <button mat-button class="r-logout-btn" (click)="accountService.logout()" *ngIf="accountService.currentUser()">
-    <mat-icon routerLink="/account/logout">logout</mat-icon>
-    Log out
-  </button>
+  <mat-menu #mobileActionsMenu="matMenu" class="r-mobile-actions-menu">
+    <button mat-menu-item *appIfAuth="true" (click)="openMessenger()">
+      <mat-icon>chat</mat-icon>
+      <span>Messenger</span>
+    </button>
+
+    <button
+      mat-menu-item
+      *appIfAuth="true"
+      [matMenuTriggerFor]="notificationsMenu"
+      (click)="loadNotifications()">
+      <mat-icon>notifications</mat-icon>
+      <span>Notifications</span>
+      <span class="r-mobile-actions-count" *ngIf="notificationService.unreadCount() > 0">{{ notificationService.unreadCount() }}</span>
+    </button>
+
+    <button mat-menu-item (click)="toggleDarkMode()">
+      <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      <span>{{ isDarkMode ? 'Switch to light mode' : 'Switch to dark mode' }}</span>
+    </button>
+
+    <button mat-menu-item routerLink="/account/login" *ngIf="!(hasRoute('login') || accountService.currentUser())">
+      <mat-icon>login</mat-icon>
+      <span>Sign in</span>
+    </button>
+
+    <button mat-menu-item (click)="accountService.logout()" *ngIf="accountService.currentUser()">
+      <mat-icon>logout</mat-icon>
+      <span>Log out</span>
+    </button>
+  </mat-menu>
 </mat-toolbar>
