@@ -52,7 +52,7 @@ export class RegisterComponent implements OnDestroy {
       }
 
       return of(control.value).pipe(
-        debounceTime(500),
+        debounceTime(1000),
         switchMap(email => this.accountService.isEmailUnique(email)),
         map(isUnique => (isUnique ? null : { emailTaken: true })),
         catchError(() => of(null))
@@ -67,7 +67,7 @@ export class RegisterComponent implements OnDestroy {
       }
 
       return of(control.value).pipe(
-        debounceTime(500),
+        debounceTime(1000),
         switchMap(nickname => this.accountService.isNickValid(nickname)),
         map(isValid => (isValid ? null : { nicknameInvalid: true })),
         catchError(() => of(null))
