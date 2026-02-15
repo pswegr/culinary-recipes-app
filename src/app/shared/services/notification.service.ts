@@ -5,6 +5,7 @@ import { NotificationModel, NotificationType } from '../models/notification.mode
 import { AccountService } from './account.service';
 import { AlertService } from './alert.service';
 import { environment } from 'src/environments/environment';
+import { I18nService } from './i18n.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class NotificationService {
   private readonly http = inject(HttpClient);
   private readonly accountService = inject(AccountService);
   private readonly alertService = inject(AlertService);
+  private readonly i18nService = inject(I18nService);
 
   readonly notifications = signal<NotificationModel[]>([]);
   readonly unreadCount = signal<number>(0);
@@ -53,7 +55,7 @@ export class NotificationService {
       this.notifications.set((response ?? []).map((item) => this.normalizeNotification(item)));
       this.unreadCount.set(this.notifications().filter((item) => !item.isRead).length);
     } catch {
-      this.alertService.openSnackBar('Unable to load notifications right now.');
+      this.alertService.openSnackBar(this.i18nService.translate('notifications.errors.unableLoadNow'));
     } finally {
       this.isLoading.set(false);
     }
@@ -88,7 +90,7 @@ export class NotificationService {
     try {
       await firstValueFrom(this.http.post(`${environment.apiUrl}Notifications/${notificationId}/read`, {}));
     } catch {
-      this.alertService.openSnackBar('Could not mark notification as read.');
+      this.alertService.openSnackBar(this.i18nService.translate('notifications.errors.markAsRead'));
       return;
     }
 

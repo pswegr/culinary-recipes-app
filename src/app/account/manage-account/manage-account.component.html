@@ -1,9 +1,9 @@
 
 <div class="r-account-info">
   <div>
-    Nickname: {{accountService.currentUser()?.nick}}
+    {{ 'account.manage.nickname' | t }}: {{accountService.currentUser()?.nick}}
   </div>
   <div>
-    Email: {{accountService.currentUser()?.email}}
+    {{ 'account.manage.email' | t }}: {{accountService.currentUser()?.email}}
   </div>
 </div>

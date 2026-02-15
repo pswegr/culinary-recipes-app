@@ -18,7 +18,7 @@ import { MessagingService } from 'src/app/shared/services/messaging.service';
   standalone: false
 })
 export class RecipesListComponent {
-  title = 'Recipes';
+  titleKey = 'recipes.titles.recipes';
   searchText = new FormControl('');
   category: string | null = null;
   overlayOpen = this.searchBarService.overlayoppen;

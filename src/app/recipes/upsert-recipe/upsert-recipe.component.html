@@ -1,48 +1,48 @@
 <ng-container *ngIf="!isLoading(); else formLoading">
   <div class="r-header">
-    <h2 class="r-heading-secondary">Add new recipe</h2>
+    <h2 class="r-heading-secondary">{{ 'recipes.upsert.headingAdd' | t }}</h2>
     <div class="r-header-actions">
       <button mat-stroked-button color="warn" (click)="revertChanges()">
         <mat-icon>undo</mat-icon>
-          {{ recipeId ? 'Revert' : 'Clear' }}
+          {{ recipeId ? ('common.revert' | t) : ('common.clear' | t) }}
       </button>
       <button mat-button color="primary" [disabled]="!(!disableSafe || recipeId)" (click)="save()">
         <mat-icon>save</mat-icon>
-          Save
+          {{ 'common.save' | t }}
       </button>
     </div>
   </div>
   <mat-stepper class="r-stepper" linear="false" [orientation]="(stepperOrientation | async) ?? 'horizontal'" #stepper (selectionChange)="checkCompletion()" >
     <mat-step>
       <form class="r-form-recipes-data">
-        <ng-template matStepLabel>Fill out recipe data</ng-template>
+        <ng-template matStepLabel>{{ 'recipes.upsert.fillOutRecipeData' | t }}</ng-template>
         <mat-form-field class="r-full-width">
-          <mat-label>Title</mat-label>
-          <input matInput placeholder="title" [ngModel]="recipe().title" (ngModelChange)="updateRecipeField('title', $event)" name="title">
+          <mat-label>{{ 'common.title' | t }}</mat-label>
+          <input matInput [placeholder]="'recipes.upsert.titlePlaceholder' | t" [ngModel]="recipe().title" (ngModelChange)="updateRecipeField('title', $event)" name="title">
         </mat-form-field>
         <mat-form-field class="r-full-width">
-          <mat-label>Description</mat-label>
-          <textarea matInput placeholder="Write description of the dish" [ngModel]="recipe().description" (ngModelChange)="updateRecipeField('description', $event)" name="description"></textarea>
+          <mat-label>{{ 'common.description' | t }}</mat-label>
+          <textarea matInput [placeholder]="'recipes.upsert.descriptionPlaceholder' | t" [ngModel]="recipe().description" (ngModelChange)="updateRecipeField('description', $event)" name="description"></textarea>
         </mat-form-field>
         <mat-form-field class="r-full-width">
-          <mat-label>Servings</mat-label>
-          <input type="number" matInput placeholder="number of servings" [ngModel]="recipe().servings" (ngModelChange)="updateRecipeField('servings', $event)" name="servings">
+          <mat-label>{{ 'recipes.labels.servings' | t }}</mat-label>
+          <input type="number" matInput [placeholder]="'recipes.upsert.servingsPlaceholder' | t" [ngModel]="recipe().servings" (ngModelChange)="updateRecipeField('servings', $event)" name="servings">
         </mat-form-field>
         <mat-form-field class="r-full-width">
-          <mat-label>Cooking time</mat-label>
-          <input type="number" matInput placeholder="cooking Time [minutes]" [ngModel]="recipe().cookingTime" (ngModelChange)="updateRecipeField('cookingTime', $event)" name="cookingTime">
+          <mat-label>{{ 'recipes.labels.cookingTime' | t }}</mat-label>
+          <input type="number" matInput [placeholder]="'recipes.upsert.cookingTimePlaceholder' | t" [ngModel]="recipe().cookingTime" (ngModelChange)="updateRecipeField('cookingTime', $event)" name="cookingTime">
         </mat-form-field>
         <mat-form-field class="r-full-width">
-          <mat-label>Preparation time</mat-label>
-          <input type="number" matInput placeholder="Preparation Time [minutes]" [ngModel]="recipe().preparationTime" (ngModelChange)="updateRecipeField('preparationTime', $event)" name="preparationTime">
+          <mat-label>{{ 'recipes.labels.preparationTime' | t }}</mat-label>
+          <input type="number" matInput [placeholder]="'recipes.upsert.preparationTimePlaceholder' | t" [ngModel]="recipe().preparationTime" (ngModelChange)="updateRecipeField('preparationTime', $event)" name="preparationTime">
         </mat-form-field>
         <div class="r-stepper-footer">
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button matStepperNext>{{ 'common.next' | t }}</button>
         </div>
       </form>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Igredients</ng-template>
+      <ng-template matStepLabel>{{ 'recipes.upsert.ingredientStep' | t }}</ng-template>
       <div class="r-ingredients">
         <div class="r-ingredients-list">
           <div class="r-ingredient-list-item" *ngFor="let item of recipe().ingredients; let i= index;">
@@ -50,10 +50,10 @@
                 {{item.name}} - {{item.quantity}} {{item.unit}}
               </div>
               <div class="r-item-action-buttons">
-                <button mat-mini-fab class="recipe-mat-fab-secondary" (click)="deleteIngredient(i)" matTooltip="Delete Ingredient">
+                <button mat-mini-fab class="recipe-mat-fab-secondary" (click)="deleteIngredient(i)" [matTooltip]="'recipes.upsert.deleteIngredientTooltip' | t">
                   <mat-icon>delete</mat-icon>
                 </button>
-                <button mat-mini-fab color="primary" (click)="editIngredient(i)" matTooltip="Edit Ingredient">
+                <button mat-mini-fab color="primary" (click)="editIngredient(i)" [matTooltip]="'recipes.upsert.editIngredientTooltip' | t">
                   <mat-icon>edit</mat-icon>
                 </button>
               </div>
@@ -61,63 +61,63 @@
         </div>
         <div class="r-grid-3-columns">
           <mat-form-field class="r-full-width r-new-instruction">
-            <mat-label>Ingredient</mat-label>
-            <textarea matInput placeholder="Igredient name" [(ngModel)]="newIngredient.name" (keyup.enter)="addNewIngrdient()" name="newInstructions.name"></textarea>
+            <mat-label>{{ 'common.ingredient' | t }}</mat-label>
+            <textarea matInput [placeholder]="'recipes.upsert.ingredientPlaceholder' | t" [(ngModel)]="newIngredient.name" (keyup.enter)="addNewIngrdient()" name="newInstructions.name"></textarea>
           </mat-form-field>
           <mat-form-field class="r-full-width r-new-instruction">
-            <mat-label>Quantity</mat-label>
-            <textarea matInput placeholder="quantity" [(ngModel)]="newIngredient.quantity" (keyup.enter)="addNewIngrdient()" name="newInstructions.quantity"></textarea>
+            <mat-label>{{ 'common.quantity' | t }}</mat-label>
+            <textarea matInput [placeholder]="'recipes.upsert.quantityPlaceholder' | t" [(ngModel)]="newIngredient.quantity" (keyup.enter)="addNewIngrdient()" name="newInstructions.quantity"></textarea>
           </mat-form-field>
           <mat-form-field class="r-full-width r-new-instruction">
-            <mat-label>Unit</mat-label>
-            <textarea matInput placeholder="unit" [(ngModel)]="newIngredient.unit" (keyup.enter)="addNewIngrdient()" name="newInstructions.unit"></textarea>
+            <mat-label>{{ 'common.unit' | t }}</mat-label>
+            <textarea matInput [placeholder]="'recipes.upsert.unitPlaceholder' | t" [(ngModel)]="newIngredient.unit" (keyup.enter)="addNewIngrdient()" name="newInstructions.unit"></textarea>
           </mat-form-field>
         </div>
         <button mat-fab extended class="recipe-mat-btn-tertiary" (click)="addNewIngrdient()" (keyup.enter)="addNewIngrdient()">
           <mat-icon>add</mat-icon>
-          Add ingredient
+          {{ 'recipes.upsert.addIngredient' | t }}
         </button>
         <div class="r-stepper-footer">
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button matStepperPrevious>{{ 'common.back' | t }}</button>
+          <button mat-button matStepperNext>{{ 'common.next' | t }}</button>
         </div>
       </div>
     </mat-step>
     <mat-step>
       <form class="r-form-recipes-data-instructions  r-overflow-auto">
-        <ng-template matStepLabel>Fill out instructions</ng-template>
+        <ng-template matStepLabel>{{ 'recipes.upsert.fillOutInstructions' | t }}</ng-template>
         <div cdkDropList class="r-list" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" (cdkDropListDropped)="drop($event)">
           <div class="r-box" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" [attr.data-drag-data]="instruction" *ngFor="let instruction of recipe().instructions; let i= index; trackBy:trackByFn" cdkDrag>
             {{instruction}}
             <div class="r-item-action-buttons">
-              <button mat-mini-fab class="recipe-mat-fab-secondary" (click)="deleteInstruction(i)" matTooltip="Delete instruction">
+              <button mat-mini-fab class="recipe-mat-fab-secondary" (click)="deleteInstruction(i)" [matTooltip]="'recipes.upsert.deleteInstructionTooltip' | t">
                 <mat-icon>delete</mat-icon>
               </button>
-              <button mat-mini-fab (click)="editInstruction(i)" matTooltip="Edit instruction">
+              <button mat-mini-fab (click)="editInstruction(i)" [matTooltip]="'recipes.upsert.editInstructionTooltip' | t">
                 <mat-icon>edit</mat-icon>
               </button> 
             </div>
           </div>
         </div>
         <mat-form-field class="r-full-width d-new-instruction">
-          <mat-label>Next instruction</mat-label>
-          <textarea matInput placeholder="instruction step" (keyup.enter)="addNewInstruction()" [(ngModel)]="newInstruction" name="newInstructions"></textarea>
+          <mat-label>{{ 'recipes.upsert.nextInstruction' | t }}</mat-label>
+          <textarea matInput [placeholder]="'recipes.upsert.instructionPlaceholder' | t" (keyup.enter)="addNewInstruction()" [(ngModel)]="newInstruction" name="newInstructions"></textarea>
         </mat-form-field>
         <button mat-fab extended class="recipe-mat-btn-tertiary" (click)="addNewInstruction()" [disabled]="recipe().instructions.length > 10">
           <mat-icon>add</mat-icon>
-          Add instruction
+          {{ 'recipes.upsert.addInstruction' | t }}
         </button>
         <div class="r-stepper-footer">
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button matStepperPrevious>{{ 'common.back' | t }}</button>
+          <button mat-button matStepperNext>{{ 'common.next' | t }}</button>
         </div>
       </form>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Category and add photo</ng-template>
+      <ng-template matStepLabel>{{ 'recipes.upsert.categoryAndAddPhoto' | t }}</ng-template>
       <div class="r-form-recipes-data">
         <mat-form-field class="r-full-width">
-          <mat-label>Category</mat-label>
+          <mat-label>{{ 'common.category' | t }}</mat-label>
           <input type="text" matInput [ngModel]="recipe().category" [matAutocomplete]="auto" (ngModelChange)="categoryChanged($event)">
           <mat-autocomplete #auto="matAutocomplete" autoSelectActiveOption="true">
             <mat-option *ngFor="let category of filteredOptions()"
@@ -126,18 +126,18 @@
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-        <mat-slide-toggle [ngModel]="recipe().published" (ngModelChange)="updateRecipeField('published', $event)" checked="true" class="r-slide-toggle">Published</mat-slide-toggle>
+        <mat-slide-toggle [ngModel]="recipe().published" (ngModelChange)="updateRecipeField('published', $event)" checked="true" class="r-slide-toggle">{{ 'recipes.upsert.published' | t }}</mat-slide-toggle>
         <mat-form-field class="r-full-width">
-          <mat-label>Tags</mat-label>
-          <mat-chip-grid #chipGrid aria-label="Fruit selection">
+          <mat-label>{{ 'common.tags' | t }}</mat-label>
+          <mat-chip-grid #chipGrid [attr.aria-label]="'recipes.upsert.tagsAria' | t">
             <mat-chip-row *ngFor="let tag of recipe().tags" (removed)="removeTag(tag)">
               {{tag}}
-              <button matChipRemove [attr.aria-label]="'remove ' + tag">
+              <button matChipRemove [attr.aria-label]="'recipes.upsert.removeTagAria' | t : { tag: tag }">
                 <mat-icon>cancel</mat-icon>
               </button>
             </mat-chip-row>
           </mat-chip-grid>
-          <input placeholder="New tag..." #tagInput [formControl]="tagCtrl"
+          <input [placeholder]="'recipes.upsert.newTagPlaceholder' | t" #tagInput [formControl]="tagCtrl"
             [matChipInputFor]="chipGrid" [matAutocomplete]="autoTags"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             (matChipInputTokenEnd)="addTag($event)"/>
@@ -149,7 +149,7 @@
         </mat-form-field>
         <app-file-input (fileUploadedEvent)="uploadedFile($event)" requiredFileType="image/png, image/jpeg"></app-file-input>
         <div class="r-stepper-footer">
-          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperPrevious>{{ 'common.back' | t }}</button>
         </div>
       </div>
     </mat-step>

@@ -7,6 +7,7 @@ import { AccountService } from 'src/app/shared/services/account.service';
 import { MessagingService } from 'src/app/shared/services/messaging.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { RecipesService } from 'src/app/shared/services/recipes.service';
+import { I18nService } from 'src/app/shared/services/i18n.service';
 
 @Component({
     selector: 'app-toolbar',
@@ -23,8 +24,10 @@ export class ToolbarComponent {
   readonly accountService = inject(AccountService);
   readonly notificationService = inject(NotificationService);
   readonly messagingService = inject(MessagingService);
+  readonly i18nService = inject(I18nService);
 
   readonly categories$ = this.recipesService.getCategories().pipe(shareReplay(1));
+  readonly languageOptions = this.i18nService.supportedLanguages;
   isDarkMode = true;
   isMobileActionsMenuOpen = false;
 
@@ -60,6 +63,10 @@ export class ToolbarComponent {
 
   onMobileActionsMenuClosed(): void {
     this.isMobileActionsMenuOpen = false;
+  }
+
+  onLanguageChanged(languageCode: string): void {
+    this.i18nService.setLanguage(languageCode);
   }
 
   markAsRead(notification: NotificationModel): void {

@@ -11,17 +11,17 @@
     <header class="m-header" cdkDragHandle>
       <div class="m-header__left">
         <mat-icon>chat</mat-icon>
-        <span>Messenger</span>
+        <span>{{ 'messenger.title' | t }}</span>
       </div>
       <div class="m-header__actions">
         <button
           mat-icon-button
           [disabled]="isSmallScreen()"
-          [matTooltip]="messagingService.widgetPinned() ? 'Unstick and drag' : 'Stick to bottom'"
+          [matTooltip]="messagingService.widgetPinned() ? ('messenger.unstickAndDrag' | t) : ('messenger.stickToBottom' | t)"
           (click)="togglePinned()">
           <mat-icon>{{ messagingService.widgetPinned() ? 'push_pin' : 'open_with' }}</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Close" (click)="closeWidget()">
+        <button mat-icon-button [matTooltip]="'messenger.close' | t" (click)="closeWidget()">
           <mat-icon>close</mat-icon>
         </button>
       </div>
@@ -29,52 +29,52 @@
 
     <div class="m-status" [class.m-status--warning]="messagingService.handshake() === null">
       @if (messagingService.handshake() === null) {
-        <span>Handshake in progress. Messaging unlocks after verification.</span>
+        <span>{{ 'messenger.handshakeInProgress' | t }}</span>
       } @else {
-        <span>Secure handshake active.</span>
+        <span>{{ 'messenger.handshakeActive' | t }}</span>
       }
     </div>
 
     <div class="m-body">
       <aside class="m-sidebar">
         <div class="m-recipient">
-          <label for="messaging-recipient">Recipient user id</label>
+          <label for="messaging-recipient">{{ 'messenger.recipientLabel' | t }}</label>
           <div class="m-recipient__controls">
             <input
               id="messaging-recipient"
               type="text"
               [value]="messagingService.recipientDraft()"
               (input)="onRecipientInput($event)"
-              placeholder="user-id" />
+              [placeholder]="'messenger.recipientPlaceholder' | t" />
             <button mat-flat-button class="recipe-mat-btn-tertiary" (click)="startConversation()">
-              Open
+              {{ 'common.open' | t }}
             </button>
           </div>
         </div>
 
         @if (messagingService.incomingRequests().length > 0) {
           <div class="m-requests">
-            <h4>Pending requests</h4>
+            <h4>{{ 'messenger.pendingRequests' | t }}</h4>
             <div class="m-request" *ngFor="let request of messagingService.incomingRequests(); trackBy: trackByRequest">
               <div class="m-request__text">
                 <span>{{ request.requesterUserId }}</span>
-                <small>wants to message you</small>
+                <small>{{ 'messenger.wantsToMessage' | t }}</small>
               </div>
               <div class="m-request__actions">
-                <button mat-stroked-button (click)="respondToRequest(request, true)">Accept</button>
-                <button mat-stroked-button (click)="respondToRequest(request, false)">Decline</button>
+                <button mat-stroked-button (click)="respondToRequest(request, true)">{{ 'common.accept' | t }}</button>
+                <button mat-stroked-button (click)="respondToRequest(request, false)">{{ 'common.decline' | t }}</button>
               </div>
             </div>
           </div>
         }
 
         <div class="m-conversations">
-          <h4>Conversations</h4>
+          <h4>{{ 'messenger.conversations' | t }}</h4>
 
           @if (messagingService.loadingConversations()) {
-            <div class="m-placeholder">Loading conversations...</div>
+            <div class="m-placeholder">{{ 'messenger.loadingConversations' | t }}</div>
           } @else if (messagingService.conversations().length === 0) {
-            <div class="m-placeholder">No conversations yet.</div>
+            <div class="m-placeholder">{{ 'messenger.noConversations' | t }}</div>
           } @else {
             <button
               class="m-conversation"
@@ -82,7 +82,7 @@
               [class.m-conversation--active]="conversation.id === messagingService.activeConversationId()"
               (click)="openConversation(conversation)">
               <span class="m-conversation__title">{{ getConversationTitle(conversation) }}</span>
-              <small class="m-conversation__preview">{{ conversation.lastMessagePreview || 'No messages yet' }}</small>
+              <small class="m-conversation__preview">{{ conversation.lastMessagePreview || ('messenger.noMessagesYet' | t) }}</small>
             </button>
           }
         </div>
@@ -92,26 +92,26 @@
         @if (messagingService.activeConversation() === null) {
           <div class="m-placeholder">
             @if (messagingService.recipientDraft().trim().length === 0) {
-              <span>Pick a conversation or enter recipient user id.</span>
+              <span>{{ 'messenger.pickConversation' | t }}</span>
             } @else if (messagingService.isRequestPendingForRecipient()) {
-              <span>Request sent. Waiting for recipient approval.</span>
+              <span>{{ 'messenger.requestSentWaiting' | t }}</span>
             } @else {
-              <span>No accepted chat yet with this user.</span>
+              <span>{{ 'messenger.noAcceptedChat' | t }}</span>
               <button
                 mat-flat-button
                 class="recipe-mat-btn-tertiary"
                 [disabled]="!canRequestConversation()"
                 (click)="sendRequest()">
-                Request messaging access
+                {{ 'messenger.requestMessagingAccess' | t }}
               </button>
             }
           </div>
         } @else {
           <div class="m-messages">
             @if (messagingService.loadingMessages()) {
-              <div class="m-placeholder">Loading messages...</div>
+              <div class="m-placeholder">{{ 'messenger.loadingMessages' | t }}</div>
             } @else if (messagingService.activeMessages().length === 0) {
-              <div class="m-placeholder">No messages in this conversation yet.</div>
+              <div class="m-placeholder">{{ 'messenger.noMessagesInConversation' | t }}</div>
             } @else {
               <article
                 class="m-message"
@@ -128,14 +128,14 @@
               rows="2"
               [value]="messagingService.messageDraft()"
               (input)="onMessageInput($event)"
-              placeholder="Write a message..."
+              [placeholder]="'messenger.writeMessagePlaceholder' | t"
               [disabled]="!messagingService.canWriteToRecipient()"></textarea>
             <button
               mat-flat-button
               class="recipe-mat-btn-tertiary"
               (click)="sendMessage()"
               [disabled]="!canSend()">
-              Send
+              {{ 'common.send' | t }}
             </button>
           </div>
         }

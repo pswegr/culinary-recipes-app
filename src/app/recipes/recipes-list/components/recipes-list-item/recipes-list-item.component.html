@@ -14,7 +14,7 @@
                 [ngStyle]="{ 'text-shadow': '0px 0px 1px ' + (recipe.photo?.mainColor ?? '#008000') + '22' }">
                 {{recipe.title}}</div>
               <div class="r-list-item-header__category">{{recipe.category}}</div>
-              <div class="r-list-item-header__created-by">by: {{recipe.createdBy}}</div>
+              <div class="r-list-item-header__created-by">{{ 'recipes.labels.by' | t }}: {{recipe.createdBy}}</div>
             </div>
             <div class="r-img-container">
               <img class="r-img" width="400" height="300"
@@ -31,16 +31,16 @@
             </div>
           </div>
           <div appResponsiveness [largeScreens]="['r-display-grid-3']" class="r-top-section__bottom">
-            <h6>Preparation time: {{recipe.preparationTime}}</h6>
-            <h6>Cooking time: {{recipe.cookingTime}}</h6>
-            <h6>Servings: {{recipe.servings}}</h6>
+            <h6>{{ 'recipes.labels.preparationTime' | t }}: {{recipe.preparationTime}}</h6>
+            <h6>{{ 'recipes.labels.cookingTime' | t }}: {{recipe.cookingTime}}</h6>
+            <h6>{{ 'recipes.labels.servings' | t }}: {{recipe.servings}}</h6>
           </div>
         </div>
         @if(showDetails()){
         <div appResponsiveness [largeScreens]="['r-display-grid-2']">
           <div class="r-list-item-content" appGradientBg="270deg" [gradientColor]="recipe.photo?.mainColor">
             <div class="r-igredients">
-              <h3 class="r-sub-header">Igredients</h3>
+              <h3 class="r-sub-header">{{ 'recipes.labels.ingredients' | t }}</h3>
               <ul class="r-ul">
                 <li class="r-li" *ngFor="let igredient of recipe.ingredients">
                   <span>{{igredient.name}}</span>
@@ -52,7 +52,7 @@
           </div>
           <div class="r-list-item-content" appGradientBg="90deg" [gradientColor]="recipe.photo?.mainColor">
             <div class="r-instructions">
-              <h3>Instructions</h3>
+              <h3>{{ 'recipes.labels.instructions' | t }}</h3>
               <ol class="r-ol">
                 <li class="r-li" *ngFor="let instruction of recipe.instructions">
                   <span>{{instruction}}</span>
@@ -67,19 +67,19 @@
         <div>
           <button mat-button *appIfAuth="true; else notAuthorized" (click)="onLike(recipe.id)">
             <mat-icon [@likeToggle]="isLiked(recipe.likedByUsers) ? 'liked' : 'unliked'" class="r-favorite"
-              aria-hidden="false" aria-label="like icon" fontIcon="favorite"></mat-icon>
-            {{isLiked(recipe.likedByUsers)? 'UNLIKE' : 'LIKE'}} | {{recipe.likedByUsers.length}}
+              aria-hidden="false" [attr.aria-label]="'recipes.actions.likeIconAria' | t" fontIcon="favorite"></mat-icon>
+            {{isLiked(recipe.likedByUsers)? ('recipes.actions.unlike' | t) : ('recipes.actions.like' | t)}} | {{recipe.likedByUsers.length}}
           </button>
           <ng-template #notAuthorized>
             <button mat-button routerLink="/account/login">
-              <mat-icon class="r-favorite" aria-hidden="false" aria-label="like icon" fontIcon="favorite"></mat-icon>
-              LIKE | {{recipe.likedByUsers.length}}
+              <mat-icon class="r-favorite" aria-hidden="false" [attr.aria-label]="'recipes.actions.likeIconAria' | t" fontIcon="favorite"></mat-icon>
+              {{ 'recipes.actions.like' | t }} | {{recipe.likedByUsers.length}}
             </button>
           </ng-template>
         </div>
         <button class="r-add-button" matButton (click)="navigateToDetailsBtnClicked(recipe.id)"
-          matTooltip="recipe details">
-          Details
+          [matTooltip]="'recipes.actions.recipeDetailsTooltip' | t">
+          {{ 'common.details' | t }}
         </button>
         <button
           class="r-add-button"
@@ -87,10 +87,10 @@
           *appIfAuth="true"
           [disabled]="!canMessageAuthor()"
           (click)="onMessageAuthor($event)"
-          matTooltip="Message author">
-          Message
+          [matTooltip]="'recipes.actions.messageAuthorTooltip' | t">
+          {{ 'common.message' | t }}
         </button>
-        <button class="r-add-button" mat-mini-fab routerLink="/recipes/upsert/{{recipe.id}}" matTooltip="Edit recipe"
+        <button class="r-add-button" mat-mini-fab routerLink="/recipes/upsert/{{recipe.id}}" [matTooltip]="'recipes.actions.editRecipeTooltip' | t"
           *appIfAdminOrOwner="recipe.createdBy">
           <mat-icon>edit</mat-icon>
         </button>

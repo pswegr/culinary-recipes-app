@@ -16,6 +16,7 @@ import { FormControl } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { UpsertRecipeStore } from './upsert-recipe.store';
+import { I18nService } from 'src/app/shared/services/i18n.service';
 
 @Component({
     selector: 'app-upsert-recipe',
@@ -52,7 +53,8 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
     private router: Router,
     private upsertRecipeStore: UpsertRecipeStore,
     private themeModeService: ThemeModeService,
-    private announcer: LiveAnnouncer){
+    private announcer: LiveAnnouncer,
+    private i18nService: I18nService){
     this.stepperOrientation = breakpointObserver
       .observe([
         Breakpoints.HandsetPortrait
@@ -188,6 +190,6 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
 
   removeTag(tag: string): void {
     this.upsertRecipeStore.removeTag(tag);
-    this.announcer.announce(`Removed ${tag}`);
+    this.announcer.announce(this.i18nService.translate('recipes.upsert.removedTag', { tag }));
   }
 }
