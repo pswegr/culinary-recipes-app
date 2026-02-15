@@ -20,19 +20,19 @@
         </div>
         <div class="r-grid-item-2">
           <h4>
-            Preparation time: {{recipe.preparationTime}}
+            {{ 'recipes.labels.preparationTime' | t }}: {{recipe.preparationTime}}
           </h4>
         </div>
         <div class="r-grid-item-3">
         </div>
         <div class="r-grid-item-4">
           <h4>
-            Cooking time: {{recipe.cookingTime}}
+            {{ 'recipes.labels.cookingTime' | t }}: {{recipe.cookingTime}}
           </h4>
         </div>
         <div class="r-grid-item-5">
           <h4>
-            Servings: {{recipe.servings}}
+            {{ 'recipes.labels.servings' | t }}: {{recipe.servings}}
           </h4>
         </div>
         <div class="r-grid-item-6">
@@ -42,7 +42,7 @@
         </div>
         <div class="r-grid-item-7 r-content" appGradientBg="270deg" [gradientColor]="recipe.photo?.mainColor">
           <div class="r-igredients">
-            <h3>Igredients</h3>
+            <h3>{{ 'recipes.labels.ingredients' | t }}</h3>
             <ul class="r-ul">
               <li class="r-li" *ngFor="let igredient of recipe.ingredients">
                 <span>{{igredient.name}}</span>
@@ -54,7 +54,7 @@
         </div>
         <div class="r-grid-item-8 r-content" appGradientBg="90deg" [gradientColor]="recipe.photo?.mainColor">
           <div class="r-instructions">
-            <h3>Instructions</h3>
+            <h3>{{ 'recipes.labels.instructions' | t }}</h3>
             <ol class="r-ol">
               <li class="r-li" *ngFor="let instruction of recipe.instructions">
                 <span>{{instruction}}</span>
@@ -62,21 +62,21 @@
             </ol>
           </div>
         </div>
-        <div class="r-grid-item-9"> created by: {{recipe.createdBy}}</div>
+        <div class="r-grid-item-9">{{ 'recipes.labels.createdBy' | t }}: {{recipe.createdBy}}</div>
       </div>
       <div class="r-card-footer">
         <div>
           <button mat-button *appIfAuth="true; else notAuthorized" (click)="onLike(recipe.id)"> 
-            <mat-icon [@likeToggle]="isLiked(recipe.likedByUsers) ? 'liked' : 'unliked'" class="r-favorite"  aria-hidden="false" aria-label="like icon" fontIcon="favorite"></mat-icon>
-            {{isLiked(recipe.likedByUsers)? 'UNLIKE' : 'LIKE'}} | {{recipe.likedByUsers.length}}
+            <mat-icon [@likeToggle]="isLiked(recipe.likedByUsers) ? 'liked' : 'unliked'" class="r-favorite"  aria-hidden="false" [attr.aria-label]="'recipes.actions.likeIconAria' | t" fontIcon="favorite"></mat-icon>
+            {{isLiked(recipe.likedByUsers)? ('recipes.actions.unlike' | t) : ('recipes.actions.like' | t)}} | {{recipe.likedByUsers.length}}
           </button>
           <ng-template #notAuthorized>
             <button mat-button routerLink="/account/login">
-              <mat-icon class="r-favorite" aria-hidden="false" aria-label="like icon" fontIcon="favorite"></mat-icon>
-              LIKE</button>
+              <mat-icon class="r-favorite" aria-hidden="false" [attr.aria-label]="'recipes.actions.likeIconAria' | t" fontIcon="favorite"></mat-icon>
+              {{ 'recipes.actions.like' | t }}</button>
           </ng-template>
         </div>
-        <button class="r-add-button" mat-mini-fab routerLink="/recipes/upsert/{{recipe.id}}" matTooltip="Edit recipe" *appIfAdminOrOwner="recipe.createdBy">
+        <button class="r-add-button" mat-mini-fab routerLink="/recipes/upsert/{{recipe.id}}" [matTooltip]="'recipes.actions.editRecipeTooltip' | t" *appIfAdminOrOwner="recipe.createdBy">
           <mat-icon>edit</mat-icon>
         </button>
       </div>

@@ -1,24 +1,41 @@
 <mat-toolbar>
-  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Open app menu">
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    [attr.aria-label]="'toolbar.aria.openAppMenu' | t">
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item routerLink="/recipes/yours">Your recipes</button>
-    <button mat-menu-item routerLink="/recipes/favorites" appResponsiveness [largeScreens]="['r-display-none']" [mediumScreens]="['r-display-none']">Favorites</button>
-    <button mat-menu-item routerLink="/recipes/all" *appIfAdminOrOwner>All recipes</button>
-    <button mat-menu-item routerLink="/policy-and-terms">Policy & terms</button>
-    <button mat-menu-item *ngIf="categories$ | async" [matMenuTriggerFor]="categoriesMenu">Categories</button>
-    <button mat-menu-item *appIfAuth="true" routerLink="/account/info">Account info</button>
+    <button mat-menu-item routerLink="/recipes/yours">{{ 'toolbar.menu.yourRecipes' | t }}</button>
+    <button
+      mat-menu-item
+      routerLink="/recipes/favorites"
+      appResponsiveness
+      [largeScreens]="['r-display-none']"
+      [mediumScreens]="['r-display-none']">
+      {{ 'toolbar.menu.favorites' | t }}
+    </button>
+    <button mat-menu-item routerLink="/recipes/all" *appIfAdminOrOwner>{{ 'toolbar.menu.allRecipes' | t }}</button>
+    <button mat-menu-item routerLink="/policy-and-terms">{{ 'toolbar.menu.policyTerms' | t }}</button>
+    <button mat-menu-item *ngIf="categories$ | async" [matMenuTriggerFor]="categoriesMenu">{{ 'toolbar.menu.categories' | t }}</button>
+    <button mat-menu-item *appIfAuth="true" routerLink="/account/info">{{ 'toolbar.menu.accountInfo' | t }}</button>
   </mat-menu>
   <mat-menu #categoriesMenu="matMenu">
     <button mat-menu-item *ngFor="let item of categories$| async" (click)="navigateToCategory(item)">{{item}}</button>
   </mat-menu>
 
   <a routerLink="/recipes" routerLinkActive="router-link-active" class="r-header-title">
-    <img src="/assets/logo/logo.png" class="r-logo" alt="Netreci - Recipes with Passion">
+    <img src="/assets/logo/logo.png" class="r-logo" [attr.alt]="'toolbar.logoAlt' | t">
   </a>
 
-  <button class="r-favorites-btn" appResponsiveness [smallScreens]="['r-display-none']" mat-button routerLink="/recipes/favorites">Favorites</button>
+  <button
+    class="r-favorites-btn"
+    appResponsiveness
+    [smallScreens]="['r-display-none']"
+    mat-button
+    routerLink="/recipes/favorites">
+    {{ 'toolbar.menu.favorites' | t }}
+  </button>
 
   <span class="r-spacer"></span>
 
@@ -27,7 +44,7 @@
       *appIfAuth="true"
       mat-icon-button
       class="r-toolbar-icon"
-      matTooltip="Messenger"
+      [matTooltip]="'toolbar.messenger' | t"
       (click)="openMessenger()">
       <mat-icon>chat</mat-icon>
     </button>
@@ -41,7 +58,7 @@
       [matBadgeHidden]="notificationService.unreadCount() === 0"
       matBadgeColor="warn"
       matBadgeSize="small"
-      matTooltip="Notifications"
+      [matTooltip]="'toolbar.notifications' | t"
       (menuOpened)="loadNotifications()">
       <mat-icon>notifications</mat-icon>
     </button>
@@ -50,31 +67,42 @@
       <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
     </button>
 
+    <mat-form-field class="r-language-field" appearance="outline">
+      <mat-select
+        [value]="i18nService.currentLanguage()"
+        (selectionChange)="onLanguageChanged($event.value)"
+        [attr.aria-label]="'toolbar.language.label' | t">
+        <mat-option *ngFor="let option of languageOptions" [value]="option.code">
+          {{ option.labelKey | t }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <button mat-button class="r-login-btn" routerLink="/account/login" *ngIf="!(hasRoute('login') || accountService.currentUser())">
       <mat-icon>login</mat-icon>
-      Sign in
+      {{ 'common.signIn' | t }}
     </button>
 
     <button mat-button class="r-logout-btn" (click)="accountService.logout()" *ngIf="accountService.currentUser()">
       <mat-icon routerLink="/account/logout">logout</mat-icon>
-      Log out
+      {{ 'common.logOut' | t }}
     </button>
   </div>
 
   <mat-menu #notificationsMenu="matMenu" class="r-notifications-menu">
     @if (notificationService.isLoading()) {
-      <div class="r-notification-status">Loading notifications...</div>
+      <div class="r-notification-status">{{ 'toolbar.notificationsLoading' | t }}</div>
     } @else if (notificationService.notifications().length === 0) {
-      <div class="r-notification-status">No notifications yet.</div>
+      <div class="r-notification-status">{{ 'toolbar.notificationsEmpty' | t }}</div>
     } @else {
       <button
         mat-menu-item
         class="r-notification-item"
         *ngFor="let notification of notificationService.notifications(); trackBy: trackByNotification"
         (click)="openNotification(notification)">
-        <div class="r-notification-item__content">
+      <div class="r-notification-item__content">
           <div class="r-notification-item__title">{{ notificationLabel(notification) }}</div>
-          <div class="r-notification-item__message">{{ notification.message || 'Open details' }}</div>
+          <div class="r-notification-item__message">{{ notification.message || ('toolbar.notificationsOpenDetails' | t) }}</div>
           <small>{{ notification.createdAt | date : 'short' }}</small>
         </div>
         <mat-icon
@@ -87,7 +115,7 @@
     }
     <button mat-menu-item (click)="openMessenger()">
       <mat-icon>chat</mat-icon>
-      Open messenger
+      {{ 'toolbar.openMessenger' | t }}
     </button>
   </mat-menu>
 
@@ -100,7 +128,7 @@
     matBadgeColor="warn"
     matBadgeSize="small"
     [attr.aria-expanded]="isMobileActionsMenuOpen"
-    aria-label="Open quick actions"
+    [attr.aria-label]="'toolbar.aria.openQuickActions' | t"
     (menuOpened)="onMobileActionsMenuOpened()"
     (menuClosed)="onMobileActionsMenuClosed()">
     <mat-icon>{{ isMobileActionsMenuOpen ? 'close' : 'apps' }}</mat-icon>
@@ -109,7 +137,7 @@
   <mat-menu #mobileActionsMenu="matMenu" class="r-mobile-actions-menu">
     <button mat-menu-item *appIfAuth="true" (click)="openMessenger()">
       <mat-icon>chat</mat-icon>
-      <span>Messenger</span>
+      <span>{{ 'toolbar.mobile.messenger' | t }}</span>
     </button>
 
     <button
@@ -118,23 +146,35 @@
       [matMenuTriggerFor]="notificationsMenu"
       (click)="loadNotifications()">
       <mat-icon>notifications</mat-icon>
-      <span>Notifications</span>
+      <span>{{ 'toolbar.mobile.notifications' | t }}</span>
       <span class="r-mobile-actions-count" *ngIf="notificationService.unreadCount() > 0">{{ notificationService.unreadCount() }}</span>
     </button>
 
     <button mat-menu-item (click)="toggleDarkMode()">
       <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
-      <span>{{ isDarkMode ? 'Switch to light mode' : 'Switch to dark mode' }}</span>
+      <span>{{ isDarkMode ? ('toolbar.switchToLightMode' | t) : ('toolbar.switchToDarkMode' | t) }}</span>
+    </button>
+
+    <button mat-menu-item [matMenuTriggerFor]="mobileLanguageMenu">
+      <mat-icon>translate</mat-icon>
+      <span>{{ 'toolbar.language.label' | t }}</span>
     </button>
 
     <button mat-menu-item routerLink="/account/login" *ngIf="!(hasRoute('login') || accountService.currentUser())">
       <mat-icon>login</mat-icon>
-      <span>Sign in</span>
+      <span>{{ 'common.signIn' | t }}</span>
     </button>
 
     <button mat-menu-item (click)="accountService.logout()" *ngIf="accountService.currentUser()">
       <mat-icon>logout</mat-icon>
-      <span>Log out</span>
+      <span>{{ 'common.logOut' | t }}</span>
+    </button>
+  </mat-menu>
+
+  <mat-menu #mobileLanguageMenu="matMenu">
+    <button mat-menu-item *ngFor="let option of languageOptions" (click)="onLanguageChanged(option.code)">
+      <mat-icon>{{ i18nService.currentLanguage() === option.code ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+      <span>{{ option.labelKey | t }}</span>
     </button>
   </mat-menu>
 </mat-toolbar>

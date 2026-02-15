@@ -16,6 +16,7 @@ import { NotificationModel, NotificationType } from '../models/notification.mode
 import { AccountService } from './account.service';
 import { AlertService } from './alert.service';
 import { NotificationService } from './notification.service';
+import { I18nService } from './i18n.service';
 import {
   HubConnection,
   HubConnectionBuilder,
@@ -37,6 +38,7 @@ export class MessagingService {
   private readonly accountService = inject(AccountService);
   private readonly alertService = inject(AlertService);
   private readonly notificationService = inject(NotificationService);
+  private readonly i18nService = inject(I18nService);
 
   private connection: HubConnection | null = null;
   private connectPromise: Promise<boolean> | null = null;
@@ -213,7 +215,7 @@ export class MessagingService {
 
       this.conversations.set(conversations);
     } catch {
-      this.alertService.openSnackBar('Unable to load conversations.');
+      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.unableLoadConversations'));
     } finally {
       this.loadingConversations.set(false);
     }
@@ -249,7 +251,7 @@ export class MessagingService {
         [conversationId]: messages,
       }));
     } catch {
-      this.alertService.openSnackBar('Unable to load messages.');
+      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.unableLoadMessages'));
     } finally {
       this.loadingMessages.set(false);
     }
@@ -259,7 +261,7 @@ export class MessagingService {
     const recipient = (recipientUserId ?? this.recipientDraft()).trim();
 
     if (!recipient) {
-      this.alertService.openSnackBar('Enter recipient user id first.');
+      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.enterRecipientFirst'));
       return;
     }
 
@@ -275,7 +277,7 @@ export class MessagingService {
     try {
       await firstValueFrom(this.http.post(`${environment.apiUrl}Messaging/requests`, body));
     } catch {
-      this.alertService.openSnackBar('Unable to send messaging request.');
+      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.unableSendRequest'));
       return;
     }
 
@@ -284,7 +286,7 @@ export class MessagingService {
       [recipient]: true,
     }));
 
-    this.alertService.openSnackBar('Messaging request sent.');
+    this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.requestSent'));
   }
 
   async respondToRequest(requestId: string, accept: boolean): Promise<void> {
@@ -306,7 +308,7 @@ export class MessagingService {
         this.http.post(`${environment.apiUrl}Messaging/requests/${requestId}/respond`, body)
       );
     } catch {
-      this.alertService.openSnackBar('Failed to respond to messaging request.');
+      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.failedRespondRequest'));
       return;
     }
 
@@ -330,7 +332,7 @@ export class MessagingService {
     const recipientUserId = this.recipientDraft().trim();
 
     if (!activeConversation || !recipientUserId) {
-      this.alertService.openSnackBar('Chat is not available yet. Send a request first.');
+      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.chatUnavailable'));
       return;
     }
 
@@ -349,7 +351,7 @@ export class MessagingService {
     try {
       await firstValueFrom(this.http.post(`${environment.apiUrl}Messaging/messages`, model));
     } catch {
-      this.alertService.openSnackBar('Message was not sent.');
+      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.messageNotSent'));
       return;
     }
 
@@ -402,13 +404,13 @@ export class MessagingService {
 
     switch (notification.type) {
       case NotificationType.MessageRequest:
-        return 'New message request';
+        return this.i18nService.translate('notifications.labels.newMessageRequest');
       case NotificationType.Message:
-        return 'New message';
+        return this.i18nService.translate('notifications.labels.newMessage');
       case NotificationType.Like:
-        return 'Recipe liked';
+        return this.i18nService.translate('notifications.labels.recipeLiked');
       default:
-        return 'Notification';
+        return this.i18nService.translate('notifications.labels.notification');
     }
   }
 
@@ -482,7 +484,7 @@ export class MessagingService {
       return this.connection.state === HubConnectionState.Connected;
     } catch {
       this.isConnected.set(false);
-      this.alertService.openSnackBar('Realtime messaging connection failed.');
+      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.realtimeConnectionFailed'));
       return false;
     } finally {
       this.isConnecting.set(false);
@@ -509,7 +511,7 @@ export class MessagingService {
       await this.connection.invoke('Handshake');
       return await this.waitForHandshakeAck();
     } catch {
-      this.alertService.openSnackBar('Handshake failed. Retry in a moment.');
+      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.handshakeFailed'));
       return false;
     } finally {
       this.handshakeInProgress.set(false);
@@ -736,7 +738,7 @@ export class MessagingService {
       }
     }
 
-    this.alertService.openSnackBar('Handshake acknowledgement timeout.');
+    this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.handshakeTimeout'));
     return false;
   }
 

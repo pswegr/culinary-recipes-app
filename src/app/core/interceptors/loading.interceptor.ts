@@ -5,6 +5,7 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { Router } from '@angular/router';
 import { AccountService } from 'src/app/shared/services/account.service';
+import { I18nService } from 'src/app/shared/services/i18n.service';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
@@ -15,7 +16,8 @@ export class LoadingInterceptor implements HttpInterceptor {
     private loadingService: LoadingService,
     private alertService: AlertService,
     private router: Router,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private i18nService: I18nService
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -32,7 +34,7 @@ export class LoadingInterceptor implements HttpInterceptor {
       }),
       catchError((err: HttpErrorResponse) => {
         const message = this.getErrorMessage(err);
-        this.alertService.openSnackBar(message, 'close');
+        this.alertService.openSnackBar(message, this.i18nService.translate('http.closeAction'));
         if (err.status === 401) {
           this.accountService.logout();
           this.router.navigateByUrl(`/account/login?returnUrl=${this.router.url}`);
@@ -50,10 +52,10 @@ export class LoadingInterceptor implements HttpInterceptor {
 
   private getErrorMessage(err: HttpErrorResponse): string {
     if (err.status === 401) {
-      return 'Unauthorized';
+      return this.i18nService.translate('http.unauthorized');
     }
 
-    return this.extractApiMessage(err.error) ?? 'Could not load resources';
+    return this.extractApiMessage(err.error) ?? this.i18nService.translate('http.couldNotLoadResources');
   }
 
   private extractApiMessage(error: unknown): string | null {

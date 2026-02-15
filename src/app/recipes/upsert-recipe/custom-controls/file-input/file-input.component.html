@@ -3,7 +3,7 @@
        (change)="onFileSelected($event)" #fileUpload>
 
 <div class="file-upload">
-   {{fileName || "No file uploaded yet."}}
+   {{fileName || ('recipes.fileInput.noFile' | t)}}
   <button mat-mini-fab color="primary" class="upload-btn"
     (click)="fileUpload.click()">
       <mat-icon>attach_file</mat-icon>

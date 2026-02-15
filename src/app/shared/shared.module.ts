@@ -13,6 +13,7 @@ import { IfAdminOrOwnerDirective } from './directives/if-admin-or-owner.directiv
 import { IfAuthDirective } from './directives/if-auth.directive';
 import { NgOptimizedImage } from '@angular/common'
 import { BgColorHoverDirective } from './directives/bg-color-hover.directive';
+import { TranslatePipe } from './pipes/translate.pipe';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { BgColorHoverDirective } from './directives/bg-color-hover.directive';
     LoadingComponent,
     PageNotFoundComponent,
     IfAdminOrOwnerDirective,
-    IfAuthDirective
+    IfAuthDirective,
+    TranslatePipe
   ],
   imports: [
     CommonModule,
@@ -46,7 +48,8 @@ import { BgColorHoverDirective } from './directives/bg-color-hover.directive';
     LoadingComponent,
     IfAdminOrOwnerDirective,
     IfAuthDirective,
-    NgOptimizedImage
+    NgOptimizedImage,
+    TranslatePipe
   ]
 })
 export class SharedModule { }

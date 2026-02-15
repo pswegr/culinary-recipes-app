@@ -6,6 +6,7 @@ import { catchError, filter, finalize, map, tap } from 'rxjs/operators';
 import { IngredientModel } from 'src/app/shared/models/igredient.model';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import { RecipesService } from 'src/app/shared/services/recipes.service';
+import { I18nService } from 'src/app/shared/services/i18n.service';
 
 interface UpsertRecipeState {
   recipe: RecipeModel;
@@ -48,6 +49,7 @@ const DRAFT_VERSION = 1;
 @Injectable()
 export class UpsertRecipeStore {
   private readonly recipesService = inject(RecipesService);
+  private readonly i18nService = inject(I18nService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly draftKey = signal<string | null>(null);
@@ -269,7 +271,7 @@ export class UpsertRecipeStore {
       catchError((error) => {
         this.state.update(state => ({
           ...state,
-          error: 'Failed to save recipe.'
+          error: this.i18nService.translate('recipes.errors.failedSaveRecipe')
         }));
         return throwError(() => error);
       }),
@@ -297,7 +299,7 @@ export class UpsertRecipeStore {
         error: () => {
           this.state.update(state => ({
             ...state,
-            error: 'Failed to load categories.'
+            error: this.i18nService.translate('recipes.errors.failedLoadCategories')
           }));
         }
       });
@@ -317,7 +319,7 @@ export class UpsertRecipeStore {
         error: () => {
           this.state.update(state => ({
             ...state,
-            error: 'Failed to load tags.'
+            error: this.i18nService.translate('recipes.errors.failedLoadTags')
           }));
         }
       });
@@ -356,7 +358,7 @@ export class UpsertRecipeStore {
         error: () => {
           this.state.update(state => ({
             ...state,
-            error: 'Failed to load recipe.'
+            error: this.i18nService.translate('recipes.errors.failedLoadRecipe')
           }));
         }
       });

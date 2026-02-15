@@ -10,7 +10,7 @@ import { RecipesListComponent } from '../recipes-list.component';
     standalone: false
 })
 export class YourRecipesListComponent extends RecipesListComponent {
-  override title: string = 'Your Recipes';
+  override titleKey = 'recipes.titles.yourRecipes';
 
   override getRecipes(tags: string[] | null = null, category: string | null = null , content: string | null = null): Observable<RecipeModel[]> {
     return this.recipeService.getAllRecipesCreatedByUser(tags, category, content);
