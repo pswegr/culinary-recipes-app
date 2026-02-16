@@ -218,6 +218,7 @@ export const translations: TranslationDictionary = {
       errors: {
         unableLoadConversations: 'Unable to load conversations.',
         unableLoadMessages: 'Unable to load messages.',
+        unableLoadRequests: 'Unable to load pending requests.',
         enterRecipientFirst: 'Enter recipient user id first.',
         unableSendRequest: 'Unable to send messaging request.',
         requestSent: 'Messaging request sent.',
@@ -465,6 +466,7 @@ export const translations: TranslationDictionary = {
       errors: {
         unableLoadConversations: 'Nie udalo sie pobrac konwersacji.',
         unableLoadMessages: 'Nie udalo sie pobrac wiadomosci.',
+        unableLoadRequests: 'Nie udalo sie pobrac oczekujacych prosb.',
         enterRecipientFirst: 'Najpierw wpisz id odbiorcy.',
         unableSendRequest: 'Nie udalo sie wyslac prosby o wiadomosc.',
         requestSent: 'Prosba o wiadomosc zostala wyslana.',

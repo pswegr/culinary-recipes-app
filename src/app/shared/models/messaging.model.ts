@@ -55,7 +55,7 @@ export interface MessagingHandshakeModel {
 }
 
 export interface CreateMessageRequestModel {
-  recipientUserId: string;
+  recipientNick: string;
 }
 
 export interface RespondMessageRequestModel {

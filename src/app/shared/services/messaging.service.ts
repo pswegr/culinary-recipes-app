@@ -123,6 +123,7 @@ export class MessagingService {
 
   openWidget(recipientUserId?: string, recipientLabel?: string): void {
     this.widgetOpen.set(true);
+    void this.refreshIncomingRequests();
 
     if (recipientUserId) {
       this.recipientDraft.set(recipientUserId);
@@ -221,6 +222,45 @@ export class MessagingService {
     }
   }
 
+  async refreshIncomingRequests(): Promise<void> {
+    if (!this.accountService.currentUser()) {
+      this.incomingRequests.set([]);
+      return;
+    }
+
+    try {
+      const response = await firstValueFrom(
+        this.http.get<unknown[]>(`${environment.apiUrl}Messaging/requests/pending`)
+      );
+
+      const currentUserId = this.currentUserId();
+      const requests = (response ?? [])
+        .map((item) => this.normalizeRequest(item))
+        .filter((request) => {
+          if (request.status !== MessageRequestStatus.Pending) {
+            return false;
+          }
+
+          if (!currentUserId) {
+            return true;
+          }
+
+          return request.recipientUserId === currentUserId;
+        })
+        .sort((left, right) => {
+          const leftTime = left.createdAt ? new Date(left.createdAt).getTime() : 0;
+          const rightTime = right.createdAt ? new Date(right.createdAt).getTime() : 0;
+          return rightTime - leftTime;
+        });
+
+      this.incomingRequests.set(requests);
+    } catch {
+      this.alertService.openSnackBar(
+        this.i18nService.translate('messenger.errors.unableLoadRequests')
+      );
+    }
+  }
+
   async loadMessages(conversationId: string, skip: number = 0, take: number = 50): Promise<void> {
     if (!conversationId || !this.accountService.currentUser()) {
       return;
@@ -257,8 +297,8 @@ export class MessagingService {
     }
   }
 
-  async requestMessagingAccess(recipientUserId?: string): Promise<void> {
-    const recipient = (recipientUserId ?? this.recipientDraft()).trim();
+  async requestMessagingAccess(recipientNick?: string): Promise<void> {
+    const recipient = (recipientNick ?? this.recipientDraft()).trim();
 
     if (!recipient) {
       this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.enterRecipientFirst'));
@@ -271,7 +311,7 @@ export class MessagingService {
     }
 
     const body: CreateMessageRequestModel = {
-      recipientUserId: recipient,
+      recipientNick: recipient,
     };
 
     try {
@@ -315,6 +355,8 @@ export class MessagingService {
     this.incomingRequests.update((value) =>
       value.filter((request) => request.id !== requestId)
     );
+
+    await this.refreshIncomingRequests();
 
     if (accept) {
       await this.refreshConversations();
@@ -430,6 +472,7 @@ export class MessagingService {
         return;
       }
 
+      await this.refreshIncomingRequests();
       await this.refreshConversations();
     })();
 
@@ -576,6 +619,7 @@ export class MessagingService {
       this.isConnected.set(true);
       this.handshake.set(null);
       void this.ensureHandshake();
+      void this.refreshIncomingRequests();
       void this.refreshConversations();
     });
   }
