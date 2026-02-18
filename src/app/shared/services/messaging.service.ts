@@ -43,6 +43,7 @@ export class MessagingService {
   private connection: HubConnection | null = null;
   private connectPromise: Promise<boolean> | null = null;
   private bootstrapPromise: Promise<void> | null = null;
+  private liveSyncIntervalId: ReturnType<typeof setInterval> | null = null;
 
   private readonly sentRequestsByRecipient = signal<Record<string, boolean>>({});
 
@@ -112,6 +113,7 @@ export class MessagingService {
 
         if (!user?.token) {
           this.resetState();
+          this.stopLiveSync();
           void this.disconnect();
           return;
         }
@@ -119,6 +121,18 @@ export class MessagingService {
         void this.bootstrapAuthorizedSession();
       }
     );
+
+    effect(() => {
+      const isAuthorized = this.accountService.currentUser() !== null;
+      const isWidgetOpen = this.widgetOpen();
+
+      if (!isAuthorized || !isWidgetOpen) {
+        this.stopLiveSync();
+        return;
+      }
+
+      this.startLiveSync();
+    });
   }
 
   openWidget(recipientUserId?: string, recipientLabel?: string): void {
@@ -132,8 +146,11 @@ export class MessagingService {
       return;
     }
 
-    if (!this.activeConversationId()) {
-      void this.bootstrapAuthorizedSession();
+    void this.bootstrapAuthorizedSession();
+
+    const activeConversationId = this.activeConversationId();
+    if (activeConversationId) {
+      void this.loadMessages(activeConversationId, 0, 50, false);
     }
   }
 
@@ -195,7 +212,7 @@ export class MessagingService {
     await this.loadMessages(conversationId);
   }
 
-  async refreshConversations(): Promise<void> {
+  async refreshConversations(silent: boolean = false): Promise<void> {
     if (!this.accountService.currentUser()) {
       this.conversations.set([]);
       return;
@@ -216,13 +233,15 @@ export class MessagingService {
 
       this.conversations.set(conversations);
     } catch {
-      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.unableLoadConversations'));
+      if (!silent) {
+        this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.unableLoadConversations'));
+      }
     } finally {
       this.loadingConversations.set(false);
     }
   }
 
-  async refreshIncomingRequests(): Promise<void> {
+  async refreshIncomingRequests(silent: boolean = false): Promise<void> {
     if (!this.accountService.currentUser()) {
       this.incomingRequests.set([]);
       return;
@@ -255,18 +274,27 @@ export class MessagingService {
 
       this.incomingRequests.set(requests);
     } catch {
-      this.alertService.openSnackBar(
-        this.i18nService.translate('messenger.errors.unableLoadRequests')
-      );
+      if (!silent) {
+        this.alertService.openSnackBar(
+          this.i18nService.translate('messenger.errors.unableLoadRequests')
+        );
+      }
     }
   }
 
-  async loadMessages(conversationId: string, skip: number = 0, take: number = 50): Promise<void> {
+  async loadMessages(
+    conversationId: string,
+    skip: number = 0,
+    take: number = 50,
+    showLoader: boolean = true
+  ): Promise<void> {
     if (!conversationId || !this.accountService.currentUser()) {
       return;
     }
 
-    this.loadingMessages.set(true);
+    if (showLoader) {
+      this.loadingMessages.set(true);
+    }
 
     const params = new HttpParams()
       .set('skip', String(skip))
@@ -291,9 +319,13 @@ export class MessagingService {
         [conversationId]: messages,
       }));
     } catch {
-      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.unableLoadMessages'));
+      if (showLoader) {
+        this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.unableLoadMessages'));
+      }
     } finally {
-      this.loadingMessages.set(false);
+      if (showLoader) {
+        this.loadingMessages.set(false);
+      }
     }
   }
 
@@ -574,18 +606,18 @@ export class MessagingService {
   }
 
   private registerHubHandlers(connection: HubConnection): void {
-    connection.on('HandshakeAcknowledged', (payload: unknown) => {
+    const onHandshakeAcknowledged = (payload: unknown) => {
       const handshake = this.normalizeHandshake(payload);
       this.handshake.set(handshake);
       this.notificationService.setUnreadCount(handshake.unreadNotificationCount);
-    });
+    };
 
-    connection.on('MessageRequestReceived', (payload: unknown) => {
+    const onMessageRequestReceived = (payload: unknown) => {
       const request = this.normalizeRequest(payload);
       this.upsertRequest(request);
-    });
+    };
 
-    connection.on('MessageRequestUpdated', (payload: unknown) => {
+    const onMessageRequestUpdated = (payload: unknown) => {
       const request = this.normalizeRequest(payload);
       this.upsertRequest(request);
 
@@ -598,17 +630,38 @@ export class MessagingService {
 
         void this.refreshConversations();
       }
-    });
+    };
 
-    connection.on('MessageReceived', (payload: unknown) => {
+    const onMessageReceived = (payload: unknown) => {
       const message = this.normalizeMessage(payload);
       this.upsertMessage(message);
       void this.refreshConversations();
-    });
+    };
 
-    connection.on('NotificationReceived', (payload: unknown) => {
+    const onNotificationReceived = (payload: unknown) => {
       this.notificationService.ingestRealtimeNotification(payload);
-    });
+    };
+
+    // Register common SignalR event aliases to tolerate backend naming differences.
+    for (const eventName of ['HandshakeAcknowledged', 'handshakeAcknowledged']) {
+      connection.on(eventName, onHandshakeAcknowledged);
+    }
+
+    for (const eventName of ['MessageRequestReceived', 'ReceiveMessageRequest']) {
+      connection.on(eventName, onMessageRequestReceived);
+    }
+
+    for (const eventName of ['MessageRequestUpdated', 'UpdateMessageRequest']) {
+      connection.on(eventName, onMessageRequestUpdated);
+    }
+
+    for (const eventName of ['MessageReceived', 'ReceiveMessage', 'NewMessage']) {
+      connection.on(eventName, onMessageReceived);
+    }
+
+    for (const eventName of ['NotificationReceived', 'ReceiveNotification']) {
+      connection.on(eventName, onNotificationReceived);
+    }
 
     connection.onclose(() => {
       this.isConnected.set(false);
@@ -668,11 +721,11 @@ export class MessagingService {
     const raw = this.asObject(payload);
 
     return {
-      userId: this.readString(raw, ['userId']) ?? this.currentUserId(),
-      connectionId: this.readString(raw, ['connectionId']) ?? '',
-      serverTimeUtc: this.readString(raw, ['serverTimeUtc']) ?? new Date().toISOString(),
-      pendingRequestCount: this.readNumber(raw, ['pendingRequestCount']) ?? 0,
-      unreadNotificationCount: this.readNumber(raw, ['unreadNotificationCount']) ?? 0,
+      userId: this.readString(raw, ['userId', 'UserId']) ?? this.currentUserId(),
+      connectionId: this.readString(raw, ['connectionId', 'ConnectionId']) ?? '',
+      serverTimeUtc: this.readString(raw, ['serverTimeUtc', 'ServerTimeUtc']) ?? new Date().toISOString(),
+      pendingRequestCount: this.readNumber(raw, ['pendingRequestCount', 'PendingRequestCount']) ?? 0,
+      unreadNotificationCount: this.readNumber(raw, ['unreadNotificationCount', 'UnreadNotificationCount']) ?? 0,
     };
   }
 
@@ -680,12 +733,16 @@ export class MessagingService {
     const raw = this.asObject(payload);
 
     return {
-      id: this.readString(raw, ['id', 'requestId']) ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      requesterUserId: this.readString(raw, ['requesterUserId', 'senderUserId']) ?? '',
-      recipientUserId: this.readString(raw, ['recipientUserId']) ?? '',
-      status: this.readNumber(raw, ['status']) ?? MessageRequestStatus.Pending,
-      createdAt: this.readString(raw, ['createdAt']),
-      updatedAt: this.readString(raw, ['updatedAt']),
+      id:
+        this.readString(raw, ['id', 'Id', 'requestId', 'RequestId']) ??
+        `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      requesterUserId:
+        this.readString(raw, ['requesterUserId', 'RequesterUserId', 'senderUserId', 'SenderUserId']) ??
+        '',
+      recipientUserId: this.readString(raw, ['recipientUserId', 'RecipientUserId']) ?? '',
+      status: this.readNumber(raw, ['status', 'Status']) ?? MessageRequestStatus.Pending,
+      createdAt: this.readString(raw, ['createdAt', 'CreatedAt']),
+      updatedAt: this.readString(raw, ['updatedAt', 'UpdatedAt']),
     };
   }
 
@@ -693,17 +750,57 @@ export class MessagingService {
     const raw = this.asObject(payload);
 
     return {
-      id: this.readString(raw, ['id']) ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      conversationId: this.readString(raw, ['conversationId']) ?? '',
-      senderUserId: this.readString(raw, ['senderUserId']) ?? '',
-      recipientUserId: this.readString(raw, ['recipientUserId']) ?? '',
-      content: this.readString(raw, ['content']) ?? '',
+      id:
+        this.readString(raw, ['id', 'Id', 'messageId', 'MessageId']) ??
+        `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      conversationId:
+        this.readString(raw, ['conversationId', 'ConversationId', 'conversationID', 'ConversationID']) ??
+        '',
+      senderUserId: this.readString(raw, ['senderUserId', 'SenderUserId']) ?? '',
+      recipientUserId: this.readString(raw, ['recipientUserId', 'RecipientUserId']) ?? '',
+      content: this.readString(raw, ['content', 'Content', 'message', 'Message']) ?? '',
       attachments: Array.isArray(raw['attachments'])
         ? (raw['attachments'] as ChatMessageModel['attachments'])
+        : Array.isArray(raw['Attachments'])
+          ? (raw['Attachments'] as ChatMessageModel['attachments'])
         : [],
-      sentAt: this.readString(raw, ['sentAt']) ?? new Date().toISOString(),
-      isRead: this.readBoolean(raw, ['isRead']) ?? false,
+      sentAt: this.readString(raw, ['sentAt', 'SentAt', 'createdAt', 'CreatedAt']) ?? new Date().toISOString(),
+      isRead: this.readBoolean(raw, ['isRead', 'IsRead']) ?? false,
     };
+  }
+
+  private startLiveSync(): void {
+    if (this.liveSyncIntervalId !== null) {
+      return;
+    }
+
+    void this.syncLiveState();
+    this.liveSyncIntervalId = setInterval(() => {
+      void this.syncLiveState();
+    }, 4000);
+  }
+
+  private stopLiveSync(): void {
+    if (this.liveSyncIntervalId === null) {
+      return;
+    }
+
+    clearInterval(this.liveSyncIntervalId);
+    this.liveSyncIntervalId = null;
+  }
+
+  private async syncLiveState(): Promise<void> {
+    if (!this.accountService.currentUser() || !this.widgetOpen()) {
+      return;
+    }
+
+    await this.refreshIncomingRequests(true);
+    await this.refreshConversations(true);
+
+    const activeConversationId = this.activeConversationId();
+    if (activeConversationId) {
+      await this.loadMessages(activeConversationId, 0, 50, false);
+    }
   }
 
   private findConversationWithRecipient(recipientUserId: string): ConversationModel | undefined {
