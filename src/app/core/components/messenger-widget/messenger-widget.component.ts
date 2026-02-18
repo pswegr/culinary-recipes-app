@@ -1,6 +1,6 @@
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, HostListener, computed, inject, signal } from '@angular/core';
-import { ConversationModel, MessageRequestModel } from 'src/app/shared/models/messaging.model';
+import { ConversationModel, MessageAlertModel, MessageRequestModel } from 'src/app/shared/models/messaging.model';
 import { AccountService } from 'src/app/shared/services/account.service';
 import { MessagingService } from 'src/app/shared/services/messaging.service';
 
@@ -86,6 +86,14 @@ export class MessengerWidgetComponent {
     void this.messagingService.respondToRequest(request.id, accept);
   }
 
+  openMessageAlert(alert: MessageAlertModel): void {
+    void this.messagingService.openFromMessageAlert(alert);
+  }
+
+  dismissMessageAlert(messageId: string): void {
+    this.messagingService.dismissMessageAlert(messageId);
+  }
+
   openConversation(conversation: ConversationModel): void {
     void this.messagingService.selectConversation(conversation.id);
   }
@@ -104,6 +112,14 @@ export class MessengerWidgetComponent {
 
   trackByRequest(index: number, request: MessageRequestModel): string {
     return request.id;
+  }
+
+  trackByAlert(index: number, alert: MessageAlertModel): string {
+    return alert.messageId;
+  }
+
+  requesterLabel(request: MessageRequestModel): string {
+    return request.requesterNick || request.requesterUserId;
   }
 
   trackByMessage(index: number, message: { id: string }): string {

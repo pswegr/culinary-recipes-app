@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
@@ -6,9 +7,11 @@ import {
   ChatMessageModel,
   ConversationModel,
   CreateMessageRequestModel,
+  MessageAlertModel,
   MessageRequestModel,
   MessageRequestStatus,
   MessagingHandshakeModel,
+  PagedResultModel,
   RespondMessageRequestModel,
   SendMessageModel,
 } from '../models/messaging.model';
@@ -39,10 +42,12 @@ export class MessagingService {
   private readonly alertService = inject(AlertService);
   private readonly notificationService = inject(NotificationService);
   private readonly i18nService = inject(I18nService);
+  private readonly document = inject(DOCUMENT);
 
   private connection: HubConnection | null = null;
   private connectPromise: Promise<boolean> | null = null;
   private bootstrapPromise: Promise<void> | null = null;
+  private baseDocumentTitle = this.document.title;
 
   private readonly sentRequestsByRecipient = signal<Record<string, boolean>>({});
 
@@ -66,6 +71,8 @@ export class MessagingService {
   readonly messagesByConversation = signal<Record<string, ChatMessageModel[]>>({});
   readonly activeConversationId = signal<string | null>(null);
   readonly incomingRequests = signal<MessageRequestModel[]>([]);
+  readonly messageAlerts = signal<MessageAlertModel[]>([]);
+  readonly unreadMessageAlerts = signal<number>(0);
 
   readonly currentUserId = computed(() => this.accountService.currentUser()?.userId ?? '');
 
@@ -112,6 +119,7 @@ export class MessagingService {
 
         if (!user?.token) {
           this.resetState();
+          this.resetMessageAttention();
           void this.disconnect();
           return;
         }
@@ -119,20 +127,32 @@ export class MessagingService {
         void this.bootstrapAuthorizedSession();
       }
     );
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('focus', () => {
+        this.resetMessageAttention();
+      });
+    }
   }
 
   openWidget(recipientUserId?: string, recipientLabel?: string): void {
     this.widgetOpen.set(true);
+    this.resetMessageAttention();
+    this.clearMessageAlerts();
+    void this.refreshIncomingRequests();
 
     if (recipientUserId) {
-      this.recipientDraft.set(recipientUserId);
+      this.recipientDraft.set(recipientLabel ?? recipientUserId);
       this.recipientLabel.set(recipientLabel ?? recipientUserId);
       void this.prepareConversation(recipientUserId);
       return;
     }
 
-    if (!this.activeConversationId()) {
-      void this.bootstrapAuthorizedSession();
+    void this.bootstrapAuthorizedSession();
+
+    const activeConversationId = this.activeConversationId();
+    if (activeConversationId) {
+      void this.loadMessages(activeConversationId, 0, 50, false);
     }
   }
 
@@ -194,20 +214,36 @@ export class MessagingService {
     await this.loadMessages(conversationId);
   }
 
-  async refreshConversations(): Promise<void> {
+  async refreshConversations(
+    silent: boolean = false,
+    skip: number = 0,
+    take: number = 50
+  ): Promise<void> {
     if (!this.accountService.currentUser()) {
       this.conversations.set([]);
       return;
     }
 
-    this.loadingConversations.set(true);
+    if (!silent) {
+      this.loadingConversations.set(true);
+    }
+    const params = new HttpParams()
+      .set('skip', String(skip))
+      .set('take', String(take));
 
     try {
       const response = await firstValueFrom(
-        this.http.get<ConversationModel[]>(`${environment.apiUrl}Messaging/conversations`)
+        this.http.get<PagedResultModel<ConversationModel> | ConversationModel[]>(
+          `${environment.apiUrl}Messaging/conversations`,
+          { params }
+        )
       );
 
-      const conversations = (response ?? []).sort((left, right) => {
+      const sourceItems = Array.isArray(response)
+        ? response
+        : (response?.items ?? []);
+
+      const conversations = sourceItems.map((item) => this.normalizeConversation(item)).sort((left, right) => {
         const leftTime = left.lastMessageAt ? new Date(left.lastMessageAt).getTime() : 0;
         const rightTime = right.lastMessageAt ? new Date(right.lastMessageAt).getTime() : 0;
         return rightTime - leftTime;
@@ -215,18 +251,70 @@ export class MessagingService {
 
       this.conversations.set(conversations);
     } catch {
-      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.unableLoadConversations'));
+      if (!silent) {
+        this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.unableLoadConversations'));
+      }
     } finally {
-      this.loadingConversations.set(false);
+      if (!silent) {
+        this.loadingConversations.set(false);
+      }
     }
   }
 
-  async loadMessages(conversationId: string, skip: number = 0, take: number = 50): Promise<void> {
+  async refreshIncomingRequests(silent: boolean = false): Promise<void> {
+    if (!this.accountService.currentUser()) {
+      this.incomingRequests.set([]);
+      return;
+    }
+
+    try {
+      const response = await firstValueFrom(
+        this.http.get<unknown[]>(`${environment.apiUrl}Messaging/requests/pending`)
+      );
+
+      const currentUserId = this.currentUserId();
+      const requests = (response ?? [])
+        .map((item) => this.normalizeRequest(item))
+        .filter((request) => {
+          if (request.status !== MessageRequestStatus.Pending) {
+            return false;
+          }
+
+          if (!currentUserId || !request.recipientUserId) {
+            return true;
+          }
+
+          return request.recipientUserId === currentUserId;
+        })
+        .sort((left, right) => {
+          const leftTime = left.createdAt ? new Date(left.createdAt).getTime() : 0;
+          const rightTime = right.createdAt ? new Date(right.createdAt).getTime() : 0;
+          return rightTime - leftTime;
+        });
+
+      this.incomingRequests.set(requests);
+    } catch {
+      if (!silent) {
+        this.alertService.openSnackBar(
+          this.i18nService.translate('messenger.errors.unableLoadRequests')
+        );
+      }
+    }
+  }
+
+  async loadMessages(
+    conversationId: string,
+    skip: number = 0,
+    take: number = 50,
+    showLoader: boolean = true
+  ): Promise<void> {
     if (!conversationId || !this.accountService.currentUser()) {
       return;
     }
 
-    this.loadingMessages.set(true);
+    if (showLoader) {
+      this.loadingMessages.set(true);
+    }
 
     const params = new HttpParams()
       .set('skip', String(skip))
@@ -251,14 +339,18 @@ export class MessagingService {
         [conversationId]: messages,
       }));
     } catch {
-      this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.unableLoadMessages'));
+      if (showLoader) {
+        this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.unableLoadMessages'));
+      }
     } finally {
-      this.loadingMessages.set(false);
+      if (showLoader) {
+        this.loadingMessages.set(false);
+      }
     }
   }
 
-  async requestMessagingAccess(recipientUserId?: string): Promise<void> {
-    const recipient = (recipientUserId ?? this.recipientDraft()).trim();
+  async requestMessagingAccess(recipientNick?: string): Promise<void> {
+    const recipient = (recipientNick ?? this.recipientDraft()).trim();
 
     if (!recipient) {
       this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.enterRecipientFirst'));
@@ -271,7 +363,7 @@ export class MessagingService {
     }
 
     const body: CreateMessageRequestModel = {
-      recipientUserId: recipient,
+      recipientNick: recipient,
     };
 
     try {
@@ -316,6 +408,8 @@ export class MessagingService {
       value.filter((request) => request.id !== requestId)
     );
 
+    await this.refreshIncomingRequests();
+
     if (accept) {
       await this.refreshConversations();
     }
@@ -329,7 +423,9 @@ export class MessagingService {
     }
 
     const activeConversation = this.activeConversation();
-    const recipientUserId = this.recipientDraft().trim();
+    const recipientUserId = activeConversation
+      ? this.resolveConversationPeerUserId(activeConversation)
+      : this.recipientDraft().trim();
 
     if (!activeConversation || !recipientUserId) {
       this.alertService.openSnackBar(this.i18nService.translate('messenger.errors.chatUnavailable'));
@@ -356,8 +452,6 @@ export class MessagingService {
     }
 
     this.messageDraft.set('');
-    await this.loadMessages(activeConversation.id);
-    await this.refreshConversations();
   }
 
   async openFromNotification(notification: NotificationModel): Promise<void> {
@@ -371,8 +465,9 @@ export class MessagingService {
     const recipientUserId =
       notification.senderUserId ??
       this.readString(payload, ['senderUserId', 'requesterUserId', 'fromUserId']);
+    const recipientNick = this.readString(payload, ['senderNick', 'requesterNick']);
 
-    this.openWidget(recipientUserId);
+    this.openWidget(recipientUserId, recipientNick);
 
     if (conversationId) {
       await this.selectConversation(conversationId);
@@ -384,16 +479,59 @@ export class MessagingService {
     }
   }
 
+  async openFromMessageAlert(alert: MessageAlertModel): Promise<void> {
+    this.dismissMessageAlert(alert.messageId);
+    this.openWidget(alert.senderUserId, alert.senderNick);
+
+    if (alert.conversationId) {
+      await this.selectConversation(alert.conversationId);
+      return;
+    }
+
+    if (alert.senderUserId) {
+      await this.prepareConversation(alert.senderUserId);
+    }
+  }
+
+  dismissMessageAlert(messageId: string): void {
+    if (!messageId) {
+      return;
+    }
+
+    let removedCount = 0;
+
+    this.messageAlerts.update((items) => {
+      const filtered = items.filter((item) => item.messageId !== messageId);
+      removedCount = items.length - filtered.length;
+      return filtered;
+    });
+
+    if (removedCount > 0) {
+      this.unreadMessageAlerts.update((value) => Math.max(0, value - removedCount));
+      const latestAlert = this.messageAlerts()[0];
+      this.updateDocumentTitle(latestAlert?.senderNick);
+    }
+  }
+
   hasConversationWithRecipient(recipientUserId: string): boolean {
     return this.findConversationWithRecipient(recipientUserId) !== undefined;
   }
 
   resolveConversationPeer(conversation: ConversationModel): string {
     const currentUserId = this.currentUserId();
+    const participantNicks = conversation.participantNicks ?? {};
+
     if (!currentUserId) {
-      return conversation.participantUserIds[0] ?? '';
+      const firstParticipantId = this.resolveConversationPeerUserId(conversation);
+      return participantNicks[firstParticipantId] ?? firstParticipantId;
     }
 
+    const peerId = this.resolveConversationPeerUserId(conversation);
+    return participantNicks[peerId] ?? peerId;
+  }
+
+  resolveConversationPeerUserId(conversation: ConversationModel): string {
+    const currentUserId = this.currentUserId();
     return conversation.participantUserIds.find((id) => id !== currentUserId) ?? currentUserId;
   }
 
@@ -430,6 +568,7 @@ export class MessagingService {
         return;
       }
 
+      await this.refreshIncomingRequests();
       await this.refreshConversations();
     })();
 
@@ -531,18 +670,18 @@ export class MessagingService {
   }
 
   private registerHubHandlers(connection: HubConnection): void {
-    connection.on('HandshakeAcknowledged', (payload: unknown) => {
+    const onHandshakeAcknowledged = (payload: unknown) => {
       const handshake = this.normalizeHandshake(payload);
       this.handshake.set(handshake);
       this.notificationService.setUnreadCount(handshake.unreadNotificationCount);
-    });
+    };
 
-    connection.on('MessageRequestReceived', (payload: unknown) => {
+    const onMessageRequestReceived = (payload: unknown) => {
       const request = this.normalizeRequest(payload);
       this.upsertRequest(request);
-    });
+    };
 
-    connection.on('MessageRequestUpdated', (payload: unknown) => {
+    const onMessageRequestUpdated = (payload: unknown) => {
       const request = this.normalizeRequest(payload);
       this.upsertRequest(request);
 
@@ -553,19 +692,61 @@ export class MessagingService {
           [request.requesterUserId]: false,
         }));
 
-        void this.refreshConversations();
+        void this.refreshConversations(true);
       }
-    });
+    };
 
-    connection.on('MessageReceived', (payload: unknown) => {
+    const onMessageReceived = (payload: unknown) => {
       const message = this.normalizeMessage(payload);
       this.upsertMessage(message);
-      void this.refreshConversations();
-    });
+      const conversationExists = this.touchConversationWithMessage(message);
+      if (!conversationExists) {
+        void this.refreshConversations(true);
+      }
+    };
 
-    connection.on('NotificationReceived', (payload: unknown) => {
+    const onConversationUpdated = (payload: unknown) => {
+      const conversation = this.normalizeConversation(payload);
+      this.upsertConversation(conversation);
+    };
+
+    const onMessageAlertReceived = (payload: unknown) => {
+      const alert = this.normalizeMessageAlert(payload);
+      this.handleMessageAlert(alert);
+    };
+
+    const onNotificationReceived = (payload: unknown) => {
       this.notificationService.ingestRealtimeNotification(payload);
-    });
+    };
+
+    // Register common SignalR event aliases to tolerate backend naming differences.
+    for (const eventName of ['HandshakeAcknowledged', 'handshakeAcknowledged']) {
+      connection.on(eventName, onHandshakeAcknowledged);
+    }
+
+    for (const eventName of ['MessageRequestReceived', 'ReceiveMessageRequest']) {
+      connection.on(eventName, onMessageRequestReceived);
+    }
+
+    for (const eventName of ['MessageRequestUpdated', 'UpdateMessageRequest']) {
+      connection.on(eventName, onMessageRequestUpdated);
+    }
+
+    for (const eventName of ['MessageReceived', 'ReceiveMessage', 'NewMessage']) {
+      connection.on(eventName, onMessageReceived);
+    }
+
+    for (const eventName of ['ConversationUpdated', 'ReceiveConversationUpdated']) {
+      connection.on(eventName, onConversationUpdated);
+    }
+
+    for (const eventName of ['MessageAlertReceived', 'ReceiveMessageAlert']) {
+      connection.on(eventName, onMessageAlertReceived);
+    }
+
+    for (const eventName of ['NotificationReceived', 'ReceiveNotification']) {
+      connection.on(eventName, onNotificationReceived);
+    }
 
     connection.onclose(() => {
       this.isConnected.set(false);
@@ -576,17 +757,27 @@ export class MessagingService {
       this.isConnected.set(true);
       this.handshake.set(null);
       void this.ensureHandshake();
-      void this.refreshConversations();
+      void this.refreshIncomingRequests();
+      void this.refreshConversations(true);
     });
   }
 
   private upsertRequest(request: MessageRequestModel): void {
     const currentUserId = this.currentUserId();
+    const currentNick = this.accountService.currentUser()?.nick?.toLowerCase();
+    const recipientNick = request.recipientNick?.toLowerCase();
 
-    if (
-      request.status !== MessageRequestStatus.Pending ||
-      request.recipientUserId !== currentUserId
-    ) {
+    const isPending = request.status === MessageRequestStatus.Pending;
+    const matchesByUserId =
+      !!request.recipientUserId &&
+      !!currentUserId &&
+      request.recipientUserId === currentUserId;
+    const matchesByNick =
+      !!recipientNick &&
+      !!currentNick &&
+      recipientNick === currentNick;
+
+    if (!isPending || (!matchesByUserId && !matchesByNick)) {
       this.incomingRequests.update((value) => value.filter((item) => item.id !== request.id));
       return;
     }
@@ -624,11 +815,11 @@ export class MessagingService {
     const raw = this.asObject(payload);
 
     return {
-      userId: this.readString(raw, ['userId']) ?? this.currentUserId(),
-      connectionId: this.readString(raw, ['connectionId']) ?? '',
-      serverTimeUtc: this.readString(raw, ['serverTimeUtc']) ?? new Date().toISOString(),
-      pendingRequestCount: this.readNumber(raw, ['pendingRequestCount']) ?? 0,
-      unreadNotificationCount: this.readNumber(raw, ['unreadNotificationCount']) ?? 0,
+      userId: this.readString(raw, ['userId', 'UserId']) ?? this.currentUserId(),
+      connectionId: this.readString(raw, ['connectionId', 'ConnectionId']) ?? '',
+      serverTimeUtc: this.readString(raw, ['serverTimeUtc', 'ServerTimeUtc']) ?? new Date().toISOString(),
+      pendingRequestCount: this.readNumber(raw, ['pendingRequestCount', 'PendingRequestCount']) ?? 0,
+      unreadNotificationCount: this.readNumber(raw, ['unreadNotificationCount', 'UnreadNotificationCount']) ?? 0,
     };
   }
 
@@ -636,12 +827,18 @@ export class MessagingService {
     const raw = this.asObject(payload);
 
     return {
-      id: this.readString(raw, ['id', 'requestId']) ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      requesterUserId: this.readString(raw, ['requesterUserId', 'senderUserId']) ?? '',
-      recipientUserId: this.readString(raw, ['recipientUserId']) ?? '',
-      status: this.readNumber(raw, ['status']) ?? MessageRequestStatus.Pending,
-      createdAt: this.readString(raw, ['createdAt']),
-      updatedAt: this.readString(raw, ['updatedAt']),
+      id:
+        this.readString(raw, ['id', 'Id', 'requestId', 'RequestId']) ??
+        `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      requesterUserId:
+        this.readString(raw, ['requesterUserId', 'RequesterUserId', 'senderUserId', 'SenderUserId']) ??
+        '',
+      requesterNick: this.readString(raw, ['requesterNick', 'RequesterNick', 'senderNick', 'SenderNick']),
+      recipientUserId: this.readString(raw, ['recipientUserId', 'RecipientUserId']) ?? '',
+      recipientNick: this.readString(raw, ['recipientNick', 'RecipientNick']),
+      status: this.readNumber(raw, ['status', 'Status']) ?? MessageRequestStatus.Pending,
+      createdAt: this.readString(raw, ['createdAt', 'CreatedAt']),
+      updatedAt: this.readString(raw, ['updatedAt', 'UpdatedAt']),
     };
   }
 
@@ -649,32 +846,214 @@ export class MessagingService {
     const raw = this.asObject(payload);
 
     return {
-      id: this.readString(raw, ['id']) ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      conversationId: this.readString(raw, ['conversationId']) ?? '',
-      senderUserId: this.readString(raw, ['senderUserId']) ?? '',
-      recipientUserId: this.readString(raw, ['recipientUserId']) ?? '',
-      content: this.readString(raw, ['content']) ?? '',
+      id:
+        this.readString(raw, ['id', 'Id', 'messageId', 'MessageId']) ??
+        `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      conversationId:
+        this.readString(raw, ['conversationId', 'ConversationId', 'conversationID', 'ConversationID']) ??
+        '',
+      senderUserId: this.readString(raw, ['senderUserId', 'SenderUserId']) ?? '',
+      senderNick: this.readString(raw, ['senderNick', 'SenderNick']),
+      recipientUserId: this.readString(raw, ['recipientUserId', 'RecipientUserId']) ?? '',
+      recipientNick: this.readString(raw, ['recipientNick', 'RecipientNick']),
+      content: this.readString(raw, ['content', 'Content', 'message', 'Message']) ?? '',
       attachments: Array.isArray(raw['attachments'])
         ? (raw['attachments'] as ChatMessageModel['attachments'])
+        : Array.isArray(raw['Attachments'])
+          ? (raw['Attachments'] as ChatMessageModel['attachments'])
         : [],
-      sentAt: this.readString(raw, ['sentAt']) ?? new Date().toISOString(),
-      isRead: this.readBoolean(raw, ['isRead']) ?? false,
+      sentAt: this.readString(raw, ['sentAt', 'SentAt', 'createdAt', 'CreatedAt']) ?? new Date().toISOString(),
+      isRead: this.readBoolean(raw, ['isRead', 'IsRead']) ?? false,
     };
+  }
+
+  private normalizeConversation(payload: unknown): ConversationModel {
+    const raw = this.asObject(payload);
+
+    const participantUserIdsRaw = raw['participantUserIds'] ?? raw['ParticipantUserIds'];
+    const participantUserIds = Array.isArray(participantUserIdsRaw)
+      ? participantUserIdsRaw.filter((item): item is string => typeof item === 'string')
+      : [];
+
+    const participantNicksRaw =
+      this.asObject(raw['participantNicks']) as Record<string, unknown>;
+    const participantNicksPascal =
+      this.asObject(raw['ParticipantNicks']) as Record<string, unknown>;
+    const participantNicksSource = Object.keys(participantNicksRaw).length > 0
+      ? participantNicksRaw
+      : participantNicksPascal;
+
+    const participantNicks: Record<string, string> = {};
+    Object.entries(participantNicksSource).forEach(([key, value]) => {
+      if (typeof value === 'string' && value.trim().length > 0) {
+        participantNicks[key] = value;
+      }
+    });
+
+    return {
+      id:
+        this.readString(raw, ['id', 'Id', 'conversationId', 'ConversationId']) ??
+        `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      participantUserIds,
+      participantNicks,
+      createdAt: this.readString(raw, ['createdAt', 'CreatedAt']) ?? new Date().toISOString(),
+      updatedAt: this.readString(raw, ['updatedAt', 'UpdatedAt']) ?? new Date().toISOString(),
+      lastMessagePreview: this.readString(raw, ['lastMessagePreview', 'LastMessagePreview']),
+      lastMessageAt: this.readString(raw, ['lastMessageAt', 'LastMessageAt']),
+      lastMessageSenderUserId: this.readString(raw, ['lastMessageSenderUserId', 'LastMessageSenderUserId']),
+      lastMessageSenderNick: this.readString(raw, ['lastMessageSenderNick', 'LastMessageSenderNick']),
+    };
+  }
+
+  private normalizeMessageAlert(payload: unknown): MessageAlertModel {
+    const raw = this.asObject(payload);
+
+    return {
+      conversationId:
+        this.readString(raw, ['conversationId', 'ConversationId']) ?? '',
+      messageId:
+        this.readString(raw, ['messageId', 'MessageId', 'id', 'Id']) ??
+        `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      senderUserId: this.readString(raw, ['senderUserId', 'SenderUserId']) ?? '',
+      senderNick: this.readString(raw, ['senderNick', 'SenderNick']),
+      preview: this.readString(raw, ['preview', 'Preview', 'messagePreview', 'MessagePreview']),
+      sentAt: this.readString(raw, ['sentAt', 'SentAt', 'sentAtUtc', 'SentAtUtc']),
+    };
+  }
+
+  private upsertConversation(conversation: ConversationModel): void {
+    if (!conversation.id) {
+      return;
+    }
+
+    this.conversations.update((items) => {
+      const withoutCurrent = items.filter((item) => item.id !== conversation.id);
+      const merged = [conversation, ...withoutCurrent];
+      return merged.sort((left, right) => {
+        const leftTime = left.lastMessageAt ? new Date(left.lastMessageAt).getTime() : 0;
+        const rightTime = right.lastMessageAt ? new Date(right.lastMessageAt).getTime() : 0;
+        return rightTime - leftTime;
+      });
+    });
+  }
+
+  private touchConversationWithMessage(message: ChatMessageModel): boolean {
+    let hasConversation = false;
+
+    this.conversations.update((items) => {
+      const currentConversation = items.find((item) => item.id === message.conversationId);
+      if (!currentConversation) {
+        return items;
+      }
+
+      hasConversation = true;
+
+      const updatedConversation: ConversationModel = {
+        ...currentConversation,
+        lastMessagePreview: message.content,
+        lastMessageAt: message.sentAt,
+        updatedAt: message.sentAt,
+        lastMessageSenderUserId: message.senderUserId,
+        lastMessageSenderNick: message.senderNick ?? currentConversation.lastMessageSenderNick,
+        participantNicks: {
+          ...(currentConversation.participantNicks ?? {}),
+          ...(message.senderUserId && message.senderNick
+            ? { [message.senderUserId]: message.senderNick }
+            : {}),
+          ...(message.recipientUserId && message.recipientNick
+            ? { [message.recipientUserId]: message.recipientNick }
+            : {}),
+        },
+      };
+
+      const withoutCurrent = items.filter((item) => item.id !== currentConversation.id);
+      return [updatedConversation, ...withoutCurrent].sort((left, right) => {
+        const leftTime = left.lastMessageAt ? new Date(left.lastMessageAt).getTime() : 0;
+        const rightTime = right.lastMessageAt ? new Date(right.lastMessageAt).getTime() : 0;
+        return rightTime - leftTime;
+      });
+    });
+
+    return hasConversation;
+  }
+
+  private handleMessageAlert(alert: MessageAlertModel): void {
+    if (!alert.messageId || alert.senderUserId === this.currentUserId()) {
+      return;
+    }
+
+    if (this.unreadMessageAlerts() === 0) {
+      this.baseDocumentTitle = this.document.title;
+    }
+
+    this.unreadMessageAlerts.update((value) => value + 1);
+    this.updateDocumentTitle(alert.senderNick);
+
+    if (this.widgetOpen() && this.activeConversationId() === alert.conversationId) {
+      return;
+    }
+
+    this.messageAlerts.update((items) => {
+      const withoutCurrent = items.filter((item) => item.messageId !== alert.messageId);
+      return [alert, ...withoutCurrent].slice(0, 5);
+    });
+  }
+
+  private clearMessageAlerts(): void {
+    this.messageAlerts.set([]);
+  }
+
+  private resetMessageAttention(): void {
+    this.unreadMessageAlerts.set(0);
+    this.document.title = this.baseDocumentTitle;
+  }
+
+  private updateDocumentTitle(senderNick?: string): void {
+    const unreadCount = this.unreadMessageAlerts();
+    if (unreadCount <= 0) {
+      this.document.title = this.baseDocumentTitle;
+      return;
+    }
+
+    if (unreadCount === 1 && senderNick) {
+      this.document.title = this.i18nService.translate('messenger.titleUnreadSingle', {
+        count: unreadCount,
+        nick: senderNick,
+      });
+      return;
+    }
+
+    this.document.title = this.i18nService.translate('messenger.titleUnreadMany', {
+      count: unreadCount,
+    });
   }
 
   private findConversationWithRecipient(recipientUserId: string): ConversationModel | undefined {
     const currentUserId = this.currentUserId();
+    const recipientLookup = recipientUserId.toLowerCase();
 
     if (!currentUserId) {
-      return this.conversations().find((conversation) =>
-        conversation.participantUserIds.includes(recipientUserId)
-      );
+      return this.conversations().find((conversation) => {
+        const matchesId = conversation.participantUserIds.includes(recipientUserId);
+        const matchesNick = Object.values(conversation.participantNicks ?? {}).some(
+          (nick) => nick.toLowerCase() === recipientLookup
+        );
+        return matchesId || matchesNick;
+      });
     }
 
     return this.conversations().find(
-      (conversation) =>
-        conversation.participantUserIds.includes(recipientUserId) &&
-        conversation.participantUserIds.includes(currentUserId)
+      (conversation) => {
+        const matchesId = conversation.participantUserIds.includes(recipientUserId);
+        const matchesNick = Object.entries(conversation.participantNicks ?? {}).some(
+          ([userId, nick]) => userId !== currentUserId && nick.toLowerCase() === recipientLookup
+        );
+
+        return (
+          (matchesId || matchesNick) &&
+          conversation.participantUserIds.includes(currentUserId)
+        );
+      }
     );
   }
 
@@ -708,6 +1087,8 @@ export class MessagingService {
     this.messagesByConversation.set({});
     this.activeConversationId.set(null);
     this.incomingRequests.set([]);
+    this.messageAlerts.set([]);
+    this.unreadMessageAlerts.set(0);
     this.sentRequestsByRecipient.set({});
   }
 
