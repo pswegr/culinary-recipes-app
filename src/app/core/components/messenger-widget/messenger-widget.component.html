@@ -56,7 +56,7 @@
             <h4>{{ 'messenger.pendingRequests' | t }}</h4>
             <div class="m-request" *ngFor="let request of messagingService.incomingRequests(); trackBy: trackByRequest">
               <div class="m-request__text">
-                <span>{{ request.requesterUserId }}</span>
+                <span>{{ requesterLabel(request) }}</span>
                 <small>{{ 'messenger.wantsToMessage' | t }}</small>
               </div>
               <div class="m-request__actions">
@@ -140,5 +140,24 @@
         }
       </section>
     </div>
+  </section>
+}
+
+@if (isAuthorized() && !messagingService.widgetOpen() && messagingService.messageAlerts().length > 0) {
+  <section class="m-alert-stack">
+    <article class="m-alert" *ngFor="let alert of messagingService.messageAlerts(); trackBy: trackByAlert">
+      <div class="m-alert__content">
+        <h5>{{ 'messenger.popupNewMessage' | t : { nick: alert.senderNick || alert.senderUserId } }}</h5>
+        <p>{{ alert.preview || ('messenger.noMessagesYet' | t) }}</p>
+      </div>
+      <div class="m-alert__actions">
+        <button mat-stroked-button (click)="dismissMessageAlert(alert.messageId)">
+          {{ 'messenger.dismiss' | t }}
+        </button>
+        <button mat-flat-button class="recipe-mat-btn-tertiary" (click)="openMessageAlert(alert)">
+          {{ 'common.open' | t }}
+        </button>
+      </div>
+    </article>
   </section>
 }

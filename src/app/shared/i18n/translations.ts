@@ -215,6 +215,10 @@ export const translations: TranslationDictionary = {
       loadingMessages: 'Loading messages...',
       noMessagesInConversation: 'No messages in this conversation yet.',
       writeMessagePlaceholder: 'Write a message...',
+      popupNewMessage: 'New message from {{nick}}',
+      dismiss: 'Dismiss',
+      titleUnreadSingle: '({{count}}) New message from {{nick}}',
+      titleUnreadMany: '({{count}}) New messages',
       errors: {
         unableLoadConversations: 'Unable to load conversations.',
         unableLoadMessages: 'Unable to load messages.',
@@ -463,6 +467,10 @@ export const translations: TranslationDictionary = {
       loadingMessages: 'Ladowanie wiadomosci...',
       noMessagesInConversation: 'Brak wiadomosci w tej konwersacji.',
       writeMessagePlaceholder: 'Napisz wiadomosc...',
+      popupNewMessage: 'Nowa wiadomosc od {{nick}}',
+      dismiss: 'Zamknij',
+      titleUnreadSingle: '({{count}}) Nowa wiadomosc od {{nick}}',
+      titleUnreadMany: '({{count}}) Nowe wiadomosci',
       errors: {
         unableLoadConversations: 'Nie udalo sie pobrac konwersacji.',
         unableLoadMessages: 'Nie udalo sie pobrac wiadomosci.',

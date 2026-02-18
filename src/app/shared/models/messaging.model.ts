@@ -20,17 +20,22 @@ export interface MediaAttachmentModel {
 export interface ConversationModel {
   id: string;
   participantUserIds: string[];
+  participantNicks?: Record<string, string>;
   createdAt: string;
   updatedAt: string;
   lastMessagePreview?: string;
   lastMessageAt?: string;
+  lastMessageSenderUserId?: string;
+  lastMessageSenderNick?: string;
 }
 
 export interface ChatMessageModel {
   id: string;
   conversationId: string;
   senderUserId: string;
+  senderNick?: string;
   recipientUserId: string;
+  recipientNick?: string;
   content: string;
   attachments: MediaAttachmentModel[];
   sentAt: string;
@@ -40,7 +45,9 @@ export interface ChatMessageModel {
 export interface MessageRequestModel {
   id: string;
   requesterUserId: string;
+  requesterNick?: string;
   recipientUserId: string;
+  recipientNick?: string;
   status: MessageRequestStatus;
   createdAt?: string;
   updatedAt?: string;
@@ -67,4 +74,21 @@ export interface SendMessageModel {
   recipientUserId: string;
   content: string;
   attachments?: MediaAttachmentModel[];
+}
+
+export interface PagedResultModel<T> {
+  items: T[];
+  skip: number;
+  take: number;
+  totalCount: number;
+  hasMore: boolean;
+}
+
+export interface MessageAlertModel {
+  conversationId: string;
+  messageId: string;
+  senderUserId: string;
+  senderNick?: string;
+  preview?: string;
+  sentAt?: string;
 }
