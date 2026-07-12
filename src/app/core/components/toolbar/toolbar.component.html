@@ -19,6 +19,10 @@
     <button mat-menu-item routerLink="/policy-and-terms">{{ 'toolbar.menu.policyTerms' | t }}</button>
     <button mat-menu-item *ngIf="categories$ | async" [matMenuTriggerFor]="categoriesMenu">{{ 'toolbar.menu.categories' | t }}</button>
     <button mat-menu-item *appIfAuth="true" routerLink="/account/info">{{ 'toolbar.menu.accountInfo' | t }}</button>
+    <button mat-menu-item *appIfAuth="true" routerLink="/finance">
+      <mat-icon>account_balance_wallet</mat-icon>
+      {{ 'toolbar.menu.finance' | t }}
+    </button>
   </mat-menu>
   <mat-menu #categoriesMenu="matMenu">
     <button mat-menu-item *ngFor="let item of categories$| async" (click)="navigateToCategory(item)">{{item}}</button>
@@ -35,6 +39,11 @@
     mat-button
     routerLink="/recipes/favorites">
     {{ 'toolbar.menu.favorites' | t }}
+  </button>
+
+  <button class="r-finance-btn" mat-button routerLink="/finance" *appIfAuth="true">
+    <mat-icon>account_balance_wallet</mat-icon>
+    {{ 'toolbar.menu.finance' | t }}
   </button>
 
   <span class="r-spacer"></span>
@@ -138,6 +147,10 @@
     <button mat-menu-item *appIfAuth="true" (click)="openMessenger()">
       <mat-icon>chat</mat-icon>
       <span>{{ 'toolbar.mobile.messenger' | t }}</span>
+    </button>
+    <button mat-menu-item *appIfAuth="true" routerLink="/finance">
+      <mat-icon>account_balance_wallet</mat-icon>
+      <span>{{ 'toolbar.menu.finance' | t }}</span>
     </button>
 
     <button

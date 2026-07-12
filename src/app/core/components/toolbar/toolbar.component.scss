@@ -70,6 +70,16 @@
   margin-left: 1rem;
 }
 
+.r-finance-btn {
+  margin-left: 0.25rem;
+}
+
+@media screen and (max-width: 900px) {
+  .r-finance-btn {
+    display: none;
+  }
+}
+
 .r-toolbar-actions {
   display: inline-flex;
   align-items: center;
