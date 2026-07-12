@@ -231,6 +231,16 @@ export const translations: TranslationDictionary = {
       newIncomeType: 'New income type',
       typeName: 'Type name',
       unknownType: 'Unknown type',
+      chart: {
+        eyebrow: 'Monthly distribution',
+        title: 'Income and expenses by type',
+        subtitle: 'Compare which categories make up your cash flow for the selected month.',
+        expensesByType: 'Chart of expenses by type',
+        incomeByType: 'Chart of income by type',
+        noExpenses: 'Add an expense to see its category breakdown.',
+        noIncome: 'Add income to see its category breakdown.',
+        itemLabel: '{{type}}: {{amount}}, {{share}}% of total',
+      },
       tabs: {
         overview: 'Overview',
         add: 'Add & plan',
@@ -545,6 +555,16 @@ export const translations: TranslationDictionary = {
       newIncomeType: 'Nowy typ przychodu',
       typeName: 'Nazwa typu',
       unknownType: 'Nieznany typ',
+      chart: {
+        eyebrow: 'Miesieczny podzial',
+        title: 'Przychody i wydatki wedlug typu',
+        subtitle: 'Porownaj udzial kategorii w przeplywie pieniedzy dla wybranego miesiaca.',
+        expensesByType: 'Wykres wydatkow wedlug typu',
+        incomeByType: 'Wykres przychodow wedlug typu',
+        noExpenses: 'Dodaj wydatek, aby zobaczyc podzial na kategorie.',
+        noIncome: 'Dodaj przychod, aby zobaczyc podzial na kategorie.',
+        itemLabel: '{{type}}: {{amount}}, {{share}}% calosci',
+      },
       tabs: {
         overview: 'Podsumowanie',
         add: 'Dodaj i planuj',

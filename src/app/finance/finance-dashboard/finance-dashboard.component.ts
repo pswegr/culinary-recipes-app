@@ -15,6 +15,14 @@ interface CalendarDay {
   totalIncome: number;
 }
 
+interface TypeBreakdown {
+  id: string;
+  name: string;
+  total: number;
+  share: number;
+  barWidth: number;
+}
+
 @Component({
   selector: 'app-finance-dashboard',
   templateUrl: './finance-dashboard.component.html',
@@ -71,6 +79,28 @@ export class FinanceDashboardComponent implements OnInit {
 
   get selectedMonthName(): string {
     return this.monthName(this.selectedMonth);
+  }
+
+  get expenseBreakdown(): TypeBreakdown[] {
+    const dashboard = this.dashboard;
+    if (!dashboard) return [];
+
+    return this.buildTypeBreakdown(
+      dashboard.expenses,
+      dashboard.expenseTypes,
+      item => item.expenseTypeId,
+    );
+  }
+
+  get incomeBreakdown(): TypeBreakdown[] {
+    const dashboard = this.dashboard;
+    if (!dashboard) return [];
+
+    return this.buildTypeBreakdown(
+      dashboard.incomes,
+      dashboard.incomeTypes,
+      item => item.incomeTypeId,
+    );
   }
 
   get calendarWeeks(): (CalendarDay | null)[][] {
@@ -246,6 +276,43 @@ export class FinanceDashboardComponent implements OnInit {
 
   calendarDayLabel(day: CalendarDay): string {
     return `${day.date.toLocaleDateString()}, ${this.i18n.translate('finance.income')}: ${day.totalIncome}, ${this.i18n.translate('finance.expenses')}: ${day.totalExpenses}`;
+  }
+
+  breakdownLabel(item: TypeBreakdown): string {
+    return this.i18n.translate('finance.chart.itemLabel', {
+      type: item.name,
+      amount: new Intl.NumberFormat(this.i18n.currentLanguage() === 'pl' ? 'pl-PL' : 'en-US', {
+        style: 'currency',
+        currency: 'PLN',
+      }).format(item.total),
+      share: item.share.toFixed(1),
+    });
+  }
+
+  private buildTypeBreakdown<T extends { amount: number }>(
+    transactions: T[],
+    types: { id: string; name: string }[],
+    typeId: (transaction: T) => string,
+  ): TypeBreakdown[] {
+    const totals = new Map<string, number>();
+    for (const transaction of transactions) {
+      const id = typeId(transaction);
+      const amount = Number(transaction.amount) || 0;
+      totals.set(id, (totals.get(id) ?? 0) + amount);
+    }
+
+    const totalAmount = Array.from(totals.values()).reduce((sum, amount) => sum + amount, 0);
+    const maximum = Math.max(0, ...totals.values());
+
+    return Array.from(totals.entries())
+      .map(([id, total]) => ({
+        id,
+        name: types.find(type => type.id === id)?.name ?? this.i18n.translate('finance.unknownType'),
+        total,
+        share: totalAmount > 0 ? (total / totalAmount) * 100 : 0,
+        barWidth: maximum > 0 ? (total / maximum) * 100 : 0,
+      }))
+      .sort((left, right) => right.total - left.total);
   }
 
   private toApiDate(value: Date): string {

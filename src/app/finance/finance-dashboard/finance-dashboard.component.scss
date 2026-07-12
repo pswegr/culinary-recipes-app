@@ -157,12 +157,129 @@
 
 .calendar-card,
 .year-section,
-.type-section {
+.type-section,
+.breakdown-section {
   margin-top: 1rem;
   padding: 1.25rem;
   border: 1px solid var(--r-border);
   border-radius: var(--r-radius-lg);
   background: var(--r-surface);
+}
+
+.section-description {
+  max-width: 680px;
+  margin: 0.25rem 0 0;
+  color: var(--r-muted);
+  font-size: 0.88rem;
+}
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.breakdown-card {
+  min-width: 0;
+  padding: 1.1rem;
+  border: 1px solid var(--r-border);
+  border-radius: var(--r-radius-md);
+  background: var(--r-surface-2);
+}
+
+.breakdown-heading,
+.breakdown-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.breakdown-heading {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--r-border);
+}
+
+.breakdown-heading > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.breakdown-heading span,
+.breakdown-label span {
+  color: var(--r-muted);
+  font-size: 0.78rem;
+}
+
+.breakdown-heading strong {
+  font-family: var(--r-font-display);
+  font-size: 1.5rem;
+}
+
+.expense-chart .breakdown-heading mat-icon,
+.expense-chart .breakdown-heading strong {
+  color: #e07b65;
+}
+
+.income-chart .breakdown-heading mat-icon,
+.income-chart .breakdown-heading strong {
+  color: #48b58b;
+}
+
+.breakdown-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.breakdown-row {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.breakdown-label strong {
+  overflow: hidden;
+  font-size: 0.86rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.breakdown-label span {
+  flex: 0 0 auto;
+}
+
+.bar-track {
+  height: 0.65rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--r-surface-3);
+}
+
+.bar-fill {
+  display: block;
+  min-width: 2px;
+  height: 100%;
+  border-radius: inherit;
+  transform-origin: left center;
+}
+
+.expense-chart .bar-fill {
+  background: linear-gradient(90deg, #c85d4b, #e99a86);
+}
+
+.income-chart .bar-fill {
+  background: linear-gradient(90deg, #278b68, #63c9a3);
+}
+
+.chart-empty {
+  min-height: 5rem;
+  display: grid;
+  place-items: center;
+  margin: 1rem 0 0;
+  color: var(--r-muted);
+  font-size: 0.85rem;
+  text-align: center;
 }
 
 .calendar-legend {
@@ -342,6 +459,7 @@
   .month-navigation { width: 100%; justify-content: space-between; }
   .summary-grid,
   .goal-grid,
+  .breakdown-grid,
   .forms-grid,
   .transactions-grid { grid-template-columns: 1fr; }
   .plan-form-card { grid-column: auto; }
@@ -350,5 +468,6 @@
   .finance-tabs ::ng-deep .mat-mdc-tab-body-content { padding: 0.65rem; }
   .calendar-card,
   .year-section,
-  .type-section { padding: 0.8rem; }
+  .type-section,
+  .breakdown-section { padding: 0.8rem; }
 }

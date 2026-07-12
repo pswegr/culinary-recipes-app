@@ -68,6 +68,64 @@
           </mat-card>
         </section>
 
+        <section class="breakdown-section" aria-labelledby="breakdown-title">
+          <div class="section-heading">
+            <div>
+              <p class="finance-eyebrow">{{ 'finance.chart.eyebrow' | t }}</p>
+              <h2 id="breakdown-title">{{ 'finance.chart.title' | t }}</h2>
+              <p class="section-description">{{ 'finance.chart.subtitle' | t }}</p>
+            </div>
+          </div>
+
+          <div class="breakdown-grid">
+            <article class="breakdown-card expense-chart" [attr.aria-label]="'finance.chart.expensesByType' | t">
+              <div class="breakdown-heading">
+                <div>
+                  <span>{{ 'finance.expenses' | t }}</span>
+                  <strong>{{ data.summary.totalExpenses | currency:'PLN':'symbol-narrow' }}</strong>
+                </div>
+                <mat-icon aria-hidden="true">donut_large</mat-icon>
+              </div>
+
+              <div class="breakdown-list" role="list" *ngIf="expenseBreakdown.length; else noExpenseBreakdown">
+                <div class="breakdown-row" role="listitem" *ngFor="let item of expenseBreakdown" [attr.aria-label]="breakdownLabel(item)">
+                  <div class="breakdown-label">
+                    <strong>{{ item.name }}</strong>
+                    <span>{{ item.total | currency:'PLN':'symbol-narrow' }} · {{ item.share | number:'1.0-1' }}%</span>
+                  </div>
+                  <div class="bar-track" aria-hidden="true">
+                    <span class="bar-fill" [style.width.%]="item.barWidth"></span>
+                  </div>
+                </div>
+              </div>
+              <ng-template #noExpenseBreakdown><p class="chart-empty">{{ 'finance.chart.noExpenses' | t }}</p></ng-template>
+            </article>
+
+            <article class="breakdown-card income-chart" [attr.aria-label]="'finance.chart.incomeByType' | t">
+              <div class="breakdown-heading">
+                <div>
+                  <span>{{ 'finance.income' | t }}</span>
+                  <strong>{{ data.summary.totalIncome | currency:'PLN':'symbol-narrow' }}</strong>
+                </div>
+                <mat-icon aria-hidden="true">bar_chart</mat-icon>
+              </div>
+
+              <div class="breakdown-list" role="list" *ngIf="incomeBreakdown.length; else noIncomeBreakdown">
+                <div class="breakdown-row" role="listitem" *ngFor="let item of incomeBreakdown" [attr.aria-label]="breakdownLabel(item)">
+                  <div class="breakdown-label">
+                    <strong>{{ item.name }}</strong>
+                    <span>{{ item.total | currency:'PLN':'symbol-narrow' }} · {{ item.share | number:'1.0-1' }}%</span>
+                  </div>
+                  <div class="bar-track" aria-hidden="true">
+                    <span class="bar-fill" [style.width.%]="item.barWidth"></span>
+                  </div>
+                </div>
+              </div>
+              <ng-template #noIncomeBreakdown><p class="chart-empty">{{ 'finance.chart.noIncome' | t }}</p></ng-template>
+            </article>
+          </div>
+        </section>
+
         <section class="calendar-card" aria-labelledby="month-calendar-title">
           <div class="section-heading">
             <div>
