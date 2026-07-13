@@ -1,0 +1,327 @@
+<section class="finance-page" aria-labelledby="finance-title">
+  <header class="finance-hero">
+    <div>
+      <p class="finance-eyebrow">{{ 'finance.eyebrow' | t }}</p>
+      <h1 id="finance-title">{{ 'finance.title' | t }}</h1>
+      <p>{{ 'finance.subtitle' | t }}</p>
+    </div>
+    <nav class="month-navigation" [attr.aria-label]="'finance.monthNavigation' | t">
+      <button mat-icon-button type="button" (click)="previousMonth()" [attr.aria-label]="'finance.previousMonth' | t">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <strong aria-live="polite">{{ selectedMonthName }} {{ selectedYear }}</strong>
+      <button mat-icon-button type="button" (click)="nextMonth()" [attr.aria-label]="'finance.nextMonth' | t">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </nav>
+  </header>
+
+  <div class="finance-loading" *ngIf="isLoading" role="status">{{ 'common.loading' | t }}</div>
+
+  <ng-container *ngIf="dashboard as data">
+    <section class="summary-grid" [attr.aria-label]="'finance.monthSummary' | t">
+      <mat-card class="summary-card income-card">
+        <mat-icon aria-hidden="true">south_west</mat-icon>
+        <span>{{ 'finance.income' | t }}</span>
+        <strong>{{ data.summary.totalIncome | currency:'PLN':'symbol-narrow' }}</strong>
+      </mat-card>
+      <mat-card class="summary-card expense-card">
+        <mat-icon aria-hidden="true">north_east</mat-icon>
+        <span>{{ 'finance.expenses' | t }}</span>
+        <strong>{{ data.summary.totalExpenses | currency:'PLN':'symbol-narrow' }}</strong>
+      </mat-card>
+      <mat-card class="summary-card savings-card" [class.is-negative]="data.summary.savings < 0">
+        <mat-icon aria-hidden="true">savings</mat-icon>
+        <span>{{ 'finance.savings' | t }}</span>
+        <strong>{{ data.summary.savings | currency:'PLN':'symbol-narrow' }}</strong>
+      </mat-card>
+    </section>
+
+    <mat-tab-group animationDuration="250ms" class="finance-tabs">
+      <mat-tab [label]="'finance.tabs.overview' | t">
+        <section class="goal-grid">
+          <mat-card class="goal-card">
+            <div class="card-heading">
+              <div>
+                <span>{{ 'finance.expenseLimit' | t }}</span>
+                <h2>{{ data.summary.totalExpenses | currency:'PLN':'symbol-narrow' }} / {{ data.summary.expenseLimit | currency:'PLN':'symbol-narrow' }}</h2>
+              </div>
+              <mat-icon aria-hidden="true">speed</mat-icon>
+            </div>
+            <mat-progress-bar mode="determinate" [value]="progress(data.summary.expenseLimitProgress)" [attr.aria-label]="'finance.expenseLimitProgress' | t"></mat-progress-bar>
+            <p *ngIf="data.summary.expenseLimit > 0">
+              {{ 'finance.remaining' | t }} {{ data.summary.remainingExpenseLimit | currency:'PLN':'symbol-narrow' }}
+            </p>
+            <p *ngIf="data.summary.expenseLimit === 0">{{ 'finance.noLimit' | t }}</p>
+          </mat-card>
+          <mat-card class="goal-card">
+            <div class="card-heading">
+              <div>
+                <span>{{ 'finance.savingsGoal' | t }}</span>
+                <h2>{{ data.summary.savings | currency:'PLN':'symbol-narrow' }} / {{ data.summary.savingsGoal | currency:'PLN':'symbol-narrow' }}</h2>
+              </div>
+              <mat-icon aria-hidden="true">flag</mat-icon>
+            </div>
+            <mat-progress-bar mode="determinate" [value]="progress(data.summary.savingsGoalProgress)" [attr.aria-label]="'finance.savingsGoalProgress' | t"></mat-progress-bar>
+            <p *ngIf="data.summary.savingsGoal > 0">{{ data.summary.savingsGoalProgress | number:'1.0-1' }}% {{ 'finance.ofGoal' | t }}</p>
+            <p *ngIf="data.summary.savingsGoal === 0">{{ 'finance.noGoal' | t }}</p>
+          </mat-card>
+        </section>
+
+        <section class="breakdown-section" aria-labelledby="breakdown-title">
+          <div class="section-heading">
+            <div>
+              <p class="finance-eyebrow">{{ 'finance.chart.eyebrow' | t }}</p>
+              <h2 id="breakdown-title">{{ 'finance.chart.title' | t }}</h2>
+              <p class="section-description">{{ 'finance.chart.subtitle' | t }}</p>
+            </div>
+            <div class="chart-view-switch" role="group" [attr.aria-label]="'finance.chart.viewLabel' | t">
+              <button type="button" class="chart-view-button" [class.active]="chartView === 'bar'" [attr.aria-pressed]="chartView === 'bar'" (click)="setChartView('bar')">
+                <mat-icon aria-hidden="true">bar_chart</mat-icon>
+                <span>{{ 'finance.chart.views.bar' | t }}</span>
+              </button>
+              <button type="button" class="chart-view-button" [class.active]="chartView === 'radial'" [attr.aria-pressed]="chartView === 'radial'" (click)="setChartView('radial')">
+                <mat-icon aria-hidden="true">donut_large</mat-icon>
+                <span>{{ 'finance.chart.views.radial' | t }}</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="breakdown-grid">
+            <article class="breakdown-card expense-chart" [attr.aria-label]="'finance.chart.expensesByType' | t">
+              <div class="breakdown-heading">
+                <div>
+                  <span>{{ 'finance.expenses' | t }}</span>
+                  <strong>{{ data.summary.totalExpenses | currency:'PLN':'symbol-narrow' }}</strong>
+                </div>
+                <mat-icon aria-hidden="true">donut_large</mat-icon>
+              </div>
+
+              <div class="breakdown-list" role="list" *ngIf="chartView === 'bar' && expenseBreakdown.length">
+                <div class="breakdown-row" role="listitem" *ngFor="let item of expenseBreakdown" [attr.aria-label]="breakdownLabel(item)">
+                  <div class="breakdown-label">
+                    <strong>{{ item.name }}</strong>
+                    <span>{{ item.total | currency:'PLN':'symbol-narrow' }} · {{ item.share | number:'1.0-1' }}%</span>
+                  </div>
+                  <div class="bar-track" aria-hidden="true">
+                    <span class="bar-fill" [style.width.%]="item.barWidth"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="radial-layout" *ngIf="chartView === 'radial' && expenseBreakdown.length">
+                <div class="radial-chart" role="img" [attr.aria-label]="'finance.chart.expensesByType' | t" [style.background]="radialGradient(expenseBreakdown, 'expense')">
+                  <div class="radial-center">
+                    <span>{{ 'finance.chart.total' | t }}</span>
+                    <strong>{{ data.summary.totalExpenses | currency:'PLN':'symbol-narrow':'1.0-0' }}</strong>
+                  </div>
+                </div>
+                <div class="radial-legend" role="list">
+                  <div class="radial-legend-item" role="listitem" *ngFor="let item of expenseBreakdown; let itemIndex = index" [attr.aria-label]="breakdownLabel(item)">
+                    <span class="radial-legend-dot" aria-hidden="true" [style.background]="chartColor(itemIndex, 'expense')"></span>
+                    <strong>{{ item.name }}</strong>
+                    <span>{{ item.total | currency:'PLN':'symbol-narrow' }} · {{ item.share | number:'1.0-1' }}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="chart-empty" *ngIf="expenseBreakdown.length === 0">{{ 'finance.chart.noExpenses' | t }}</p>
+            </article>
+
+            <article class="breakdown-card income-chart" [attr.aria-label]="'finance.chart.incomeByType' | t">
+              <div class="breakdown-heading">
+                <div>
+                  <span>{{ 'finance.income' | t }}</span>
+                  <strong>{{ data.summary.totalIncome | currency:'PLN':'symbol-narrow' }}</strong>
+                </div>
+                <mat-icon aria-hidden="true">bar_chart</mat-icon>
+              </div>
+
+              <div class="breakdown-list" role="list" *ngIf="chartView === 'bar' && incomeBreakdown.length">
+                <div class="breakdown-row" role="listitem" *ngFor="let item of incomeBreakdown" [attr.aria-label]="breakdownLabel(item)">
+                  <div class="breakdown-label">
+                    <strong>{{ item.name }}</strong>
+                    <span>{{ item.total | currency:'PLN':'symbol-narrow' }} · {{ item.share | number:'1.0-1' }}%</span>
+                  </div>
+                  <div class="bar-track" aria-hidden="true">
+                    <span class="bar-fill" [style.width.%]="item.barWidth"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="radial-layout" *ngIf="chartView === 'radial' && incomeBreakdown.length">
+                <div class="radial-chart" role="img" [attr.aria-label]="'finance.chart.incomeByType' | t" [style.background]="radialGradient(incomeBreakdown, 'income')">
+                  <div class="radial-center">
+                    <span>{{ 'finance.chart.total' | t }}</span>
+                    <strong>{{ data.summary.totalIncome | currency:'PLN':'symbol-narrow':'1.0-0' }}</strong>
+                  </div>
+                </div>
+                <div class="radial-legend" role="list">
+                  <div class="radial-legend-item" role="listitem" *ngFor="let item of incomeBreakdown; let itemIndex = index" [attr.aria-label]="breakdownLabel(item)">
+                    <span class="radial-legend-dot" aria-hidden="true" [style.background]="chartColor(itemIndex, 'income')"></span>
+                    <strong>{{ item.name }}</strong>
+                    <span>{{ item.total | currency:'PLN':'symbol-narrow' }} · {{ item.share | number:'1.0-1' }}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="chart-empty" *ngIf="incomeBreakdown.length === 0">{{ 'finance.chart.noIncome' | t }}</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="calendar-card" aria-labelledby="month-calendar-title">
+          <div class="section-heading">
+            <div>
+              <p class="finance-eyebrow">{{ 'finance.calendar.daily' | t }}</p>
+              <h2 id="month-calendar-title">{{ selectedMonthName }} {{ selectedYear }}</h2>
+            </div>
+            <div class="calendar-legend" aria-label="Legend">
+              <span class="income-dot">{{ 'finance.income' | t }}</span>
+              <span class="expense-dot">{{ 'finance.expenses' | t }}</span>
+            </div>
+          </div>
+          <div class="calendar-scroll">
+            <table class="finance-calendar">
+              <caption class="visually-hidden">{{ 'finance.calendar.caption' | t }}</caption>
+              <thead>
+                <tr>
+                  <th scope="col" *ngFor="let weekDay of weekDays">{{ weekDay | t }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let week of calendarWeeks">
+                  <td *ngFor="let day of week" [class.empty-day]="!day">
+                    <div *ngIf="day" class="calendar-day" [attr.aria-label]="calendarDayLabel(day)">
+                      <span class="day-number">{{ day.day }}</span>
+                      <span class="day-total income" *ngIf="day.totalIncome > 0">+{{ day.totalIncome | number:'1.2-2' }}</span>
+                      <span class="day-total expense" *ngIf="day.totalExpenses > 0">−{{ day.totalExpenses | number:'1.2-2' }}</span>
+                      <span class="entry-count" *ngIf="day.incomes.length + day.expenses.length > 0">
+                        {{ day.incomes.length + day.expenses.length }} {{ 'finance.calendar.entries' | t }}
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="year-section" aria-labelledby="year-title">
+          <div class="section-heading">
+            <div>
+              <p class="finance-eyebrow">{{ 'finance.calendar.yearAtGlance' | t }}</p>
+              <h2 id="year-title">{{ selectedYear }}</h2>
+            </div>
+          </div>
+          <div class="year-grid">
+            <button type="button" class="month-card" *ngFor="let month of yearSummary" (click)="selectMonth(month)" [class.selected]="month.month === selectedMonth" [attr.aria-label]="monthName(month.month)">
+              <strong>{{ monthName(month.month) }}</strong>
+              <span class="income">+{{ month.totalIncome | currency:'PLN':'symbol-narrow' }}</span>
+              <span class="expense">−{{ month.totalExpenses | currency:'PLN':'symbol-narrow' }}</span>
+              <span class="month-saving" [class.negative]="month.savings < 0">{{ 'finance.savings' | t }} {{ month.savings | currency:'PLN':'symbol-narrow' }}</span>
+            </button>
+          </div>
+        </section>
+      </mat-tab>
+
+      <mat-tab [label]="'finance.tabs.add' | t">
+        <section class="forms-grid">
+          <mat-card class="finance-form-card">
+            <div class="card-heading"><h2>{{ 'finance.addExpense' | t }}</h2><mat-icon aria-hidden="true">shopping_cart</mat-icon></div>
+            <form [formGroup]="expenseForm" (ngSubmit)="addExpense()">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'finance.expenseType' | t }}</mat-label>
+                <mat-select formControlName="typeId" required>
+                  <mat-option *ngFor="let type of data.expenseTypes" [value]="type.id">{{ type.name }} — {{ type.description }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline"><mat-label>{{ 'common.description' | t }}</mat-label><input matInput formControlName="description" maxlength="500"></mat-form-field>
+              <div class="form-row">
+                <mat-form-field appearance="outline"><mat-label>{{ 'finance.amount' | t }}</mat-label><input matInput type="number" min="0.01" step="0.01" formControlName="amount" required><span matTextSuffix>PLN</span></mat-form-field>
+                <mat-form-field appearance="outline"><mat-label>{{ 'finance.date' | t }}</mat-label><input matInput [matDatepicker]="expenseDate" formControlName="date" required><mat-datepicker-toggle matIconSuffix [for]="expenseDate"></mat-datepicker-toggle><mat-datepicker #expenseDate></mat-datepicker></mat-form-field>
+              </div>
+              <button mat-flat-button type="submit" [disabled]="expenseForm.invalid"><mat-icon>add</mat-icon>{{ 'finance.addExpense' | t }}</button>
+            </form>
+          </mat-card>
+
+          <mat-card class="finance-form-card">
+            <div class="card-heading"><h2>{{ 'finance.addIncome' | t }}</h2><mat-icon aria-hidden="true">payments</mat-icon></div>
+            <form [formGroup]="incomeForm" (ngSubmit)="addIncome()">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'finance.incomeType' | t }}</mat-label>
+                <mat-select formControlName="typeId" required>
+                  <mat-option *ngFor="let type of data.incomeTypes" [value]="type.id">{{ type.name }} — {{ type.description }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline"><mat-label>{{ 'common.description' | t }}</mat-label><input matInput formControlName="description" maxlength="500"></mat-form-field>
+              <div class="form-row">
+                <mat-form-field appearance="outline"><mat-label>{{ 'finance.amount' | t }}</mat-label><input matInput type="number" min="0.01" step="0.01" formControlName="amount" required><span matTextSuffix>PLN</span></mat-form-field>
+                <mat-form-field appearance="outline"><mat-label>{{ 'finance.date' | t }}</mat-label><input matInput [matDatepicker]="incomeDate" formControlName="date" required><mat-datepicker-toggle matIconSuffix [for]="incomeDate"></mat-datepicker-toggle><mat-datepicker #incomeDate></mat-datepicker></mat-form-field>
+              </div>
+              <button mat-flat-button type="submit" [disabled]="incomeForm.invalid"><mat-icon>add</mat-icon>{{ 'finance.addIncome' | t }}</button>
+            </form>
+          </mat-card>
+
+          <mat-card class="finance-form-card plan-form-card">
+            <div class="card-heading"><h2>{{ 'finance.monthPlan' | t }}</h2><mat-icon aria-hidden="true">track_changes</mat-icon></div>
+            <form [formGroup]="planForm" (ngSubmit)="savePlan()">
+              <div class="form-row">
+                <mat-form-field appearance="outline"><mat-label>{{ 'finance.expenseLimit' | t }}</mat-label><input matInput type="number" min="0" step="0.01" formControlName="expenseLimit"><span matTextSuffix>PLN</span></mat-form-field>
+                <mat-form-field appearance="outline"><mat-label>{{ 'finance.savingsGoal' | t }}</mat-label><input matInput type="number" min="0" step="0.01" formControlName="savingsGoal"><span matTextSuffix>PLN</span></mat-form-field>
+              </div>
+              <button mat-flat-button type="submit" [disabled]="planForm.invalid"><mat-icon>save</mat-icon>{{ 'finance.savePlan' | t }}</button>
+            </form>
+          </mat-card>
+        </section>
+      </mat-tab>
+
+      <mat-tab [label]="'finance.tabs.transactions' | t">
+        <section class="transactions-grid">
+          <div>
+            <h2>{{ 'finance.expenses' | t }}</h2>
+            <p *ngIf="data.expenses.length === 0">{{ 'finance.noExpenses' | t }}</p>
+            <mat-card class="transaction-row" *ngFor="let expense of data.expenses">
+              <mat-icon class="expense-icon" aria-hidden="true">north_east</mat-icon>
+              <div><strong>{{ expenseTypeName(expense.expenseTypeId) }}</strong><span>{{ expense.description || ('finance.noDescription' | t) }} · {{ expense.date | date:'mediumDate' }}</span></div>
+              <b class="expense">−{{ expense.amount | currency:'PLN':'symbol-narrow' }}</b>
+              <button mat-icon-button type="button" (click)="deleteExpense(expense)" [attr.aria-label]="'finance.deleteExpense' | t"><mat-icon>delete</mat-icon></button>
+            </mat-card>
+          </div>
+          <div>
+            <h2>{{ 'finance.income' | t }}</h2>
+            <p *ngIf="data.incomes.length === 0">{{ 'finance.noIncome' | t }}</p>
+            <mat-card class="transaction-row" *ngFor="let income of data.incomes">
+              <mat-icon class="income-icon" aria-hidden="true">south_west</mat-icon>
+              <div><strong>{{ incomeTypeName(income.incomeTypeId) }}</strong><span>{{ income.description || ('finance.noDescription' | t) }} · {{ income.date | date:'mediumDate' }}</span></div>
+              <b class="income">+{{ income.amount | currency:'PLN':'symbol-narrow' }}</b>
+              <button mat-icon-button type="button" (click)="deleteIncome(income)" [attr.aria-label]="'finance.deleteIncome' | t"><mat-icon>delete</mat-icon></button>
+            </mat-card>
+          </div>
+        </section>
+
+        <section class="type-section" aria-labelledby="type-title">
+          <h2 id="type-title">{{ 'finance.customTypes' | t }}</h2>
+          <div class="forms-grid compact">
+            <mat-card class="finance-form-card">
+              <h3>{{ 'finance.newExpenseType' | t }}</h3>
+              <form [formGroup]="expenseTypeForm" (ngSubmit)="addExpenseType()">
+                <mat-form-field appearance="outline"><mat-label>{{ 'finance.typeName' | t }}</mat-label><input matInput formControlName="name" maxlength="80" required></mat-form-field>
+                <mat-form-field appearance="outline"><mat-label>{{ 'common.description' | t }}</mat-label><input matInput formControlName="description" maxlength="300"></mat-form-field>
+                <button mat-stroked-button type="submit" [disabled]="expenseTypeForm.invalid">{{ 'common.add' | t }}</button>
+              </form>
+            </mat-card>
+            <mat-card class="finance-form-card">
+              <h3>{{ 'finance.newIncomeType' | t }}</h3>
+              <form [formGroup]="incomeTypeForm" (ngSubmit)="addIncomeType()">
+                <mat-form-field appearance="outline"><mat-label>{{ 'finance.typeName' | t }}</mat-label><input matInput formControlName="name" maxlength="80" required></mat-form-field>
+                <mat-form-field appearance="outline"><mat-label>{{ 'common.description' | t }}</mat-label><input matInput formControlName="description" maxlength="300"></mat-form-field>
+                <button mat-stroked-button type="submit" [disabled]="incomeTypeForm.invalid">{{ 'common.add' | t }}</button>
+              </form>
+            </mat-card>
+          </div>
+        </section>
+      </mat-tab>
+    </mat-tab-group>
+  </ng-container>
+</section>

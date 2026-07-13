@@ -21,6 +21,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatDivider } from '@angular/material/divider';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatTabsModule } from '@angular/material/tabs';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
   declarations: [],
@@ -48,6 +52,10 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatCheckboxModule,
     MatBadgeModule,
     MatDivider,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatTabsModule,
+    A11yModule,
   ],
   exports: [
     MatToolbarModule,
@@ -71,7 +79,11 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatFormFieldModule,
     MatCheckboxModule,
     MatBadgeModule,
-    MatDivider
+    MatDivider,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatTabsModule,
+    A11yModule,
   ]
 })
 export class MaterialModule { }

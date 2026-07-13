@@ -14,6 +14,10 @@ const routes: Routes = [
   },
   {path: 'policy-and-terms', component: TermsComponent, title: "Policy & terms"},
   {path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule)},
+  {
+    path: 'finance',
+    loadChildren: () => import('./finance/finance.module').then(m => m.FinanceModule),
+  },
   {path: '**', pathMatch: 'full', component: PageNotFoundComponent, title: 'Page not found' },
 ];
 
