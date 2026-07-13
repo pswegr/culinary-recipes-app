@@ -41,6 +41,10 @@ export class FinanceDashboardComponent implements OnInit {
   dashboard: FinanceDashboard | null = null;
   yearSummary: MonthSummary[] = [];
   isLoading = true;
+  chartView: 'bar' | 'radial' = 'bar';
+
+  private readonly expenseChartColors = ['#c85d4b', '#e07b65', '#f0a071', '#b74f72', '#875b9d', '#d3a93f', '#9c5947', '#e6bf83'];
+  private readonly incomeChartColors = ['#278b68', '#48b58b', '#63c9a3', '#2e8f9b', '#4d72b8', '#79a84b', '#3d9f82', '#8ecf9d'];
 
   readonly expenseForm = this.formBuilder.nonNullable.group({
     typeId: ['', Validators.required],
@@ -272,6 +276,32 @@ export class FinanceDashboardComponent implements OnInit {
 
   progress(value: number): number {
     return Math.max(0, Math.min(value, 100));
+  }
+
+  setChartView(view: 'bar' | 'radial'): void {
+    if (this.chartView === view) return;
+
+    this.chartView = view;
+    void this.liveAnnouncer.announce(this.i18n.translate('finance.chart.viewChanged', {
+      view: this.i18n.translate(`finance.chart.views.${view}`),
+    }));
+  }
+
+  chartColor(index: number, kind: 'expense' | 'income'): string {
+    const colors = kind === 'expense' ? this.expenseChartColors : this.incomeChartColors;
+    return colors[index % colors.length];
+  }
+
+  radialGradient(items: TypeBreakdown[], kind: 'expense' | 'income'): string {
+    let start = 0;
+    const segments = items.map((item, index) => {
+      const end = start + item.share;
+      const segment = `${this.chartColor(index, kind)} ${start}% ${end}%`;
+      start = end;
+      return segment;
+    });
+
+    return `conic-gradient(from -90deg, ${segments.join(', ')})`;
   }
 
   calendarDayLabel(day: CalendarDay): string {

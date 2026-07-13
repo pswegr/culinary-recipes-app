@@ -173,6 +173,52 @@
   font-size: 0.88rem;
 }
 
+.chart-view-switch {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 0.2rem;
+  padding: 0.25rem;
+  border: 1px solid var(--r-border);
+  border-radius: 999px;
+  background: var(--r-surface-2);
+}
+
+.chart-view-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  color: var(--r-muted);
+  background: transparent;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chart-view-button mat-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  font-size: 1.15rem;
+}
+
+.chart-view-button:hover {
+  color: var(--r-text);
+}
+
+.chart-view-button.active {
+  color: var(--r-text);
+  background: var(--r-surface);
+  box-shadow: var(--r-shadow-soft);
+}
+
+.chart-view-button:focus-visible {
+  outline: 2px solid var(--r-accent);
+  outline-offset: 2px;
+}
+
 .breakdown-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -270,6 +316,87 @@
 
 .income-chart .bar-fill {
   background: linear-gradient(90deg, #278b68, #63c9a3);
+}
+
+.radial-layout {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.7fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: 1.25rem;
+  min-height: 230px;
+  padding-top: 1rem;
+}
+
+.radial-chart {
+  width: min(100%, 190px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--r-border) 55%, transparent);
+}
+
+.radial-center {
+  width: 60%;
+  aspect-ratio: 1;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: 0.35rem;
+  border-radius: 50%;
+  background: var(--r-surface-2);
+  box-shadow: 0 0 0 1px var(--r-border), var(--r-shadow-soft);
+  text-align: center;
+}
+
+.radial-center span {
+  color: var(--r-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.radial-center strong {
+  max-width: 100%;
+  overflow: hidden;
+  font-family: var(--r-font-display);
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radial-legend {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.radial-legend-item {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.radial-legend-dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+}
+
+.radial-legend-item strong {
+  overflow: hidden;
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radial-legend-item > span:last-child {
+  color: var(--r-muted);
+  font-size: 0.72rem;
+  white-space: nowrap;
 }
 
 .chart-empty {
@@ -456,6 +583,9 @@
 @media (max-width: 760px) {
   .finance-page { width: min(100% - 1rem, 1420px); padding-top: 0; }
   .finance-hero { align-items: flex-start; flex-direction: column; }
+  .breakdown-section > .section-heading { align-items: flex-start; flex-direction: column; }
+  .chart-view-switch { width: 100%; }
+  .chart-view-button { flex: 1; justify-content: center; }
   .month-navigation { width: 100%; justify-content: space-between; }
   .summary-grid,
   .goal-grid,
@@ -470,4 +600,8 @@
   .year-section,
   .type-section,
   .breakdown-section { padding: 0.8rem; }
+}
+
+@media (max-width: 480px) {
+  .radial-layout { grid-template-columns: 1fr; }
 }

@@ -75,6 +75,16 @@
               <h2 id="breakdown-title">{{ 'finance.chart.title' | t }}</h2>
               <p class="section-description">{{ 'finance.chart.subtitle' | t }}</p>
             </div>
+            <div class="chart-view-switch" role="group" [attr.aria-label]="'finance.chart.viewLabel' | t">
+              <button type="button" class="chart-view-button" [class.active]="chartView === 'bar'" [attr.aria-pressed]="chartView === 'bar'" (click)="setChartView('bar')">
+                <mat-icon aria-hidden="true">bar_chart</mat-icon>
+                <span>{{ 'finance.chart.views.bar' | t }}</span>
+              </button>
+              <button type="button" class="chart-view-button" [class.active]="chartView === 'radial'" [attr.aria-pressed]="chartView === 'radial'" (click)="setChartView('radial')">
+                <mat-icon aria-hidden="true">donut_large</mat-icon>
+                <span>{{ 'finance.chart.views.radial' | t }}</span>
+              </button>
+            </div>
           </div>
 
           <div class="breakdown-grid">
@@ -87,7 +97,7 @@
                 <mat-icon aria-hidden="true">donut_large</mat-icon>
               </div>
 
-              <div class="breakdown-list" role="list" *ngIf="expenseBreakdown.length; else noExpenseBreakdown">
+              <div class="breakdown-list" role="list" *ngIf="chartView === 'bar' && expenseBreakdown.length">
                 <div class="breakdown-row" role="listitem" *ngFor="let item of expenseBreakdown" [attr.aria-label]="breakdownLabel(item)">
                   <div class="breakdown-label">
                     <strong>{{ item.name }}</strong>
@@ -98,7 +108,24 @@
                   </div>
                 </div>
               </div>
-              <ng-template #noExpenseBreakdown><p class="chart-empty">{{ 'finance.chart.noExpenses' | t }}</p></ng-template>
+
+              <div class="radial-layout" *ngIf="chartView === 'radial' && expenseBreakdown.length">
+                <div class="radial-chart" role="img" [attr.aria-label]="'finance.chart.expensesByType' | t" [style.background]="radialGradient(expenseBreakdown, 'expense')">
+                  <div class="radial-center">
+                    <span>{{ 'finance.chart.total' | t }}</span>
+                    <strong>{{ data.summary.totalExpenses | currency:'PLN':'symbol-narrow':'1.0-0' }}</strong>
+                  </div>
+                </div>
+                <div class="radial-legend" role="list">
+                  <div class="radial-legend-item" role="listitem" *ngFor="let item of expenseBreakdown; let itemIndex = index" [attr.aria-label]="breakdownLabel(item)">
+                    <span class="radial-legend-dot" aria-hidden="true" [style.background]="chartColor(itemIndex, 'expense')"></span>
+                    <strong>{{ item.name }}</strong>
+                    <span>{{ item.total | currency:'PLN':'symbol-narrow' }} · {{ item.share | number:'1.0-1' }}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="chart-empty" *ngIf="expenseBreakdown.length === 0">{{ 'finance.chart.noExpenses' | t }}</p>
             </article>
 
             <article class="breakdown-card income-chart" [attr.aria-label]="'finance.chart.incomeByType' | t">
@@ -110,7 +137,7 @@
                 <mat-icon aria-hidden="true">bar_chart</mat-icon>
               </div>
 
-              <div class="breakdown-list" role="list" *ngIf="incomeBreakdown.length; else noIncomeBreakdown">
+              <div class="breakdown-list" role="list" *ngIf="chartView === 'bar' && incomeBreakdown.length">
                 <div class="breakdown-row" role="listitem" *ngFor="let item of incomeBreakdown" [attr.aria-label]="breakdownLabel(item)">
                   <div class="breakdown-label">
                     <strong>{{ item.name }}</strong>
@@ -121,7 +148,24 @@
                   </div>
                 </div>
               </div>
-              <ng-template #noIncomeBreakdown><p class="chart-empty">{{ 'finance.chart.noIncome' | t }}</p></ng-template>
+
+              <div class="radial-layout" *ngIf="chartView === 'radial' && incomeBreakdown.length">
+                <div class="radial-chart" role="img" [attr.aria-label]="'finance.chart.incomeByType' | t" [style.background]="radialGradient(incomeBreakdown, 'income')">
+                  <div class="radial-center">
+                    <span>{{ 'finance.chart.total' | t }}</span>
+                    <strong>{{ data.summary.totalIncome | currency:'PLN':'symbol-narrow':'1.0-0' }}</strong>
+                  </div>
+                </div>
+                <div class="radial-legend" role="list">
+                  <div class="radial-legend-item" role="listitem" *ngFor="let item of incomeBreakdown; let itemIndex = index" [attr.aria-label]="breakdownLabel(item)">
+                    <span class="radial-legend-dot" aria-hidden="true" [style.background]="chartColor(itemIndex, 'income')"></span>
+                    <strong>{{ item.name }}</strong>
+                    <span>{{ item.total | currency:'PLN':'symbol-narrow' }} · {{ item.share | number:'1.0-1' }}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="chart-empty" *ngIf="incomeBreakdown.length === 0">{{ 'finance.chart.noIncome' | t }}</p>
             </article>
           </div>
         </section>
