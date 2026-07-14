@@ -86,9 +86,12 @@
     <mat-step>
       <form class="r-form-recipes-data-instructions  r-overflow-auto">
         <ng-template matStepLabel>{{ 'recipes.upsert.fillOutInstructions' | t }}</ng-template>
-        <div cdkDropList class="r-list" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" (cdkDropListDropped)="drop($event)">
-          <div class="r-box" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" [attr.data-drag-data]="instruction" *ngFor="let instruction of recipe().instructions; let i= index; trackBy:trackByFn" cdkDrag>
-            {{instruction}}
+        <div cdkDropList cdkDropListLockAxis="y" [cdkDropListAutoScrollStep]="16" class="r-list" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" (cdkDropListDropped)="drop($event)">
+          <div class="r-box" [ngClass]="{'r-dark':isDarkMode, 'r-light': !isDarkMode }" [attr.data-drag-data]="instruction" *ngFor="let instruction of recipe().instructions; let i= index; trackBy:trackByFn" cdkDrag cdkDragLockAxis="y">
+            <button mat-icon-button type="button" class="r-drag-handle" cdkDragHandle [attr.aria-label]="'recipes.upsert.reorderInstruction' | t" [matTooltip]="'recipes.upsert.reorderInstruction' | t">
+              <mat-icon>drag_indicator</mat-icon>
+            </button>
+            <span class="r-instruction-text">{{instruction}}</span>
             <div class="r-item-action-buttons">
               <button mat-mini-fab class="recipe-mat-fab-secondary" (click)="deleteInstruction(i)" [matTooltip]="'recipes.upsert.deleteInstructionTooltip' | t">
                 <mat-icon>delete</mat-icon>

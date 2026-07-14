@@ -43,6 +43,10 @@
   display: block;
   border-radius: var(--r-radius-md);
   max-height: 700px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 0.5rem;
   border: 1px solid var(--r-border);
   background: var(--r-surface-2);
@@ -67,17 +71,30 @@
   background: var(--r-surface);
   box-shadow: var(--r-shadow-soft);
 
-  display: inline-grid;
-  grid-template-columns: 5fr 1fr;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   width: 100%;
   gap: 8px;
   align-items: center;
   box-sizing: border-box;
-  text-align: justify;
-  cursor: move;
+  text-align: left;
   
   font-size: 14px;
-  flex-wrap: wrap;
+}
+
+.r-instruction-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.r-drag-handle {
+  color: var(--r-muted);
+  cursor: grab;
+  touch-action: none;
+}
+
+.r-box.cdk-drag-dragging .r-drag-handle {
+  cursor: grabbing;
 }
 
 .cdk-drag-preview {
@@ -241,6 +258,43 @@
 }
 
 @media screen and (max-width: 700px) {
+  .r-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .r-header-actions {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .r-form-recipes-data-instructions {
+    padding: 1rem;
+  }
+
+  .r-list {
+    max-height: clamp(16rem, 42dvh, 28rem);
+  }
+
+  .r-box {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 0.75rem;
+    row-gap: 0.25rem;
+  }
+
+  .r-drag-handle {
+    grid-row: 1 / span 2;
+  }
+
+  .r-item-action-buttons {
+    grid-column: 2;
+    align-items: center;
+  }
+
   .r-form-skeleton-header {
     flex-direction: column;
     align-items: flex-start;
@@ -248,5 +302,29 @@
 
   .r-form-skeleton-card {
     padding: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .r-form-recipes-data-instructions {
+    padding: 0.75rem;
+  }
+
+  .r-box {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .r-drag-handle {
+    grid-row: auto;
+    justify-self: start;
+  }
+
+  .r-instruction-text,
+  .r-item-action-buttons {
+    grid-column: 1;
+  }
+
+  .r-item-action-buttons {
+    width: 100%;
   }
 }

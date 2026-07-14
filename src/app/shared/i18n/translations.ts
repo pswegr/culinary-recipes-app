@@ -182,6 +182,7 @@ export const translations: TranslationDictionary = {
         editIngredientTooltip: 'Edit ingredient',
         deleteInstructionTooltip: 'Delete instruction',
         editInstructionTooltip: 'Edit instruction',
+        reorderInstruction: 'Drag to reorder instruction',
       },
       fileInput: {
         noFile: 'No file uploaded yet.',
@@ -513,6 +514,7 @@ export const translations: TranslationDictionary = {
         editIngredientTooltip: 'Edytuj skladnik',
         deleteInstructionTooltip: 'Usun instrukcje',
         editInstructionTooltip: 'Edytuj instrukcje',
+        reorderInstruction: 'Przeciagnij, aby zmienic kolejnosc instrukcji',
       },
       fileInput: {
         noFile: 'Brak przeslanego pliku.',
