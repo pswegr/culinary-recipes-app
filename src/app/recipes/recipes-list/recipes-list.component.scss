@@ -39,7 +39,7 @@
       }
 
       .r-search-bar-container {
-        border-radius: 999px;
+        border-radius: var(--r-radius-round);
         display: flex;
         justify-content: space-between;
         align-items: center;

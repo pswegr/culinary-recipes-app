@@ -162,6 +162,7 @@ $light-theme: mat.define-theme((
 :root {
   --r-font-display: 'Fraunces', serif;
   --r-font-sans: 'Karla', sans-serif;
+  --r-radius-round: 999px;
   --r-radius-xl: 30px;
   --r-radius-lg: 22px;
   --r-radius-md: 14px;
@@ -254,8 +255,15 @@ p {
   color-scheme: light;
 
   @include mat.chips-overrides((
+    container-shape-radius: var(--r-radius-round),
     outline-color: rgba(43, 32, 23, 0.18),
     label-text-color: rgba(43, 32, 23, 0.86)
+  ));
+
+  @include mat.fab-overrides((
+    container-shape: var(--r-radius-round),
+    extended-container-shape: var(--r-radius-round),
+    small-container-shape: var(--r-radius-round)
   ));
 
   .recipe-mat-fab-tertiary {
@@ -323,8 +331,15 @@ p {
   color-scheme: dark;
 
   @include mat.chips-overrides((
+    container-shape-radius: var(--r-radius-round),
     outline-color: rgba(255, 255, 255, 0.16),
     label-text-color: rgba(255, 255, 255, 0.72)
+  ));
+
+  @include mat.fab-overrides((
+    container-shape: var(--r-radius-round),
+    extended-container-shape: var(--r-radius-round),
+    small-container-shape: var(--r-radius-round)
   ));
 
   .recipe-mat-fab-tertiary {
@@ -448,7 +463,7 @@ mat-toolbar {
 
 .mat-mdc-fab,
 .mat-mdc-mini-fab {
-  border-radius: var(--r-radius-lg);
+  border-radius: var(--r-radius-round);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -459,7 +474,7 @@ mat-toolbar {
 }
 
 .mat-mdc-chip {
-  border-radius: 999px;
+  border-radius: var(--r-radius-round);
   border: 1px solid var(--r-border);
   background: var(--r-surface-2);
 }
