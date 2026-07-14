@@ -12,8 +12,8 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 export class AppComponent implements OnInit {
   private readonly themeClasses = ['theme-dark', 'theme-light'];
   private readonly themeColors = {
-    dark: '#16110c',
-    light: '#f6f0e6'
+    dark: 'rgba(28, 21, 15, 0.68)',
+    light: 'rgba(255, 250, 243, 0.72)'
   };
 
   constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, private themeModeService : ThemeModeService, private overlay: OverlayContainer) {}
