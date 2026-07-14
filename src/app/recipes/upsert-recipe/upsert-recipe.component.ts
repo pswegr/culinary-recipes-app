@@ -5,7 +5,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { IngredientModel } from 'src/app/shared/models/igredient.model';
 import { Observable, Subject, Subscription, map, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper';
 import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
@@ -56,9 +56,7 @@ export class UpsertRecipeComponent implements OnInit, OnDestroy {
     private announcer: LiveAnnouncer,
     private i18nService: I18nService){
     this.stepperOrientation = breakpointObserver
-      .observe([
-        Breakpoints.HandsetPortrait
-      ])
+      .observe('(max-width: 700px)')
       .pipe(map(({matches}) => (matches ? 'vertical' : 'horizontal')));
     
   

@@ -492,6 +492,23 @@ mat-toolbar {
   color: #1c1814;
 }
 
+@media screen and (max-width: 700px) {
+  .r-stepper .mat-step-header {
+    margin: 0.25rem 0 0.5rem;
+    padding-inline: 0.25rem;
+  }
+
+  .r-stepper.mat-stepper-vertical .mat-vertical-content-container {
+    margin-inline: 0;
+    margin-inline-start: 1rem;
+  }
+
+  .r-stepper.mat-stepper-vertical .mat-vertical-content,
+  .r-stepper.mat-stepper-horizontal .mat-horizontal-content-container {
+    padding: 0 0.5rem 0.75rem;
+  }
+}
+
 .r-skeleton {
   --skeleton-base: var(--r-surface-2);
   --skeleton-highlight: var(--r-surface-3);
