@@ -42,6 +42,12 @@ export class FinanceDashboardComponent implements OnInit {
   yearSummary: MonthSummary[] = [];
   isLoading = true;
   chartView: 'bar' | 'radial' = 'bar';
+  readonly skeletonSummaryCards = Array.from({ length: 3 });
+  readonly skeletonGoalCards = Array.from({ length: 2 });
+  readonly skeletonBreakdownCards = Array.from({ length: 2 });
+  readonly skeletonBreakdownRows = Array.from({ length: 4 });
+  readonly skeletonCalendarDays = Array.from({ length: 28 });
+  readonly skeletonMonths = Array.from({ length: 12 });
 
   private readonly expenseChartColors = ['#c85d4b', '#e07b65', '#f0a071', '#b74f72', '#875b9d', '#d3a93f', '#9c5947', '#e6bf83'];
   private readonly incomeChartColors = ['#278b68', '#48b58b', '#63c9a3', '#2e8f9b', '#4d72b8', '#79a84b', '#3d9f82', '#8ecf9d'];

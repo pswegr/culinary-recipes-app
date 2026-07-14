@@ -1,4 +1,4 @@
-<section class="finance-page" aria-labelledby="finance-title">
+<section class="finance-page" aria-labelledby="finance-title" [attr.aria-busy]="isLoading">
   <header class="finance-hero">
     <div>
       <p class="finance-eyebrow">{{ 'finance.eyebrow' | t }}</p>
@@ -16,9 +16,77 @@
     </nav>
   </header>
 
-  <div class="finance-loading" *ngIf="isLoading" role="status">{{ 'common.loading' | t }}</div>
+  <div class="finance-skeleton" *ngIf="isLoading" role="status" aria-live="polite">
+    <span class="visually-hidden">{{ 'common.loading' | t }}</span>
 
-  <ng-container *ngIf="dashboard as data">
+    <div class="finance-skeleton-content" aria-hidden="true">
+      <section class="summary-grid">
+        <div class="finance-skeleton-card finance-skeleton-summary-card" *ngFor="let _ of skeletonSummaryCards">
+          <span class="r-skeleton finance-skeleton-icon"></span>
+          <span class="finance-skeleton-copy">
+            <span class="r-skeleton r-skeleton-line short"></span>
+            <span class="r-skeleton finance-skeleton-value"></span>
+          </span>
+        </div>
+      </section>
+
+      <div class="finance-skeleton-tabs">
+        <div class="finance-skeleton-tab-list">
+          <span class="r-skeleton finance-skeleton-tab"></span>
+          <span class="r-skeleton finance-skeleton-tab"></span>
+          <span class="r-skeleton finance-skeleton-tab"></span>
+        </div>
+
+        <div class="finance-skeleton-tab-content">
+          <section class="goal-grid">
+            <div class="finance-skeleton-card finance-skeleton-goal-card" *ngFor="let _ of skeletonGoalCards">
+              <span class="r-skeleton r-skeleton-line short"></span>
+              <span class="r-skeleton finance-skeleton-value"></span>
+              <span class="r-skeleton r-skeleton-line"></span>
+              <span class="r-skeleton r-skeleton-line short"></span>
+            </div>
+          </section>
+
+          <section class="finance-skeleton-panel">
+            <div class="finance-skeleton-heading">
+              <span class="r-skeleton r-skeleton-title"></span>
+              <span class="r-skeleton r-skeleton-subtitle"></span>
+            </div>
+            <div class="breakdown-grid">
+              <div class="finance-skeleton-card finance-skeleton-breakdown-card" *ngFor="let _ of skeletonBreakdownCards">
+                <span class="r-skeleton finance-skeleton-value"></span>
+                <div class="finance-skeleton-breakdown-row" *ngFor="let _ of skeletonBreakdownRows">
+                  <span class="r-skeleton r-skeleton-line short"></span>
+                  <span class="r-skeleton r-skeleton-line"></span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="finance-skeleton-panel">
+            <div class="finance-skeleton-heading">
+              <span class="r-skeleton r-skeleton-title"></span>
+              <span class="r-skeleton r-skeleton-subtitle"></span>
+            </div>
+            <div class="finance-skeleton-calendar">
+              <span class="r-skeleton finance-skeleton-day" *ngFor="let _ of skeletonCalendarDays"></span>
+            </div>
+          </section>
+
+          <section class="finance-skeleton-panel">
+            <div class="finance-skeleton-heading">
+              <span class="r-skeleton r-skeleton-title"></span>
+            </div>
+            <div class="year-grid">
+              <span class="r-skeleton finance-skeleton-month" *ngFor="let _ of skeletonMonths"></span>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!isLoading && dashboard as data">
     <section class="summary-grid" [attr.aria-label]="'finance.monthSummary' | t">
       <mat-card class="summary-card income-card">
         <mat-icon aria-hidden="true">south_west</mat-icon>
