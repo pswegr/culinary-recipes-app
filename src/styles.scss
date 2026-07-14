@@ -192,6 +192,10 @@ body {
   height: 100%;
 }
 
+html {
+  background-color: var(--r-bg);
+}
+
 *,
 *::before,
 *::after {

@@ -11,6 +11,10 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 })
 export class AppComponent implements OnInit {
   private readonly themeClasses = ['theme-dark', 'theme-light'];
+  private readonly themeColors = {
+    dark: '#16110c',
+    light: '#f6f0e6'
+  };
 
   constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, private themeModeService : ThemeModeService, private overlay: OverlayContainer) {}
 
@@ -24,11 +28,15 @@ export class AppComponent implements OnInit {
 
   private applyTheme(isDarkMode: boolean) {
     const hostClass = isDarkMode ? 'theme-dark' : 'theme-light';
+    const themeColor = isDarkMode ? this.themeColors.dark : this.themeColors.light;
 
-    this.themeClasses.forEach((themeClass) => {
-      this.renderer.removeClass(this.document.body, themeClass);
+    [this.document.documentElement, this.document.body].forEach((host) => {
+      this.themeClasses.forEach((themeClass) => {
+        this.renderer.removeClass(host, themeClass);
+      });
+      this.renderer.addClass(host, hostClass);
     });
-    this.renderer.addClass(this.document.body, hostClass);
+    this.document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', themeColor);
     this.themeModeService.isDark.set(isDarkMode);
 
     const overlayContainer = this.overlay.getContainerElement();

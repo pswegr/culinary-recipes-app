@@ -1,10 +1,11 @@
 .mat-toolbar {
   position: sticky;
-  top: env(safe-area-inset-top);
+  top: 0;
   z-index: 1000;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  min-height: 72px;
+  padding-top: env(safe-area-inset-top);
+  padding-left: calc(1.5rem + env(safe-area-inset-left));
+  padding-right: calc(1.5rem + env(safe-area-inset-right));
+  min-height: calc(72px + env(safe-area-inset-top));
   gap: 0.5rem;
 }
 
@@ -167,9 +168,9 @@
 
 @media screen and (max-width: 600px) {
   .mat-toolbar {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    min-height: 64px;
+    padding-left: calc(0.75rem + env(safe-area-inset-left));
+    padding-right: calc(0.75rem + env(safe-area-inset-right));
+    min-height: calc(64px + env(safe-area-inset-top));
     gap: 0.3rem;
   }
 
