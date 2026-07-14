@@ -4,10 +4,6 @@
   z-index: 1000;
   display: block;
   padding-top: env(safe-area-inset-top);
-  padding-left: calc(1.5rem + env(safe-area-inset-left));
-  padding-right: calc(1.5rem + env(safe-area-inset-right));
-  height: calc(72px + env(safe-area-inset-top));
-  min-height: calc(72px + env(safe-area-inset-top));
   background: linear-gradient(
     to bottom,
     var(--r-toolbar-top) 0%,
@@ -23,7 +19,6 @@
 
 .mat-toolbar {
   position: relative;
-  padding-top: env(safe-area-inset-top);
   padding-left: calc(1.5rem + env(safe-area-inset-left));
   padding-right: calc(1.5rem + env(safe-area-inset-right));
   height: calc(72px + env(safe-area-inset-top));
