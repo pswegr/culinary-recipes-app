@@ -1,12 +1,22 @@
-.mat-toolbar {
+:host {
   position: sticky;
   top: 0;
   z-index: 1000;
+  display: block;
+}
+
+.mat-toolbar {
+  position: relative;
   padding-top: env(safe-area-inset-top);
   padding-left: calc(1.5rem + env(safe-area-inset-left));
   padding-right: calc(1.5rem + env(safe-area-inset-right));
   min-height: calc(72px + env(safe-area-inset-top));
   gap: 0.5rem;
+  background: var(--r-glass);
+  -webkit-backdrop-filter: blur(14px) saturate(1.08);
+  backdrop-filter: blur(14px) saturate(1.08);
+  border-bottom: 1px solid var(--r-border);
+  box-shadow: 0 8px 24px rgba(8, 6, 4, 0.12);
 }
 
 .r-spacer {

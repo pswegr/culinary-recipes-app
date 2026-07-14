@@ -384,11 +384,6 @@ p {
   --mat-sys-color-on-background: rgba(255, 255, 255, 0.82);
 }
 
-mat-toolbar {
-  backdrop-filter: blur(18px) saturate(1.1);
-  background: var(--r-glass);
-}
-
 .mat-mdc-menu-panel {
   border-radius: var(--r-radius-md);
   border: 1px solid var(--r-border);
