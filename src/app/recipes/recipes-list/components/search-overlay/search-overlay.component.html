@@ -22,12 +22,13 @@
       </mat-list-item>
     }
     @if(isLoading$ | async){
-      <mat-list-item disabled="true">
-        <div class="loading-item"></div>
-      </mat-list-item>
-      <mat-list-item disabled="true">
-        <div class="loading-item"></div>
-      </mat-list-item>
+      @for (_ of skeletonItems; track $index) {
+        <mat-list-item class="search-skeleton-item" aria-hidden="true">
+          <span matListItemIcon class="r-skeleton search-skeleton-image"></span>
+          <span matListItemTitle class="r-skeleton r-skeleton-line search-skeleton-title"></span>
+          <span matListItemMeta class="r-skeleton search-skeleton-action"></span>
+        </mat-list-item>
+      }
     }
   </mat-action-list>
 </div>

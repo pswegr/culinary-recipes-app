@@ -15,6 +15,7 @@ export class SearchOverlayComponent {
   filteredRecipesList = input.required<RecipeModel[]>();
   recentSearches = model.required<string[]>();
   onHistoryItemChoosen = output<string>();
+  readonly skeletonItems = Array.from({ length: 2 });
   isLoading$ = concat(
     of(true),
     timer(2000).pipe(
