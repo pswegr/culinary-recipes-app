@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, EventEmitter, HostBinding, HostListener, OnInit, Output, inject } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
 import { shareReplay } from 'rxjs';
@@ -15,9 +16,12 @@ import { I18nService } from 'src/app/shared/services/i18n.service';
     styleUrls: ['./toolbar.component.scss'],
     standalone: false
 })
-export class ToolbarComponent {
+export class ToolbarComponent implements OnInit {
   @Output() readonly darkModeSwitched = new EventEmitter<boolean>();
 
+  @HostBinding('class.r-scrolled') isScrolled = false;
+
+  private readonly document = inject(DOCUMENT);
   private readonly recipesService = inject(RecipesService);
   private readonly router = inject(Router);
 
@@ -30,6 +34,15 @@ export class ToolbarComponent {
   readonly languageOptions = this.i18nService.supportedLanguages;
   isDarkMode = true;
   isMobileActionsMenuOpen = false;
+
+  ngOnInit(): void {
+    this.updateScrolledState();
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    this.updateScrolledState();
+  }
 
   onDarkModeSwithed({ checked }: MatSlideToggleChange): void {
     this.isDarkMode = checked;
@@ -88,5 +101,10 @@ export class ToolbarComponent {
 
   trackByNotification(index: number, notification: NotificationModel): string {
     return notification.id;
+  }
+
+  private updateScrolledState(): void {
+    const scrollTop = this.document.defaultView?.scrollY ?? this.document.documentElement.scrollTop;
+    this.isScrolled = scrollTop > 0;
   }
 }

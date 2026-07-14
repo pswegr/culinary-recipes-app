@@ -76,7 +76,7 @@
       <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
     </button>
 
-    <mat-form-field class="r-language-field" appearance="outline">
+    <mat-form-field class="r-language-field" appearance="outline" subscriptSizing="dynamic">
       <mat-select
         [value]="i18nService.currentLanguage()"
         (selectionChange)="onLanguageChanged($event.value)"
