@@ -185,6 +185,7 @@ $light-theme: mat.define-theme((
   --r-accent: #e0b36b;
   --r-accent-strong: #c38a4b;
   --r-glass: rgba(28, 21, 15, 0.68);
+  --r-browser-chrome: rgb(56, 36, 19);
 }
 
 html,
@@ -193,7 +194,7 @@ body {
 }
 
 html {
-  background-color: var(--r-bg);
+  background-color: var(--r-browser-chrome);
 }
 
 *,
@@ -298,6 +299,7 @@ p {
   --r-accent: #d9a25c;
   --r-accent-strong: #b7793c;
   --r-glass: rgba(255, 250, 243, 0.72);
+  --r-browser-chrome: rgb(253, 247, 239);
   --r-shadow-soft: 0 8px 20px rgba(42, 28, 18, 0.08);
   --r-shadow-medium: 0 16px 34px rgba(42, 28, 18, 0.14);
 
