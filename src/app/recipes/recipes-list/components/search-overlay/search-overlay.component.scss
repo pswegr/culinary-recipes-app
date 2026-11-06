@@ -1,3 +1,9 @@
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
 .overlay-container {
   border-radius: 0 0 var(--r-radius-md) var(--r-radius-md);
   border: 1px solid var(--r-border);
@@ -10,11 +16,7 @@
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-  width: 55vw;
-
-  @media screen and (max-width: 600px) {
-    width: 75vw;
-  }
+  width: 100%;
 }
 
 @supports (height: 100dvh) {

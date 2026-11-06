@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RecipeModel } from 'src/app/shared/models/recipe.model';
 import { RecipesService } from '../../shared/services/recipes.service';
-import { BehaviorSubject, Observable, Subscription, combineLatest, debounceTime, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, catchError, combineLatest, debounceTime, of, switchMap, tap } from 'rxjs';
 import { MatChipListboxChange } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -21,6 +21,7 @@ export class RecipesListComponent {
   titleKey = 'recipes.titles.recipes';
   searchText = new FormControl('');
   category: string | null = null;
+  loadFailed = false;
   overlayOpen = this.searchBarService.overlayoppen;
   recentSearches = this.searchBarService.recentSearches;
   skeletonCards = Array.from({ length: 6 });
@@ -30,11 +31,17 @@ export class RecipesListComponent {
   chosenTags: BehaviorSubject<string[]> = new BehaviorSubject([''])
   recipes$: Observable<RecipeModel[]> = combineLatest([this.route.queryParamMap, this.refreshToken.asObservable()]).pipe(
     tap(([params]) => {
+      this.loadFailed = false;
       this.chosenTags.next(params.getAll('tag'));
       this.searchText.setValue(params.get('content'));
       this.category = params.get('category');
     }),
-    switchMap(([params]) => this.getRecipes(params.getAll('tag'), params.get('category'), params.get('content')))
+    switchMap(([params]) => this.getRecipes(params.getAll('tag'), params.get('category'), params.get('content')).pipe(
+      catchError(() => {
+        this.loadFailed = true;
+        return of([]);
+      })
+    ))
   );
 
   filteredRecipesList = toSignal(combineLatest([this.route.queryParamMap, this.searchText.valueChanges]).pipe(
@@ -51,7 +58,7 @@ export class RecipesListComponent {
 
       localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
       this.recentSearches.set(recentSearches);
-      return this.getRecipes(params.getAll('tag'), params.get('category'), searchText)
+      return this.getRecipes(params.getAll('tag'), params.get('category'), searchText).pipe(catchError(() => of([])))
     })
   ));
 
@@ -63,7 +70,7 @@ export class RecipesListComponent {
     return this.recipeService.getTags();
   }
 
-  tags$: Observable<string[]> = this.getTags();
+  tags$: Observable<string[]> = this.getTags().pipe(catchError(() => of([])));
 
   likeToggleSub = Subscription.EMPTY;
 
@@ -113,10 +120,23 @@ export class RecipesListComponent {
   };
 
   handleSearch() {
-    const tagsObj = { tag: this.chosenTags.value, content: this.searchText.value }
-    this.router.navigate([this.router.url], {
-      queryParams: tagsObj
-    })
+    this.overlayOpen.set(false);
+    this.updateQueryParams({ tag: this.chosenTags.value, content: this.searchText.value || null });
+  }
+
+  chooseRecentSearch(search: string) {
+    this.searchText.setValue(search);
+    this.handleSearch();
+  }
+
+  clearFilters() {
+    this.searchText.reset();
+    this.overlayOpen.set(false);
+    this.updateQueryParams({ tag: null, category: null, content: null });
+  }
+
+  trackByRecipe(_index: number, recipe: RecipeModel) {
+    return recipe.id;
   }
 
   resetSearchText() {

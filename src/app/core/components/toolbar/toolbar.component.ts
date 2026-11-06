@@ -32,7 +32,7 @@ export class ToolbarComponent implements OnInit {
 
   readonly categories$ = this.recipesService.getCategories().pipe(shareReplay(1));
   readonly languageOptions = this.i18nService.supportedLanguages;
-  isDarkMode = true;
+  isDarkMode = false;
   isMobileActionsMenuOpen = false;
 
   ngOnInit(): void {

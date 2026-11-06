@@ -1,43 +1,63 @@
-    .footer {
-        padding: 2rem 0;
-        margin-top: 3rem;
-        margin-bottom: 2rem;
-        background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.04));
-    }
+.footer {
+  margin-top: 64px;
+  border-top: 1px solid var(--r-border);
+}
 
-    .footer-content {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 1.5rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
+.footer-content {
+  width: min(100%, 1344px);
+  margin-inline: auto;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
 
-        .footer-text {
-            display: flex;
-            flex-direction: row;
-            gap: 0.25rem;
-            flex-wrap: wrap;
-        }
-    }
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
 
-    .footer-content p {
-        margin: 0;
-        color: var(--r-muted);
-        font-size: 0.9rem;
-        letter-spacing: 0.02em;
-    }
+.footer-brand img {
+  width: auto;
+  height: 32px;
+  max-width: 148px;
+  object-fit: contain;
+}
 
-    .social-links a {
-        color: var(--r-muted);
-        transition: color 0.3s ease;
-    }
+.footer-text {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
 
-    .social-links a:hover {
-        color: var(--r-accent);
-    }
+.footer-text p {
+  margin: 0;
+  color: var(--r-muted);
+  font-size: 12px;
+}
 
-    .instagram-link svg {
-        vertical-align: middle;
-    }
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: auto;
+  color: var(--r-muted);
+  font-size: 12px;
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  transition: color 180ms ease;
+}
+
+.social-links a:hover { color: var(--r-brand); }
+.instagram-link svg { width: 18px; height: 18px; }
+.footer-policy { white-space: nowrap; }
+
+@media (max-width: 700px) {
+  .footer { margin-top: 40px; }
+  .footer-content { flex-wrap: wrap; gap: 18px; padding: 24px 20px; }
+  .footer-text { order: 3; width: 100%; }
+}

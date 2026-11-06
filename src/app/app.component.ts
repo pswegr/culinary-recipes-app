@@ -12,14 +12,14 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 export class AppComponent implements OnInit {
   private readonly themeClasses = ['theme-dark', 'theme-light'];
   private readonly themeColors = {
-    dark: 'rgb(56, 36, 19)',
-    light: 'rgb(253, 247, 239)'
+    dark: '#171c19',
+    light: '#f8f7f3'
   };
 
   constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, private themeModeService : ThemeModeService, private overlay: OverlayContainer) {}
 
   ngOnInit(): void {
-    this.applyTheme(true);
+    this.applyTheme(this.themeModeService.isDark());
   }
 
   switchMode(isDarkMode: boolean){

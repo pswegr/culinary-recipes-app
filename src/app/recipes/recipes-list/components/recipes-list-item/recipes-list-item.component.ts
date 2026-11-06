@@ -1,5 +1,4 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { provideCloudinaryLoader } from '@angular/common';
 import { Component, EventEmitter, Input, OnDestroy, Output, signal, Signal, WritableSignal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject} from 'rxjs';
@@ -15,14 +14,14 @@ import { ThemeModeService } from 'src/app/shared/services/theme-mode.service';
         trigger('likeToggle', [
             state('liked', style({
                 opacity: 1,
-                color: 'red',
+                color: 'var(--r-brand)',
             })),
             state('unliked', style({
                 opacity: 0.8,
                 color: 'inherit',
             })),
-            transition('liked => unliked', [animate('3s')]),
-            transition('unliked => liked', [animate('2s')])
+            transition('liked => unliked', [animate('160ms')]),
+            transition('unliked => liked', [animate('160ms')])
         ]),
     ],
     standalone: false

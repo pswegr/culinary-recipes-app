@@ -1,74 +1,80 @@
-<ng-container *ngIf="recipes$ | async as recipes; else recipesLoading">
-  <div class="r-container" [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']" appResponsiveness>
-    <div class="r-header" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
-      <h2 class="r-title">{{ titleKey | t }}
-        @if(this.category){
-          {{' - ' + this.category}}
+@let recipes = recipes$ | async;
+<div class="r-container">
+  @if (titleKey === 'recipes.titles.recipes' && !category) {
+    <section class="r-discovery" aria-labelledby="discovery-title">
+      <div class="r-discovery__copy">
+        <div class="r-eyebrow">{{ 'recipes.discovery.eyebrow' | t }}</div>
+        <h1 id="discovery-title">{{ 'recipes.discovery.title' | t }} <span>{{ 'recipes.discovery.titleAccent' | t }}</span></h1>
+        <p>{{ 'recipes.discovery.subtitle' | t }}</p>
+        <a class="r-discovery__link" routerLink="/recipes/yours">
+          {{ 'toolbar.menu.yourRecipes' | t }}<mat-icon aria-hidden="true">arrow_forward</mat-icon>
+        </a>
+      </div>
+      <div class="r-discovery__visual">
+        <img src="/assets/default/meal.jpg" width="1200" height="800" fetchpriority="high" [alt]="'recipes.discovery.imageAlt' | t">
+      </div>
+    </section>
+  }
+
+  <section class="r-collection" aria-labelledby="collection-title">
+    <div class="r-collection-heading">
+      <div>
+        <span class="r-eyebrow">{{ 'recipes.discovery.collectionEyebrow' | t }}</span>
+        <h2 id="collection-title">{{ titleKey | t }}@if(category) {<span class="r-category"> / {{category}}</span>}</h2>
+      </div>
+      <a class="r-add-recipe" routerLink="/recipes/upsert"><mat-icon aria-hidden="true">add</mat-icon>{{ 'recipes.discovery.addRecipe' | t }}</a>
+    </div>
+
+    <div class="r-search-row">
+      <div class="r-search-bar-container" #searchBar cdkOverlayOrigin #overlayPosition="cdkOverlayOrigin" [class.opened]="overlayOpen()">
+        <button mat-icon-button (click)="handleSearch()" [attr.aria-label]="'recipes.search.placeholder' | t"><mat-icon>search</mat-icon></button>
+        <input class="r-input" type="search" autocomplete="off" [placeholder]="'recipes.discovery.searchPlaceholder' | t" [attr.aria-label]="'recipes.search.placeholder' | t" (focus)="overlayOpen.set(true)" (keydown.enter)="handleSearch()" (keydown.escape)="overlayOpen.set(false)" [formControl]="searchText">
+        @if (searchText.value) {
+          <button mat-icon-button (click)="resetSearchText()" [attr.aria-label]="'common.clear' | t"><mat-icon>close</mat-icon></button>
         }
-      </h2>
-      <div class="r-header__top">
-        <div class="r-search-bar-container" cdkOverlayOrigin #overlayPosition="cdkOverlayOrigin"
-          [ngClass]="{'opened mat-elevation-z2': overlayOpen()}">
-          <div class="r-search-bar-container__left">
-            <button mat-icon-button (click)="handleSearch()">
-              <mat-icon>search</mat-icon>
-            </button>
-            <input class="r-input" [placeholder]="'recipes.search.placeholder' | t" (click)="overlayOpen.set(true)" appResponsiveness
-              [darkMode]="['r-dark-mode']" [formControl]="searchText" />
-          </div>
-          <button mat-icon-button (click)="resetSearchText()" class="r-clear-filter">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-        @if (overlayOpen()) {
-          <div class="r-search-backdrop" (click)="overlayOpen.set(false)" aria-hidden="true"></div>
+        <span class="r-search-hint" aria-hidden="true">↵</span>
+      </div>
+      <span class="r-search-caption"><mat-icon aria-hidden="true">restaurant</mat-icon>{{ 'recipes.discovery.searchCaption' | t }}</span>
+    </div>
+
+    <ng-template cdkConnectedOverlay [cdkConnectedOverlayOpen]="overlayOpen()" [cdkConnectedOverlayOrigin]="overlayPosition" [cdkConnectedOverlayWidth]="searchBar.offsetWidth" (overlayOutsideClick)="!searchBar.contains($any($event.target)) && overlayOpen.set(false)" (overlayKeydown)="$event.key === 'Escape' && overlayOpen.set(false)">
+      <app-search-overlay [recentSearches]="recentSearches()" [filteredRecipesList]="filteredRecipesList() || []" (onHistoryItemChoosen)="chooseRecentSearch($event)"></app-search-overlay>
+    </ng-template>
+
+    <div class="r-filter-row">
+      <button class="r-all-filter" [class.is-active]="!chosenTags.value.length && !category && !searchText.value" (click)="clearFilters()"><mat-icon aria-hidden="true">apps</mat-icon>{{ 'recipes.discovery.allTags' | t }}</button>
+      <span class="r-filter-divider" aria-hidden="true"></span>
+      <mat-chip-listbox class="r-tag-list" multiple [attr.aria-label]="'recipes.search.tagSelectionAria' | t" (change)="chipsChanged($event)">
+        <mat-chip-option [selected]="selected(tag)" *ngFor="let tag of tags$ | async">{{tag}}</mat-chip-option>
+      </mat-chip-listbox>
+    </div>
+
+    @if (recipes) {
+      <div class="r-results-line" aria-live="polite">
+        <span>{{ 'recipes.discovery.resultCount' | t : { count: recipes.length } }}</span>
+        @if (chosenTags.value.length || category || searchText.value) {
+          <button (click)="clearFilters()">{{ 'recipes.discovery.clearFilters' | t }}<mat-icon aria-hidden="true">close</mat-icon></button>
         }
-        <ng-template #connectedOverlay="cdkConnectedOverlay" cdkConnectedOverlay
-          [cdkConnectedOverlayOpen]="overlayOpen()" [cdkConnectedOverlayOrigin]="overlayPosition"
-          [cdkConnectedOverlayHasBackdrop]="overlayOptions.hasBackdrop" (overlayOutsideClick)="overlayOpen.set(false)"
-          [cdkConnectedOverlayFlexibleDimensions]="overlayOptions.flexibleDimensions">
-          <app-search-overlay [recentSearches]="recentSearches()" [filteredRecipesList]="filteredRecipesList()!" 
-            (onHistoryItemChoosen)="searchText.setValue($event)"></app-search-overlay>
-        </ng-template>
-        <button class="r-add-button recipe-mat-primary-button" mat-fab routerLink="/recipes/upsert"
-          [matTooltip]="'recipes.actions.addNewRecipeTooltip' | t">
-          <mat-icon>add</mat-icon>
-        </button>
       </div>
-      <div class="r-chips">
-        <mat-chip-listbox multiple [attr.aria-label]="'recipes.search.tagSelectionAria' | t" (change)="chipsChanged($event)">
-          <mat-chip-option [selected]="selected(tag)" [disabled]="disableCombination(recipes, tag)" [attr.title]="'recipes.search.tagSelectionAria' | t"
-            *ngFor="let tag of tags$ | async">{{tag}}</mat-chip-option>
-        </mat-chip-listbox>
+      <div class="r-content">
+        <app-recipes-list-item [recipe]="item" *ngFor="let item of recipes; trackBy: trackByRecipe" (tag)="clickTagOnItem($event)" (likeToggleClicked)="clickLikeToggle($event)" (messageAuthorClicked)="openMessaging($event.recipientUserId, $event.recipientLabel)"></app-recipes-list-item>
       </div>
-    </div>
-    <div class="r-content" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
-      <app-recipes-list-item [recipe]="item" *ngFor="let item of recipes" (tag)="clickTagOnItem($event)"
-        (likeToggleClicked)="clickLikeToggle($event)"
-        (messageAuthorClicked)="openMessaging($event.recipientUserId, $event.recipientLabel)"></app-recipes-list-item>
-    </div>
-  </div>
-</ng-container>
-<ng-template #recipesLoading>
-  <div class="r-container r-skeleton-container" [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']" appResponsiveness>
-    <div class="r-header" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
-      <div class="r-title r-skeleton r-skeleton-title"></div>
-      <div class="r-header__top">
-        <div class="r-search-bar-container r-skeleton-bar">
-          <div class="r-skeleton r-skeleton-line"></div>
+      @if (!recipes.length) {
+        <div class="r-empty-state" role="status">
+          <span class="r-empty-state__icon"><mat-icon aria-hidden="true">{{ loadFailed ? 'cloud_off' : 'search_off' }}</mat-icon></span>
+          <h3>{{ (loadFailed ? 'recipes.discovery.loadError' : 'recipes.discovery.noResults') | t }}</h3>
+          <p>{{ (loadFailed ? 'recipes.discovery.loadErrorSubtitle' : 'recipes.discovery.emptySubtitle') | t }}</p>
+          <button class="r-state-button" (click)="loadFailed ? refreshToken.next(null) : clearFilters()">{{ (loadFailed ? 'recipes.discovery.retry' : 'recipes.discovery.clearFilters') | t }}<mat-icon aria-hidden="true">arrow_forward</mat-icon></button>
         </div>
-        <div class="r-skeleton r-skeleton-fab"></div>
+      }
+    } @else {
+      <div class="r-results-line"><span class="r-skeleton r-skeleton-line r-skeleton-count"></span></div>
+      <div class="r-content" [attr.aria-label]="'common.loading' | t" aria-busy="true">
+        <div class="r-skeleton-card" *ngFor="let _ of skeletonCards" aria-hidden="true">
+          <div class="r-skeleton r-skeleton-media"></div>
+          <div class="r-skeleton-card__copy"><div class="r-skeleton r-skeleton-line"></div><div class="r-skeleton r-skeleton-line short"></div><div class="r-skeleton r-skeleton-line"></div></div>
+        </div>
       </div>
-      <div class="r-chips r-skeleton-chips">
-        <span class="r-skeleton r-skeleton-pill" *ngFor="let _ of skeletonChips"></span>
-      </div>
-    </div>
-    <div class="r-content" appResponsiveness [largeScreens]="['r-desktop']" [smallScreens]="['r-handset-poitret-mode']">
-      <div class="r-skeleton-card" *ngFor="let _ of skeletonCards">
-        <div class="r-skeleton r-skeleton-media"></div>
-        <div class="r-skeleton r-skeleton-line"></div>
-        <div class="r-skeleton r-skeleton-line short"></div>
-      </div>
-    </div>
-  </div>
-</ng-template>
+    }
+  </section>
+</div>
